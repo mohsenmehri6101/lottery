@@ -3036,7 +3036,7 @@
                     {
                         "name": "selects",
                         "in": "query",
-                        "description": "selects:id, text, parent, status, user_creator, user_editor, created_at, updated_at",
+                        "description": "selects: id, url, status_code, exception, message, user_creator, stack_trace, requests, headers, user_agent, extra_date, created_at, updated_at, deleted_at",
                         "required": false,
                         "schema": {
                             "type": "string"

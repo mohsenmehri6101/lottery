@@ -7,6 +7,12 @@ use Modules\Exception\Entities\Error;
 
 class ErrorIndexRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
+        $this->merge(['selects' => convert_withs_from_string_to_array(withs: $this->get(key: 'selects'))]);
+    }
+
     public function authorize(): bool
     {
         return true;
@@ -16,7 +22,6 @@ class ErrorIndexRequest extends FormRequest
     {
         $relations_permissible = implode(',', Error::$relations_ ?? []);
         $selects_allows = implode(',', (new Error)->getFillable());
-
 
         return [
             'paginate' => 'nullable|boolean',
@@ -40,5 +45,6 @@ class ErrorIndexRequest extends FormRequest
             'updated_at' => 'nullable',
             'deleted_at' => 'nullable',
         ];
+
     }
 }
