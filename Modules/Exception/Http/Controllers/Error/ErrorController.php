@@ -61,8 +61,24 @@ class ErrorController extends Controller
      */
     public function show(ErrorShowRequest $request,$error_id): JsonResponse
     {
-        $error = $this->errorService->show($error_id);
+        $error = $this->errorService->show($request,$error_id);
         return $error ? ResponseHelper::responseSuccessShow(data: $error) : ResponseHelper::responseFailedShow();
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/exception/errors/{id}",
+     *     tags={"exceptions-errors"},
+     *     summary="delete error",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="number"),description="id"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function destroy($exception_id): JsonResponse
+    {
+        $status_delete = $this->errorService->destroy($exception_id);
+        return $status_delete ? ResponseHelper::responseSuccessDelete() : ResponseHelper::responseFailedDelete();
+    }
 }

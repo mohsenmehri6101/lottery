@@ -18,6 +18,7 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('errors')->name('errors_')->group(function () {
         Route::get('/', [ErrorController::class, 'index'])->name('index');
         Route::get('/{id}', [ErrorController::class, 'show'])->name('show');
+        Route::delete('/{id}', [ErrorController::class, 'destroy'])->name('destroy');
     });
 
 });
