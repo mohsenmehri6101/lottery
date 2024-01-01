@@ -32,7 +32,7 @@ class ErrorController extends Controller
      *     @OA\Parameter(name="status_code",in="query",required=false, @OA\Schema(type="integer"),description="status_code"),
      *     @OA\Parameter(name="exception",in="query",required=false, @OA\Schema(type="integer"),description="exception"),
      *     @OA\Parameter(name="message",in="query",required=false, @OA\Schema(type="integer"),description="message"),
-     *     @OA\Parameter(name="selects",in="query",required=false, @OA\Schema(type="string"),description="selects:id, text, parent, status, user_creator, user_editor, created_at, updated_at"),
+     *     @OA\Parameter(name="selects",in="query",required=false, @OA\Schema(type="string"),description="selects: id, url, status_code, exception, message, user_creator, stack_trace, requests, headers, user_agent, extra_date, created_at, updated_at, deleted_at"),
      *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is"),
      *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="integer"),description="user_creator"),
      *     @OA\Parameter(name="created_at",in="query",required=false, @OA\Schema(type="integer"),description="created_at"),
