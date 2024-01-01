@@ -3,6 +3,7 @@
 namespace Modules\Exception\Entities;
 
 use App\Models\Traits\GetCastsModel;
+use App\Models\Traits\UserCreator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Database\Eloquent\Model;
@@ -26,9 +27,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Error extends Model
 {
-    use SoftDeletes,GetCastsModel;
+    use SoftDeletes, GetCastsModel, UserCreator;
 
-    protected $table='errors';
+    protected $table = 'errors';
 
     protected static function boot(): void
     {
@@ -41,7 +42,7 @@ class Error extends Model
         });
     }
 
-    protected $fillable=[
+    protected $fillable = [
         'id',
         'url',
         'status_code',
@@ -58,31 +59,32 @@ class Error extends Model
         'deleted_at',
     ];
 
-    protected $casts=[
-        'id'=>'integer',
+    protected $casts = [
+        'id' => 'integer',
 
-        'url'=>'string',
-        'status_code'=>'integer',
-        'exception'=>'string',
-        'message'=>'string',
-        'user_creator'=>'integer',
-        'stack_trace'=>'json',
-        'requests'=>'json',
-        'headers'=>'json',
-        'user_agent'=>'string',
-        'extra_date'=>'json',
+        'url' => 'string',
+        'status_code' => 'integer',
+        'exception' => 'string',
+        'message' => 'string',
+        'user_creator' => 'integer',
+        'stack_trace' => 'json',
+        'requests' => 'json',
+        'headers' => 'json',
+        'user_agent' => 'string',
+        'extra_date' => 'json',
 
-        'created_at'=>'date',
-        'updated_at'=>'date',
-        'deleted_at'=>'date',
+        'created_at' => 'date',
+        'updated_at' => 'date',
+        'deleted_at' => 'date',
     ];
 
-    protected $hidden=[
+    protected $hidden = [
         'id'
     ];
 
-    public static array $relations_=[
-        'exceptionModel'
+    public static array $relations_ = [
+        'exceptionModel',
+        'userCreator'
     ];
 
     /**
@@ -90,6 +92,7 @@ class Error extends Model
      */
     public function exceptionModel(): BelongsTo
     {
-        return $this->belongsTo(ExceptionModel::class,'exception','exception');
+        return $this->belongsTo(ExceptionModel::class, 'exception', 'exception');
     }
+
 }
