@@ -8,11 +8,13 @@ use Modules\Exception\Entities\Error;
 use Modules\Exception\Http\Repositories\ErrorRepository;
 use Modules\Exception\Http\Requests\Error\ErrorIndexRequest;
 use Exception;
+use Modules\Exception\Http\Requests\Error\ErrorShowRequest;
 
 class ErrorService extends Controller
 {
     public function __construct(public ErrorRepository $errorRepository)
     {
+
     }
 
     public function index(ErrorIndexRequest $request)
@@ -36,10 +38,17 @@ class ErrorService extends Controller
         }
     }
 
-    public function show($error_id)
+    public function show(ErrorShowRequest $request,$error_id)
     {
         try {
-            return $this->errorRepository->findOrFail($error_id);
+            $fields = $request->validated();
+
+            /**
+             * @var $withs
+             */
+            extract($fields);
+            $withs = $withs ?? [];
+            return $this->errorRepository->withRelations(relations: $withs)->findOrFail($error_id);
         } catch (Exception $exception) {
             throw $exception;
         }

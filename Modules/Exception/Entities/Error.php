@@ -3,6 +3,7 @@
 namespace Modules\Exception\Entities;
 
 use App\Models\Traits\GetCastsModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,7 +30,7 @@ class Error extends Model
 
     protected $table='errors';
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         static::creating(function ($item) {
@@ -80,7 +81,14 @@ class Error extends Model
         'id'
     ];
 
-    public function exceptionModel(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public static array $relations_=[
+        'exceptionModel'
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function exceptionModel(): BelongsTo
     {
         return $this->belongsTo(ExceptionModel::class,'exception','exception');
     }

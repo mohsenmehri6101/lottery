@@ -6,6 +6,7 @@ use App\Helper\Response\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Modules\Exception\Http\Requests\Error\ErrorIndexRequest;
+use Modules\Exception\Http\Requests\Error\ErrorShowRequest;
 use Modules\Exception\Services\ErrorService;
 
 class ErrorController extends Controller
@@ -17,7 +18,7 @@ class ErrorController extends Controller
     /**
      * @OA\Get(
      *     path="/api/v1/exception/errors",
-     *     tags={"exceptions"},
+     *     tags={"exceptions-errors"},
      *     summary="list exceptions",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="paginate",in="query",required=false, @OA\Schema(type="string"),description="paginate"),
@@ -31,6 +32,8 @@ class ErrorController extends Controller
      *     @OA\Parameter(name="status_code",in="query",required=false, @OA\Schema(type="integer"),description="status_code"),
      *     @OA\Parameter(name="exception",in="query",required=false, @OA\Schema(type="integer"),description="exception"),
      *     @OA\Parameter(name="message",in="query",required=false, @OA\Schema(type="integer"),description="message"),
+     *     @OA\Parameter(name="selects",in="query",required=false, @OA\Schema(type="string"),description="selects:id, text, parent, status, user_creator, user_editor, created_at, updated_at"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is"),
      *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="integer"),description="user_creator"),
      *     @OA\Parameter(name="created_at",in="query",required=false, @OA\Schema(type="integer"),description="created_at"),
      *     @OA\Parameter(name="updated_at",in="query",required=false, @OA\Schema(type="integer"),description="updated_at"),
@@ -48,7 +51,7 @@ class ErrorController extends Controller
     /**
      * @OA\Get(
      *     path="/api/v1/exception/errors/{id}",
-     *     tags={"exceptions"},
+     *     tags={"exceptions-errors"},
      *     summary="show one error",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id",in="path",required=false, @OA\Schema(type="integer"),description="id"),
@@ -56,7 +59,7 @@ class ErrorController extends Controller
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
      */
-    public function show($error_id): JsonResponse
+    public function show(ErrorShowRequest $request,$error_id): JsonResponse
     {
         $error = $this->errorService->show($error_id);
         return $error ? ResponseHelper::responseSuccessShow(data: $error) : ResponseHelper::responseFailedShow();
