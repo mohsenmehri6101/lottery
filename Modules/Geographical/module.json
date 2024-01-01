@@ -1,0 +1,11 @@
+{
+    "name": "Geographical",
+    "alias": "geographical",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Geographical\\Providers\\GeographicalServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,12 @@
+{
+    "Authentication": true,
+    "Authorization": true,
+    "Geographical": true,
+    "Exception": true,
+    "Notification": true,
+    "Payment": true,
+    "Faq": true,
+    "Gym": true,
+    "ContactUs": true,
+    "Slider": true
+}
