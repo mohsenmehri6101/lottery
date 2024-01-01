@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Exception\Entities\Error;
 use Modules\Exception\Http\Repositories\ErrorRepository;
 use Modules\Exception\Http\Requests\Error\ErrorIndexRequest;
-use Modules\Exception\Http\Requests\Error\ErrorStoreRequest;
 use Exception;
-use Modules\Exception\Http\Requests\Error\ErrorUpdateRequest;
 
 class ErrorService extends Controller
 {
@@ -43,37 +41,6 @@ class ErrorService extends Controller
         try {
             return $this->errorRepository->findOrFail($error_id);
         } catch (Exception $exception) {
-            throw $exception;
-        }
-    }
-
-    public function store(ErrorStoreRequest $request)
-    {
-        DB::beginTransaction();
-        try {
-            $inputs = $request->validated();
-            $error = $this->errorRepository->create($inputs);
-            DB::commit();
-            return $error;
-        } catch (Exception $exception) {
-            DB::rollBack();
-            throw $exception;
-        }
-    }
-
-
-    public function update(ErrorUpdateRequest $request, $error_id)
-    {
-        DB::beginTransaction();
-        try {
-            /** @var Error $error */
-            $error = $this->errorRepository->findOrFail($error_id);
-            $fields = $request->validated();
-            $this->errorRepository->update($error, $fields);
-            DB::commit();
-            return true;
-        } catch (Exception $exception) {
-            DB::rollBack();
             throw $exception;
         }
     }

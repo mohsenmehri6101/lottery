@@ -18,8 +18,12 @@ class ErrorRepository extends BaseRepository
         return [];
     }
 
-    public function create(array $data)
+    public function fillable_search(): array
     {
-        return parent::create($data);
+        return [
+            'exception',
+            'message',
+        ];
     }
+
 }

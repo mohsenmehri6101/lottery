@@ -109,6 +109,24 @@ return [
                 'deleted_at' => 'deleted_at',
             ],
         ],
+        'errors' => [
+            'fields' => [
+                'id' => 'id',
+                'url' => 'url',
+                'status_code' => 'status_code',
+                'exception' => 'exception',
+                'message' => 'message',
+                'user_creator' => 'user_creator',
+                'stack_trace' => 'stack_trace',
+                'requests' => 'requests',
+                'headers' => 'headers',
+                'user_agent' => 'user_agent',
+                'extra_date' => 'extra_date',
+                'created_at' => 'created_at',
+                'updated_at' => 'updated_at',
+                'deleted_at' => 'deleted_at',
+            ],
+        ],
     ],
     'authorization' => [
         'roles' => [
