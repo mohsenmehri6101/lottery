@@ -355,6 +355,33 @@
                 "operationId": "2fe2030408cc4b1b82b4ab3abc0759b4",
                 "parameters": [
                     {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "paginate",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "per_page",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "query",
                         "description": "id",
@@ -445,6 +472,28 @@
                             "items": {
                                 "type": "integer"
                             }
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "description": "Column to sort by",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction_by",
+                        "in": "query",
+                        "description": "Sort direction (asc or desc)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
                         }
                     },
                     {
@@ -4044,9 +4093,9 @@
                 "operationId": "472853381427297b8ddd26d8d95a2328",
                 "parameters": [
                     {
-                        "name": "province",
+                        "name": "name",
                         "in": "query",
-                        "description": "province",
+                        "description": "name",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -11764,38 +11813,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v1/payments/confirm-payment": {
-            "post": {
-                "tags": [
-                    "payments"
-                ],
-                "summary": "create link payment",
-                "operationId": "e8cf4f4190be047e354d7561ed0d61e0",
                 "responses": {
                     "200": {
                         "description": "Success",
