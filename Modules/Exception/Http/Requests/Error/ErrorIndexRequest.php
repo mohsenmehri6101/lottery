@@ -19,12 +19,12 @@ class ErrorIndexRequest extends FormRequest
             'page'=>'nullable|integer|min:1',
             'per_page'=>'nullable|integer|min:1',
 
-            'id' => 'nullable',
+            'id' => 'nullable|exists:errors,id',
             'url' => 'nullable',
-            'status_code' => 'nullable',
-            'exception' => 'nullable',
-            'message' => 'nullable',
-            'user_creator' => 'nullable',
+            'status_code' => 'nullable|numeric',
+            'exception' => 'nullable|string',
+            'message' => 'nullable|string',
+            'user_creator' => 'nullable|exists:users,id',
 
             'created_at' => 'nullable',
             'updated_at' => 'nullable',

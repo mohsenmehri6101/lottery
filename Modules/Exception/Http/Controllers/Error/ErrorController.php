@@ -16,6 +16,25 @@ class ErrorController extends Controller
     {
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/exception/errors",
+     *     tags={"exceptions"},
+     *     summary="list exceptions",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="paginate",in="query",required=false, @OA\Schema(type="string"),description="paginate"),
+     *     @OA\Parameter(name="per_page",in="query",required=false, @OA\Schema(type="string"),description="per_page"),
+     *     @OA\Parameter(name="id",in="query",required=false, @OA\Schema(type="integer"),description="id"),
+     *     @OA\Parameter(name="exception",in="query",required=false, @OA\Schema(type="string"),description="exception"),
+     *     @OA\Parameter(name="message",in="query",required=false, @OA\Schema(type="string"),description="message"),
+     *     @OA\Parameter(name="level",in="query",required=false, @OA\Schema(type="number"),description="level"),
+     *     @OA\Parameter(name="status_code",in="query",required=false, @OA\Schema(type="number"),description="status_code"),
+     *     @OA\Parameter(name="description",in="query",required=false, @OA\Schema(type="string"),description="description"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
     public function index(ErrorIndexRequest $request): JsonResponse
     {
         $errors = $this->errorService->index($request);
