@@ -21,9 +21,11 @@ class ErrorService extends Controller
     {
         try {
             $fields = $request->validated();
-
             $message = $fields['message'] ?? null;
+            $selects = $fields['selects'] ?? [];
+            unset($fields['selects']);
 
+            // set like
             if ($message && filled($message)) {
                 $fields['message'] = (object)[
                     'col' => 'message',
@@ -32,7 +34,7 @@ class ErrorService extends Controller
                 ];
             }
 
-            return $this->errorRepository->resolve_paginate(inputs: $fields);
+            return $this->errorRepository->resolve_paginate(inputs: $fields,selects: $selects);
         } catch (Exception $exception) {
             throw $exception;
         }
@@ -58,6 +60,7 @@ class ErrorService extends Controller
     {
         DB::beginTransaction();
         try {
+
             # find Error
             /** @var Error $error */
             $error = $this->errorRepository->findOrFail($error_id);
@@ -66,6 +69,7 @@ class ErrorService extends Controller
 
             DB::commit();
             return $status_delete_error;
+
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;

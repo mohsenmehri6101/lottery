@@ -21,5 +21,4 @@ class ErrorShowRequest extends FormRequest
             'withs.*' => "nullable|string|in:$relations_permissible",
         ];
     }
-
 }

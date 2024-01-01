@@ -3034,6 +3034,24 @@
                         }
                     },
                     {
+                        "name": "selects",
+                        "in": "query",
+                        "description": "selects:id, text, parent, status, user_creator, user_editor, created_at, updated_at",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "withs",
+                        "in": "query",
+                        "description": "relations:list is",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "user_creator",
                         "in": "query",
                         "description": "user_creator",
