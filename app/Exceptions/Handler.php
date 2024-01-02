@@ -4,7 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Modules\Exception\Services\ExceptionService;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,12 +28,12 @@ class Handler extends ExceptionHandler
 
     public function report(Throwable $e): void
     {
-//        dd($e->getMessage(),$e->getLine()/*,$e->getTrace()*/);
+        // dd($e->getMessage(),$e->getLine()/*,$e->getTrace()*/);
         parent::report($e);
         ExceptionService::reporter($e);
     }
 
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $e): \Illuminate\Http\Response|JsonResponse|Response|RedirectResponse|null
     {
         return ExceptionService::render(request: $request, exception: $e);
     }

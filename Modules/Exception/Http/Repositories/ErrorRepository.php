@@ -23,6 +23,7 @@ class ErrorRepository extends BaseRepository
         return [
             'exception',
             'message',
+            'url',
         ];
     }
 
