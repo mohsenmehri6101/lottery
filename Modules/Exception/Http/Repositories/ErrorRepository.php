@@ -7,7 +7,6 @@ use Modules\Exception\Entities\Error;
 
 class ErrorRepository extends BaseRepository
 {
-
     public function model(): string
     {
         return Error::class;
@@ -15,7 +14,7 @@ class ErrorRepository extends BaseRepository
 
     public function relations(): array
     {
-        return [];
+        return Error::$relations_;
     }
 
     public function fillable_search(): array

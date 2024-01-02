@@ -14,9 +14,7 @@ class ErrorService extends Controller
 {
     public function __construct(public ErrorRepository $errorRepository)
     {
-
     }
-
     public function index(ErrorIndexRequest $request)
     {
         try {

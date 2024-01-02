@@ -13,11 +13,6 @@ class ErrorIndexRequest extends FormRequest
         $this->merge(['selects' => convert_withs_from_string_to_array(withs: $this->get(key: 'selects'))]);
     }
 
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         $relations_permissible = implode(',', Error::$relations_ ?? []);
