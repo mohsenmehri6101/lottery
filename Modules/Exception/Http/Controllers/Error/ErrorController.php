@@ -13,6 +13,7 @@ class ErrorController extends Controller
 {
     public function __construct(public ErrorService $errorService)
     {
+
     }
 
     /**
@@ -81,4 +82,5 @@ class ErrorController extends Controller
         $status_delete = $this->errorService->destroy($exception_id);
         return $status_delete ? ResponseHelper::responseSuccessDelete() : ResponseHelper::responseFailedDelete();
     }
+
 }
