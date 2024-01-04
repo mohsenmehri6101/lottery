@@ -67,6 +67,5 @@ class DeleteErrorsCommand extends Command
         Error::query()->onlyTrashed()->forceDelete();
         $this->info('Deleted all soft-deleted errors');
     }
-
     /* ------------------ do brother do ------------------------------- */
 }
