@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- *
  * @property integer $id
  * @property integer $status_code
  * @property string $exception
@@ -61,7 +60,6 @@ class Error extends Model
 
     protected $casts = [
         'id' => 'integer',
-
         'url' => 'string',
         'status_code' => 'integer',
         'exception' => 'string',
@@ -79,7 +77,7 @@ class Error extends Model
     ];
 
     protected $hidden = [
-        'id'
+        # 'id'
     ];
 
     public static array $relations_ = [
@@ -94,5 +92,4 @@ class Error extends Model
     {
         return $this->belongsTo(ExceptionModel::class, 'exception', 'exception');
     }
-
 }

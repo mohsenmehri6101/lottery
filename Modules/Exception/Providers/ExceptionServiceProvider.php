@@ -3,8 +3,8 @@
 namespace Modules\Exception\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
 use Modules\Exception\Console\InsertExceptionCommand;
+use Modules\Exception\Console\DeleteErrorsCommand;
 
 class ExceptionServiceProvider extends ServiceProvider
 {
@@ -124,10 +124,11 @@ class ExceptionServiceProvider extends ServiceProvider
         }
     }
 
-    private function loadCommands()
+    private function loadCommands(): void
     {
         $this->commands([
             InsertExceptionCommand::class,
+            DeleteErrorsCommand::class,
         ]);
     }
 
