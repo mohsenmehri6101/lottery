@@ -8857,6 +8857,44 @@
                 }
             }
         },
+        "/api/v1/reserve_templates/statuses": {
+            "get": {
+                "tags": [
+                    "reserve_templates"
+                ],
+                "summary": "list statuses reserve_templates",
+                "operationId": "87456509e2c71caa683844262e79408f",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/scores": {
             "get": {
                 "tags": [

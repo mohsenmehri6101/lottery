@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use JetBrains\PhpStorm\ArrayShape;
 use Modules\Authentication\Entities\User;
 
 /**
@@ -33,14 +32,15 @@ use Modules\Authentication\Entities\User;
 class ReserveTemplate extends Model
 {
     use SoftDeletes, GetCastsModel, UserCreator, UserEditor;
-    const status_inactive=0;
-    const status_active=1;
 
     protected $table = 'reserve_templates';
     const status_gender_acceptance_unknown = 0;
     const status_gender_acceptance_male = 1;
     const status_gender_acceptance_female = 2;
     const status_gender_acceptance_all = 3;
+
+    const status_inactive=0;
+    const status_active=1;
 
     protected $fillable = [
         'id',
