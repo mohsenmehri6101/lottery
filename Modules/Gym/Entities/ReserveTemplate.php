@@ -150,6 +150,11 @@ class ReserveTemplate extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function gym(): BelongsTo
+    {
+        return $this->belongsTo(Gym::class, 'gym_id');
+    }
+
     public function reserves(): HasMany
     {
         return $this->hasMany(Reserve::class, 'reserve_template_id');
