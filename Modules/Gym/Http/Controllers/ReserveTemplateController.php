@@ -168,4 +168,24 @@ class ReserveTemplateController extends Controller
         });
         return ResponseHelper::responseSuccess(data: $gender_acceptances);
     }
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/reserve_templates/statuses",
+     *     tags={"reserve_templates"},
+     *     summary="list statuses reserve_templates",
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="string"),description="status"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function statuses(Request $request): JsonResponse
+    {
+        $statuses = $this->reserveTemplateService->statuses($request);
+        $statuses = collect($statuses)->map(function ($name, $id) {
+            return ["id" => $id, "name" => $name];
+        });
+        return ResponseHelper::responseSuccess(data: $statuses);
+    }
 }

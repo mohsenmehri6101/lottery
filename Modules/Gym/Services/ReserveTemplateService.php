@@ -145,4 +145,10 @@ class ReserveTemplateService
         return ReserveTemplate::getStatusGenderAcceptanceTitle();
     }
 
+    public function statuses(Request $request): array|bool|int|string|null
+    {
+        $status = $request->status ?? null;
+        return ReserveTemplate::getStatusTitle();
+    }
+
 }

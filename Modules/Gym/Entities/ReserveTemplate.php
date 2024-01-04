@@ -111,6 +111,7 @@ class ReserveTemplate extends Model
             }
         });
     }
+
     public static function getStatusGenderAcceptanceTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusGenderAcceptancePersian();
@@ -134,7 +135,6 @@ class ReserveTemplate extends Model
             self::status_gender_acceptance_all,
         ];
     }
-    #[ArrayShape([self::status_gender_acceptance_unknown => "string", self::status_gender_acceptance_male => "string", self::status_gender_acceptance_female => "string", self::status_gender_acceptance_all => "string"])]
     public static function getStatusGenderAcceptancePersian(): array
     {
         return [
@@ -142,6 +142,35 @@ class ReserveTemplate extends Model
             self::status_gender_acceptance_male => 'مرد',# 1
             self::status_gender_acceptance_female => 'زن',# 2
             self::status_gender_acceptance_all => 'زن و مرد',# 3
+        ];
+    }
+
+    public static function getStatusTitle($status = null): array|bool|int|string|null
+    {
+        $statuses = self::getStatusPersian();
+        if (!is_null($status)) {
+            if (is_string_persian($status)) {
+                return array_search($status, $statuses) ?? null;
+            }
+            if (is_int($status) && in_array($status, array_keys($statuses))) {
+                return $statuses[$status] ?? null;
+            }
+            return null;
+        }
+        return $statuses;
+    }
+    public static function getStatus(): array
+    {
+        return [
+            self::status_inactive,
+            self::status_active,
+        ];
+    }
+    public static function getStatusPersian(): array
+    {
+        return [
+            self::status_inactive => 'غیرفعال',# 0
+            self::status_active => 'فعال',# 1
         ];
     }
 

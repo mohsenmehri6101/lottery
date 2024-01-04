@@ -51,5 +51,4 @@ return new class extends Migration {
         Schema::dropIfExists('reserve_templates');
         Schema::dropIfExists('reserves');
     }
-
 };

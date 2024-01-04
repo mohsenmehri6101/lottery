@@ -30,6 +30,7 @@ Route::prefix('gyms')->name('gyms_')->group(function () {
 Route::prefix('reserve_templates')->name('reserve_templates_')->group(function () {
     Route::get('/', [ReserveTemplateController::class, 'index'])->name('index');
     Route::get('gender-acceptances', [ReserveTemplateController::class, 'gender_acceptances'])->name('gender_acceptances');
+    Route::get('statuses', [ReserveTemplateController::class, 'statuses'])->name('statuses');
     Route::get('between-date', [ReserveTemplateController::class, 'betweenDate'])->name('between_date');
     Route::get('/{id}', [ReserveTemplateController::class, 'show'])->name('show');
     Route::post('/', [ReserveTemplateController::class, 'store'])->middleware('auth:api')->name('store');
