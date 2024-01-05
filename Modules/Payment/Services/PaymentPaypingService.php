@@ -25,7 +25,6 @@ class PaymentPaypingService
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName)
     {
         try {
-            return 'sdfasf';
             $data = [
                 'clientRefId' => $clientRefId, /* شماره فاکتور */
                 'payerIdentity' => $mobile, /* شماره موبایل یا ایمیل پرداخت کننده */

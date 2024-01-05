@@ -39,5 +39,10 @@ Route::prefix('payments')->name('payments_')->group(function () {
     Route::post('/create-link-payment', [PaymentController::class, 'createLinkPayment'])->middleware('auth:api')->name('create_link_payment');
     Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('confirm_payment_get');
     Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('confirm_payment_post');
+
+    Route::post('/create-link-payment-sadad', [PaymentController::class, 'createLinkPaymentSadad'])->middleware('auth:api')->name('create_link_payment');
+    Route::get('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_get');
+    Route::post('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_post');
+
     Route::get('/{id}', [PaymentController::class, 'show'])->middleware('auth:api')->name('show');
 });

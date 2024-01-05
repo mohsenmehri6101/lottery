@@ -76,8 +76,30 @@ class PaymentController extends Controller
         $link = $this->paymentService->createLinkPayment($request);
         return ResponseHelper::responseSuccessShow(data:['link'=>$link]);
     }
-
     public function confirmPayment(Request $request): JsonResponse
+    {
+        $status = $this->paymentService->confirmPayment($request);
+        return ResponseHelper::responseSuccessShow();
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/payments/create-link-payment-sadad",
+     *     tags={"payments"},
+     *     summary="create link payment",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="factor_id",in="query",required=true, @OA\Schema(type="integer"),description="factor_id"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): JsonResponse
+    {
+        $link = $this->paymentService->createLinkPayment($request);
+        return ResponseHelper::responseSuccessShow(data:['link'=>$link]);
+    }
+    public function confirmPaymentSadad(Request $request): JsonResponse
     {
         $status = $this->paymentService->confirmPayment($request);
         return ResponseHelper::responseSuccessShow();
