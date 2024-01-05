@@ -19,8 +19,9 @@ class PaymentSadadService
         $this->TokenCode = $token ?? env('PAYMENT_SADAD_TOKEN');
     }
 
-    public function createLinkPayment($MerchantId = null, $TerminalId = null, $Amount = null, $OrderId = null, $LocalDateTime = null, $ReturnUrl = null, $SignData = null, $AdditionalData = null, $MultiplexingData = null, $UserId = null, $ApplicationName = null, $PanAuthenticationType = null, $NationalCode = null, $CardHolderIdentity = null, $SourcePanList = [], $NationalCodeEnc = null, $SourcePanList = null)
+    public function createLinkPayment($MerchantId = null, $TerminalId = null, $Amount = null, $OrderId = null, $LocalDateTime = null, $ReturnUrl = null, $SignData = null, $AdditionalData = null, $MultiplexingData = null, $UserId = null, $ApplicationName = null, $PanAuthenticationType = null, $NationalCode = null, $CardHolderIdentity = null, $SourcePanList = [], $NationalCodeEnc = null)
     {
+        $SourcePanList=null;
         try {
             # MerchantId               string   required
             # TerminalId               string   required
