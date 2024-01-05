@@ -12271,6 +12271,49 @@
                 ]
             }
         },
+        "/api/v1/payments/create-link-payment-sadad": {
+            "post": {
+                "tags": [
+                    "payments"
+                ],
+                "summary": "create link payment",
+                "operationId": "52e42adf6ffe9de003a2f4d80832356a",
+                "parameters": [
+                    {
+                        "name": "factor_id",
+                        "in": "query",
+                        "description": "factor_id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/sliders": {
             "get": {
                 "tags": [
