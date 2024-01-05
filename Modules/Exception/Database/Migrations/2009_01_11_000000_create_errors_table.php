@@ -8,25 +8,26 @@ return new class extends Migration {
     public function up(): void
     {
         /*
-                    DROP TABLE IF EXISTS `errors`;
-                    CREATE TABLE `errors`  (
-                      `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-                      `status_code` int(11) NULL DEFAULT NULL COMMENT 'http status code',
-                      `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'روت خطای اتفاق افتاده',
-                      `exception` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'نوع خطا(نام خطا)',
-                      `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'متن خطا',
-                      `user_creator` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT 'user_creator',
-                      `stack_trace` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'محل وقوع خطا  - شرح خطا - نوع خطا',
-                      `requests` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'اطلاعات ارسالی توسط کاربر',
-                      `headers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'اطلاعات هدر کاربر',
-                      `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'اطلاعات دستگاه کاربر',
-                      `extra_date` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'اطلاعات اضافی که توسط developer تنظیم شده است',
-                      `created_at` timestamp NULL DEFAULT NULL,
-                      `updated_at` timestamp NULL DEFAULT NULL,
-                      `deleted_at` timestamp NULL DEFAULT NULL,
-                      PRIMARY KEY (`id`) USING BTREE
-                    ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'جدول ثبت خطاهای اتفاق افتاده در پروژه' ROW_FORMAT = Dynamic;
+    DROP TABLE IF EXISTS `errors`;
+    CREATE TABLE `errors`  (
+      `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `status_code` int(11) NULL DEFAULT NULL COMMENT 'http status code',
+      `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'روت خطای اتفاق افتاده',
+      `exception` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'نوع خطا(نام خطا)',
+      `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'متن خطا',
+      `user_creator` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT 'user_creator',
+      `stack_trace` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'محل وقوع خطا  - شرح خطا - نوع خطا',
+      `requests` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'اطلاعات ارسالی توسط کاربر',
+      `headers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'اطلاعات هدر کاربر',
+      `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'اطلاعات دستگاه کاربر',
+      `extra_date` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'اطلاعات اضافی که توسط developer تنظیم شده است',
+      `created_at` timestamp NULL DEFAULT NULL,
+      `updated_at` timestamp NULL DEFAULT NULL,
+      `deleted_at` timestamp NULL DEFAULT NULL,
+      PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'جدول ثبت خطاهای اتفاق افتاده در پروژه' ROW_FORMAT = Dynamic;
 */
+
         Schema::create('errors', function (Blueprint $table) {
             $table->comment('جدول ثبت خطاهای اتفاق افتاده در پروژه');
             $table->id();
