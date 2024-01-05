@@ -5,18 +5,20 @@ namespace Modules\Gym\Entities;
 use App\Models\Traits\GetCastsModel;
 use App\Models\Traits\UserCreator;
 use App\Models\Traits\UserEditor;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JetBrains\PhpStorm\ArrayShape;
 use Modules\Authentication\Entities\User;
 use Modules\Payment\Entities\Factor;
+use Carbon\Carbon;
 
 /**
  * @property integer $id
  * @property integer $reserve_template_id
+ * @property integer $gym_id
  * @property integer $user_id
  * @property integer $payment_status
  * @property integer $user_creator
@@ -44,6 +46,7 @@ class Reserve extends Model
     protected $fillable = [
         'id',
         'reserve_template_id',
+        'gym_id',
         'user_id',
         'payment_status',
         'user_creator',
@@ -57,6 +60,7 @@ class Reserve extends Model
     protected $casts = [
         'id' => 'integer',
         'reserve_template_id' => 'integer',
+        'gym_id' => 'integer',
         'user_id' => 'integer',
         'payment_status' => 'integer',
         'user_creator' => 'integer',
@@ -140,9 +144,9 @@ class Reserve extends Model
         ];
     }
 
-    public function gym(): HasOneThrough
+    public function gym(): BelongsTo
     {
-        return $this->hasOneThrough(Gym::class, ReserveTemplate::class, 'id', 'id', 'reserve_template_id', 'gym_id');
+        return $this->belongsTo(Gym::class, 'gym_id');
     }
 
     #[ArrayShape([self::payment_status_unknown => "string", self::payment_status_unpaid => "string", self::payment_status_paid => "string"])]
@@ -178,5 +182,23 @@ class Reserve extends Model
     public function factors(): BelongsToMany
     {
         return $this->belongsToMany(Factor::class)->withPivot('price');
+    }
+
+    public function reserveTemplatesBetweenDates($gym_id, $startDate = null, $endDate = null): Collection|array
+    {
+        $query = $this->query()->where('gym_id', $gym_id);
+
+        if ($startDate === null) {
+            $now = Carbon::now();
+            $startDate = $now->startOfWeek()->subWeek(4)->format('Y-m-d');
+        }
+
+        if ($endDate === null) {
+            $endDate = Carbon::now()->format('Y-m-d');
+        }
+        $query->whereDate('dated_at', '>=', $startDate)
+            ->whereDate('dated_at', '<=', $endDate);
+
+        return $query->get();
     }
 }

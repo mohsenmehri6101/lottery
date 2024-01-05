@@ -13,6 +13,7 @@ class ReserveStoreRequest extends FormRequest
 
         return [
             'reserve_template_id' => 'required|exists:reserve_templates,id',
+            'gym_id' => 'nullable|exists:gyms,id',
             'user_id' => 'required|exists:users,id',
             'payment_status' => "nullable|numeric|in:$statuses",
             // todo check data bigger than today $date>= $today

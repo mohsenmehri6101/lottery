@@ -5,6 +5,7 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Http\Repositories\ReserveRepository;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
@@ -73,6 +74,13 @@ class ReserveService
         DB::beginTransaction();
         try {
             $fields = $request->validated();
+            $reserve_template_id = $fields['reserve_template_id'];
+
+            if(!isset($fields['gym_id']) || !filled($fields['gym_id'])){
+                /** @var ReserveTemplate $reserveTemplate */
+                $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
+                $fields['gym_id'] = $reserveTemplate->gym_id;
+            }
 
             $reserve = $this->reserveRepository->create($fields);
             DB::commit();
@@ -83,13 +91,12 @@ class ReserveService
         }
     }
 
-
     /**
      * @param ReserveStoreBlockRequest $request
      * @return mixed
      * @throws Exception
      */
-    public function storeBlocks(ReserveStoreBlockRequest $request)
+    public function storeBlocks(ReserveStoreBlockRequest $request): mixed
     {
         DB::beginTransaction();
         try {

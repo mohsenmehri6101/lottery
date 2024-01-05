@@ -241,7 +241,9 @@ class GymDatabaseSeeder extends Seeder
 
         for ($i = 0; $i < $count; $i++) {
             $user_creator_or_editor = User::query()->inRandomOrder()->first()->id;
-            $reserve_template_id = ReserveTemplate::query()->inRandomOrder()->first()->id;
+            /** @var ReserveTemplate $reserve_template */
+            $reserve_template = ReserveTemplate::query()->inRandomOrder()->first();
+            $reserve_template_id = $reserve_template->id;
 
             // Generate random data for a reserve reservation
             $georgian_date = $faker->dateTimeThisMonth();
@@ -266,6 +268,7 @@ class GymDatabaseSeeder extends Seeder
             if (!$existing_record) {
                 $reserve_fake = [
                     'reserve_template_id' => $reserve_template_id,
+                    'gym_id' => $reserve_template->gym_id,
                     'user_id' => User::query()->inRandomOrder()->first()->id,
                     'payment_status' => $faker->boolean,
                     'user_creator' => $user_creator_or_editor,

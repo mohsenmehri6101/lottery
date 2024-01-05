@@ -33,6 +33,7 @@ return new class extends Migration {
             $table->id();
             $table->tinyInteger('status')->nullable()->default(Reserve::status_active/*1*/)->comment('');
             $table->unsignedBigInteger('reserve_template_id')->nullable();
+            $table->unsignedBigInteger('gym_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->tinyInteger('payment_status')->nullable()->default(0)->comment('');
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
