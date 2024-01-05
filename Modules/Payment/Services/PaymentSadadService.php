@@ -59,7 +59,6 @@ class PaymentSadadService
                 'NationalCodeEnc' => $NationalCodeEnc,
             ];
 
-
             $response = Http::withHeaders([
                 'accept' => 'application/json',
                 'authorization' => 'Bearer ' . $this->TokenCode,
@@ -76,6 +75,7 @@ class PaymentSadadService
             $Description = $responseData['Description'] ?? null;
             $Description = $responseData['Description'] ?? null;
 
+            $code =null;
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
                 return self::$PAYMENT_BASE_URL . 'pay/gotoipg/' . $code;
             }
