@@ -243,7 +243,6 @@ class GymDatabaseSeeder extends Seeder
             $user_creator_or_editor = User::query()->inRandomOrder()->first()->id;
             /** @var ReserveTemplate $reserve_template */
             $reserve_template = ReserveTemplate::query()->inRandomOrder()->first();
-            $reserve_template_id = $reserve_template->id;
 
             // Generate random data for a reserve reservation
             $georgian_date = $faker->dateTimeThisMonth();
@@ -261,13 +260,13 @@ class GymDatabaseSeeder extends Seeder
             // Check if a record with the same dated_at and reserve_template_id already exists
             $existing_record = Reserve::query()
                 ->where('dated_at', $formatted_georgian_date)
-                ->where('reserve_template_id', $reserve_template_id)
+                ->where('reserve_template_id', $reserve_template->id)
                 ->first();
 
             // If no existing record found, create a new reserve reservation using the model
             if (!$existing_record) {
                 $reserve_fake = [
-                    'reserve_template_id' => $reserve_template_id,
+                    'reserve_template_id' => $reserve_template->id,
                     'gym_id' => $reserve_template->gym_id,
                     'user_id' => User::query()->inRandomOrder()->first()->id,
                     'payment_status' => $faker->boolean,

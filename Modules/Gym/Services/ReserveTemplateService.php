@@ -5,6 +5,7 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Http\Repositories\ReserveTemplateRepository;
 use Modules\Gym\Http\Repositories\GymRepository;
@@ -143,6 +144,13 @@ class ReserveTemplateService
 
             $reserve_templates = $reserve_templates->map(function (ReserveTemplate $reserve_template) use ($reserves) {
                 $reserve_template['reserve'] = $reserves->filter(function (Reserve $reserve) use ($reserve_template) {
+                    Log::info([
+                        $reserve->reserve_template_id ===$reserve_template->id ,
+                        $reserve->reserve_template_id,
+                        $reserve_template->id,
+                        gettype($reserve->reserve_template_id),
+                        gettype($reserve_template->id)
+                    ]);
                     return $reserve->reserve_template_id === $reserve_template->id;
                 }) ?? null;
                 return $reserve_template;

@@ -8847,7 +8847,7 @@
                         "name": "order_by",
                         "in": "query",
                         "description": "order_by",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string"
                         }
@@ -8856,7 +8856,7 @@
                         "name": "direction_by",
                         "in": "query",
                         "description": "direction_by",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string"
                         }
