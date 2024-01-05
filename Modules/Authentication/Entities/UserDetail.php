@@ -31,7 +31,6 @@ use Modules\Geographical\Entities\City;
 class UserDetail extends ParentModel
 {
     use UserCreator, UserEditor, SoftDeletes;
-
     const gender_unknown = 0;
     const gender_male = 1;
     const gender_female = 2;

@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->comment('اطلاعات کاربر(اطلاعات هویتی + اطلاعات ورود)');
             $table->id();
-            $table->string('username');
-            $table->string('password');
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
             $table->string('email')->nullable()->unique();
             $table->string('mobile')->unique();
             $table->string('code')->unique()->nullable();

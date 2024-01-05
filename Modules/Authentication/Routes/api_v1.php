@@ -34,6 +34,7 @@ Route::prefix('authenticate')->name('authenticate_')->group(function () {
     Route::post('/resend-otp', [AuthenticationController::class, 'resendOtp'])->name('resend_otp');
     // todo should be throttle middleware
     Route::post('/otp-confirm', [AuthenticationController::class, 'otpConfirm'])->name('otp_confirm');
+    Route::post('/otp-confirm-v2', [AuthenticationController::class, 'otpConfirm'])->name('otp_confirm');
 });
 
 # web info
