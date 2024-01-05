@@ -244,7 +244,7 @@ class UserService
 
             # save user_details
             /** @var UserDetail $user */
-            $userDetail = $user->userDetail()->create($user_details_fields);
+            $user->userDetail()->create($user_details_fields);
 
             $role_default = Role::query()->where('name', RolesEnum::user->name)->first()->id;
             $role_ids = $role_ids ?? [$role_default];

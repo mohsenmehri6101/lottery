@@ -195,8 +195,6 @@ class AuthenticationService
         }
     }
 
-
-
     public function generate_otp_random(): int
     {
         $min_number_random = config('configs.authentication.otp.min_number_random');
