@@ -199,7 +199,7 @@ class UserService
              */
             extract($fields);
 
-            if (!isset($mobile) || filled($mobile)) {
+            if (!isset($mobile) || !filled($mobile)){
                 throw new Exception('ورود تلفن همراه برای ثبت نام ضروری است');
             }
 

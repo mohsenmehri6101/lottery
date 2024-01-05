@@ -91,6 +91,53 @@
                 }
             }
         },
+        "/api/v1/authentication/authenticate/otp-confirm-v2": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "تایید کد(ثبت نام یا ورود)",
+                "operationId": "bc653059160fbc40e77f827d85b1dd4b",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "mobile",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "code",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/authentication/authenticate/login": {
             "post": {
                 "tags": [

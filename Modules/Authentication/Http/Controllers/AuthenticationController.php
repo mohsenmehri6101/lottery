@@ -53,7 +53,6 @@ class AuthenticationController extends Controller
         return ResponseHelper::responseSuccess(data: $token_and_user);
     }
 
-
     /**
      * @OA\Post(
      *     path="/api/v1/authentication/authenticate/otp-confirm-v2",
