@@ -9,12 +9,12 @@ class AuthenticationServiceProvider extends ServiceProvider
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Authentication';
+    protected string $moduleName = 'Authentication';
 
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'authentication';
+    protected string $moduleNameLower = 'authentication';
 
     /**
      * Boot the application events.

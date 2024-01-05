@@ -199,11 +199,15 @@ class UserService
              */
             extract($fields);
 
+            if (!isset($mobile) || filled($mobile)) {
+                throw new Exception('ورود تلفن همراه برای ثبت نام ضروری است');
+            }
+
             # user
             $user_fields = [
                 'parent_code' => $parent_code ?? null,
                 'username' => $username ?? null,
-                'password' => $password ?? $username ?? $mobile ?? $email /* todo random password */,
+                'password' => $password ?? $username ?? $mobile ?? $email ?? null/* todo random password */,
                 'email' => $email ?? null,
                 'mobile' => $mobile ?? null,
                 'status' => $status ?? null,
@@ -246,7 +250,6 @@ class UserService
             $role_ids = $role_ids ?? [$role_default];
 
             $user->roles()->sync($role_ids);
-
 
             DB::commit();
             return $this->userRepository->withRelations(relations: ['userDetail'])->findOrFail($user?->id);

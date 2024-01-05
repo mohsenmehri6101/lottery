@@ -164,6 +164,39 @@ class AuthenticationService
             throw $exception;
         }
     }
+
+    public function otpConfirmV2(OtpConfirmRequest $request)
+    {
+        try {
+            $fields = $request->validated();
+
+            /**
+             * @var $mobile
+             * @var $code
+             */
+            extract($fields);
+
+            $mobile = $mobile ?? null;
+
+            /** @var UserService $userService */
+            $userService = resolve('UserService');
+
+            /** @var User $user */
+            $user = $userService::getUser(mobile: $mobile, withs: ['userDetail']);
+
+            if(!$user){
+                $userService->store(['mobile'=>$mobile]);
+            }
+
+            cache()->forget($mobile);
+            return self::setTokenOrApiKey(user: $user, mobile: $mobile);
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+
+
     public function generate_otp_random(): int
     {
         $min_number_random = config('configs.authentication.otp.min_number_random');

@@ -45,6 +45,7 @@ class UserStoreRequest extends FormRequest
         if (is_admin()) {
             $rules = [
                 ...$rules,
+                'status' => "nullable|numeric|in:$statuses_user",
                 'role_ids' => 'nullable|array',
                 'role_ids.*' => 'required|filled|exists:roles,id'
             ];
@@ -72,4 +73,5 @@ class UserStoreRequest extends FormRequest
             'address' => trans('custom.authentication.user_details.fields.address'),
         ];
     }
+
 }
