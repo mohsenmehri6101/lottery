@@ -200,5 +200,4 @@ class Reserve extends Model
 
         return $query->get();
     }
-
 }

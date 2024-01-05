@@ -20,4 +20,5 @@ class ReserveTemplateBetweenDateRequest extends FormRequest
             'direction_by' => "nullable|filled|in:asc,desc",
         ];
     }
+
 }

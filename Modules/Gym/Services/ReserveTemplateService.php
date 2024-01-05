@@ -5,7 +5,7 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Modules\Gym\Entities\Gym;
+use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Http\Repositories\ReserveTemplateRepository;
 use Modules\Gym\Http\Repositories\GymRepository;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateBetweenDateRequest;
@@ -14,6 +14,7 @@ use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateShowRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateStoreRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateUpdateRequest;
 use Modules\Gym\Entities\ReserveTemplate;
+use Illuminate\Support\Facades\Validator;
 
 class ReserveTemplateService
 {
@@ -24,7 +25,15 @@ class ReserveTemplateService
     public function index(ReserveTemplateIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $reserveStoreRequest = new ReserveTemplateIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $reserveStoreRequest->rules(),
+                    attributes: $reserveStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             $order_by = $fields['order_by'] ?? null;
             $direction_by = $fields['direction_by'] ?? null;
@@ -128,13 +137,19 @@ class ReserveTemplateService
             $to = $to ?? null;
             $gym_id = $gym_id ?? null;
 
-            # find gym
-            /** @var Gym $gym */
-            $gym = $this->gymRepository->findOrFail($gym_id);
-            return $gym->reserveTemplatesBetweenDates($from, $to)->get();
-            # Get reserve templates between dates
-            //            return Gym::getReserveTemplateBetweenDate(gym_id: $gym_id,from: $from,to: $to);
-            //
+            $reserve_templates = $this->index(['gym_id' => $gym_id]);
+            /** @var Reserve $reserves */
+            $reserves = Reserve::reserveBetweenDates(gym_id: $gym_id, startDate: $from, endDate: $to);
+
+            $reserve_templates = $reserve_templates->map(function (ReserveTemplate $reserve_template) use ($reserves) {
+                $reserve_template['reserve'] = $reserves->filter(function (Reserve $reserve) use ($reserve_template) {
+                    return $reserve->reserve_template_id === $reserve_template->id;
+                }) ?? null;
+                return $reserve_template;
+            });
+
+            return $reserve_templates;
+
         } catch (Exception $exception) {
             throw $exception;
         }
