@@ -191,5 +191,5 @@ class ReserveController extends Controller
         $reserves = $this->reserveService->reserveBetweenDates($request);
         return ResponseHelper::responseSuccess(data: $reserves);
     }
-    
+
 }

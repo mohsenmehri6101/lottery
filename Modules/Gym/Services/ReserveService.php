@@ -3,6 +3,7 @@
 namespace Modules\Gym\Services;
 
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Gym\Entities\ReserveTemplate;
@@ -157,9 +158,8 @@ class ReserveService
     }
 
 
-    public function reserveBetweenDates(ReserveBetweenDateRequest $request)
+    public function reserveBetweenDates(ReserveBetweenDateRequest $request): Collection|array
     {
-        DB::beginTransaction();
         try {
             $fields = $request->validated();
 
@@ -171,14 +171,9 @@ class ReserveService
              * @var $direction_by
              */
             extract($fields);
-
             // todo should be check different between from and two less one month.
-
             return Reserve::reserveBetweenDates(gym_id: $gym_id, startDate: $from, endDate: $to);
-
-            DB::commit();
         } catch (Exception $exception) {
-            DB::rollBack();
             throw $exception;
         }
     }
