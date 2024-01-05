@@ -184,9 +184,9 @@ class Reserve extends Model
         return $this->belongsToMany(Factor::class)->withPivot('price');
     }
 
-    public function reserveTemplatesBetweenDates($gym_id, $startDate = null, $endDate = null): Collection|array
+    public static  function reserveBetweenDates($gym_id, $startDate = null, $endDate = null): Collection|array
     {
-        $query = $this->query()->where('gym_id', $gym_id);
+        $query = self::query()->where('gym_id', $gym_id);
 
         if ($startDate === null) {
             $now = Carbon::now();
@@ -196,9 +196,9 @@ class Reserve extends Model
         if ($endDate === null) {
             $endDate = Carbon::now()->format('Y-m-d');
         }
-        $query->whereDate('dated_at', '>=', $startDate)
-            ->whereDate('dated_at', '<=', $endDate);
+        $query->whereDate('dated_at', '>=', $startDate)->whereDate('dated_at', '<=', $endDate);
 
         return $query->get();
     }
+
 }

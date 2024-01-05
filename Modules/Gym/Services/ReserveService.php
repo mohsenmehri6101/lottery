@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Http\Repositories\ReserveRepository;
+use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
@@ -74,9 +75,9 @@ class ReserveService
         DB::beginTransaction();
         try {
             $fields = $request->validated();
-            $reserve_template_id = $fields['reserve_template_id'];
 
-            if(!isset($fields['gym_id']) || !filled($fields['gym_id'])){
+            $reserve_template_id = $fields['reserve_template_id'];
+            if (!isset($fields['gym_id']) || !filled($fields['gym_id'])) {
                 /** @var ReserveTemplate $reserveTemplate */
                 $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
                 $fields['gym_id'] = $reserveTemplate->gym_id;
@@ -154,4 +155,32 @@ class ReserveService
             throw $exception;
         }
     }
+
+
+    public function reserveBetweenDates(ReserveBetweenDateRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $fields = $request->validated();
+
+            /**
+             * @var $from
+             * @var $to
+             * @var $gym_id
+             * @var $order_by
+             * @var $direction_by
+             */
+            extract($fields);
+
+            // todo should be check different between from and two less one month.
+
+            return Reserve::reserveBetweenDates(gym_id: $gym_id, startDate: $from, endDate: $to);
+
+            DB::commit();
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+    }
+
 }

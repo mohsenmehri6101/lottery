@@ -4,6 +4,7 @@ namespace Modules\Gym\Http\Controllers;
 
 use App\Helper\Response\ResponseHelper;
 use Illuminate\Routing\Controller;
+use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
@@ -169,4 +170,26 @@ class ReserveController extends Controller
         $status_delete = $this->reserveService->destroy($reserve_id);
         return $status_delete ? ResponseHelper::responseSuccessDelete() : ResponseHelper::responseFailedDelete();
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/reserves/between-date",
+     *     tags={"reserves"},
+     *     summary="get reserve between two date",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="from", in="query", required=true, @OA\Schema(type="string"), description="Start date"),
+     *     @OA\Parameter(name="to", in="query", required=true, @OA\Schema(type="string"), description="End date"),
+     *     @OA\Parameter(name="gym_id", in="query", required=true, @OA\Schema(type="integer"), description="Gym ID"),
+     *     @OA\Parameter(name="order_by", in="query", required=false, @OA\Schema(type="string"), description="order_by"),
+     *     @OA\Parameter(name="direction_by", in="query", required=false, @OA\Schema(type="string"), description="direction_by"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function reserveBetweenDates(ReserveBetweenDateRequest $request): JsonResponse
+    {
+        $reserves = $this->reserveService->reserveBetweenDates($request);
+        return ResponseHelper::responseSuccess(data: $reserves);
+    }
+    
 }

@@ -21,6 +21,7 @@ class ReserveUpdateRequest extends FormRequest
 
         return [
             'reserve_template_id' => 'nullable|exists:reserve_templates,id',
+            'gym_id' => 'nullable|exists:gyms,id',
             'user_id' => 'nullable|exists:users,id',
             'payment_status' => "nullable|numeric|in:$statuses",
             'dated_at' => 'nullable|unique_deleted_at_null:reserves,dated_at',
