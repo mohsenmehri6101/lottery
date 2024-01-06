@@ -128,8 +128,9 @@ class PaymentService
         if($PaymentPaypingService->confirmPayment($ref_id,$factor->total_price)){
             $factor->status = Factor::status_paid;
             $payment->status = Payment::status_paid;
-            $factor->save();
             $payment->save();
+            $factor->payment_id_paid =$payment->id;
+            $factor->save();
             return true;
         }
         return false;

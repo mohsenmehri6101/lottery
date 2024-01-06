@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Authentication\Entities\User;
 use Modules\Gym\Entities\Reserve;
@@ -20,6 +21,7 @@ use Modules\Gym\Entities\Reserve;
  * @property integer $status
  * @property integer $user_id
  * @property integer $payment_id
+ * @property integer $payment_id_paid
  * @property integer $user_creator
  * @property integer $user_editor
  * @property $created_at
@@ -44,6 +46,7 @@ class Factor extends Model
         'status',
         'user_id',
         'payment_id',
+        'payment_id_paid',
         'user_creator',
         'user_editor',
         'created_at',
@@ -58,6 +61,7 @@ class Factor extends Model
         'status' => 'integer',
         'user_id' => 'integer',
         'payment_id' => 'integer',
+        'payment_id_paid' => 'integer',
         'user_creator' => 'integer',
         'user_editor' => 'integer',
         'created_at' => 'timestamp',
@@ -70,7 +74,8 @@ class Factor extends Model
     public static array $relations_ = [
         'userCreator',
         'userEditor',
-        'payment',
+        'payments',
+        'paymentPaid',
         'user',
         'reserves',
     ];
@@ -159,4 +164,10 @@ class Factor extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function paymentPaid(): HasOne
+    {
+        return $this->hasOne(Payment::class, 'payment_id_paid', 'id');
+    }
+
 }
