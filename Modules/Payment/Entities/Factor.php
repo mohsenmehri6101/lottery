@@ -32,7 +32,6 @@ class Factor extends Model
 
     protected $table = 'factors';
 
-
     const status_unknown = 0;
     const status_unpaid = 1;
     const status_paid = 2;
@@ -160,5 +159,4 @@ class Factor extends Model
     {
         return $this->hasMany(Payment::class);
     }
-
 }

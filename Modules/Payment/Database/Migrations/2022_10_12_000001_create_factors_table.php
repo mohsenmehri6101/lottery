@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id')->nullable()->comment('کاربری که فاکتور براش ایجاد شده');
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
             $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
+            $table->unsignedBigInteger('payment_id_paid')->nullable()->comment('payment_id_paid');
             $table->timestamps();
             $table->softDeletes();
         });

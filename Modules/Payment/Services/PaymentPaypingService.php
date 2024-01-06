@@ -53,7 +53,6 @@ class PaymentPaypingService
             throw new CreateLinkPaymentException(/*extra_data:[$response->json()]*/);
 
         } catch (Exception $exception) {
-            dd_json($exception);
             throw new $exception;
         }
     }
