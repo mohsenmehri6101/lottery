@@ -36,10 +36,11 @@ Route::prefix('banks')->name('banks_')->group(function () {
 # payments
 Route::prefix('payments')->name('payments_')->group(function () {
     Route::get('/', [PaymentController::class, 'index'])->middleware('auth:api')->name('index');
+    # payping
     Route::post('/create-link-payment', [PaymentController::class, 'createLinkPayment'])->middleware('auth:api')->name('create_link_payment');
     Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('confirm_payment_get');
     Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('confirm_payment_post');
-
+    # sadad
     Route::post('/create-link-payment-sadad', [PaymentController::class, 'createLinkPaymentSadad'])->middleware('auth:api')->name('create_link_payment');
     Route::get('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_get');
     Route::post('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_post');

@@ -82,7 +82,6 @@ class PaymentController extends Controller
         return ResponseHelper::responseSuccessShow();
     }
 
-
     /**
      * @OA\Post(
      *     path="/api/v1/payments/create-link-payment-sadad",
@@ -96,9 +95,10 @@ class PaymentController extends Controller
      */
     public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): JsonResponse
     {
-        $link = $this->paymentService->createLinkPayment($request);
+        $link = $this->paymentService->createLinkPaymentSadad($request);
         return ResponseHelper::responseSuccessShow(data:['link'=>$link]);
     }
+
     public function confirmPaymentSadad(Request $request): JsonResponse
     {
         $status = $this->paymentService->confirmPayment($request);

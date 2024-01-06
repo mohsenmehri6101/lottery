@@ -130,6 +130,11 @@ class PaymentServiceProvider extends ServiceProvider
             return new \Modules\Payment\Services\PaymentPaypingService();
         });
 
+        # PaymentSadadService
+        $this->app->singleton('PaymentSadadService', function ($app) {
+            return new \Modules\Payment\Services\PaymentSadadService();
+        });
+
         # PaymentRepository
         $paymentRepository = new \Modules\Payment\Http\Repositories\PaymentRepository();
         $this->app->singleton('PaymentRepository', function ($app) use ($paymentRepository) {

@@ -50,11 +50,6 @@ class PaymentService
         }
     }
 
-    /**
-     * @param PaymentCreateLinkRequest $request
-     * @return string|null
-     * @throws CreateLinkPaymentException
-     */
     public function createLinkPayment(PaymentCreateLinkRequest $request): ?string
     {
         try {
@@ -155,4 +150,55 @@ class PaymentService
         }
     }
 
+    public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): ?string
+    {
+        try {
+            $fields = $request->validated();
+
+            /**
+             * @var $factor_id
+             */
+            extract($fields);
+
+            /** @var FactorRepository $factorRepository */
+            $factorRepository = resolve('FactorRepository');
+
+            /** @var Factor $factor */
+            $factor = $factorRepository->findOrFail($factor_id);
+            /* --------------------------------------------------------- */
+
+            /** @var PaymentPaypingService $PaymentPaypingService */
+            $PaymentPaypingService = resolve('PaymentPaypingService');
+
+            $clientRefId = $factor->id ?? null;
+            $mobile = $factor?->user?->mobile ?? null;
+            $amount = $factor->total_price ?? null;
+            /** @var User $user */
+            $user = $factor->user;
+            $returnUrl = route('api_v1_payment_payments_confirm_payment_get') ?? null;
+            $payerName = $factor?->user?->full_name ?? null;
+            $description = isset($description) && filled($description) ? $description : $mobile;
+
+            /** @var $payment $payment */
+            $payment = $factor->payments()->create([
+                'status'=>Payment::status_unpaid,
+                'resnumber'=>Payment::resnumberUnique(),
+                'amount'=>$amount,
+                'user_id'=>$user->id,
+            ]);
+
+            $url = $PaymentPaypingService->createLinkPayment(
+                clientRefId: $payment->resnumber,
+                mobile: $mobile,
+                amount: $amount,
+                returnUrl: $returnUrl,
+                description: $description,
+                payerName: $payerName,
+            );
+
+            return $url;
+        } catch (Exception $exception) {
+            throw new $exception;
+        }
+    }
 }

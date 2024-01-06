@@ -12,5 +12,4 @@ class PaymentCreateLinkRequest extends FormRequest
             'factor_id' => 'nullable|exists:factors,id',
         ];
     }
-
 }

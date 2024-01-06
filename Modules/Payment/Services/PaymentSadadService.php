@@ -23,23 +23,26 @@ class PaymentSadadService
     {
         $SourcePanList=null;
         try {
-            # MerchantId               string   required
-            # TerminalId               string   required
-            # Amount                   string   required
-            # OrderId                  number   required
-            # LocalDateTime            DateTime required
-            # ReturnUrl                string   required
-            # SignData                 string   required
-            # AdditionalData           string   required
-            # MultiplexingData         json     required
-            # UserId                   number   required
-            # ApplicationName          string   required
-            # PanAuthenticationType    number   required
-            # NationalCode             string   required
-            # CardHolderIdentity       string   required
-            # SourcePanList            list     required
-            # NationalCodeEnc          string   required
-
+            #############################################################################################################
+            # ###############          ######   ########            #####################################################
+            # MerchantId               string   required            شماره پذیرنده
+            # TerminalId               string   required            شماره ترمینال
+            # Amount                   string   required            مبلغ تراکنش
+            # OrderId                  number   required            شماره سفارش(فاکتور)
+            # LocalDateTime            DateTime required            تاریخ و زمان ارسال تراکنش
+            # ReturnUrl                string   required            ادرس بازگشت
+            # SignData                 string   required            اطلاعات تراکنش به صورت رمزنگاری شده توسط کلید پذیرنده
+            # AdditionalData           string   not-required        اطلاعات اضافی تراکنش
+            # MultiplexingData         json     not-required        اطلاعات تسهیم
+            # UserId                   number   required            شماره همراه کاربر
+            # ApplicationName          string   required            نام اپلیکیشن درخواست کننده
+            # PanAuthenticationType    number   required            نوع احراز هویت
+            # NationalCode             string   required            کد ملی دارنده کارت
+            # CardHolderIdentity       string   required            شماره موبایل دارنده کارت
+            # SourcePanList            list     required            لیستی از شماره کارت ها برای نمایش
+            # NationalCodeEnc          string   required            کد ملی دارنده کارت به صورت رمزنگاری شده
+            # ###############          ######   ########            #####################################################
+            #############################################################################################################
 
             $data = [
                 'MerchantId' => $MerchantId,
