@@ -167,7 +167,7 @@ class Factor extends Model
 
     public function paymentPaid(): HasOne
     {
-        return $this->hasOne(Payment::class, 'payment_id_paid', 'id');
+        return $this->hasOne(Payment::class, 'id','payment_id_paid');
     }
 
 }

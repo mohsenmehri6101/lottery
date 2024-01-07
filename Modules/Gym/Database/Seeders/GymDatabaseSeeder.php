@@ -16,6 +16,7 @@ use Modules\Geographical\Entities\City;
 use Illuminate\Http\UploadedFile;
 use Modules\Gym\Entities\Attribute;
 use Modules\Gym\Entities\Category;
+use Modules\Gym\Entities\Complaint;
 use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
@@ -99,6 +100,26 @@ class GymDatabaseSeeder extends Seeder
             Category::query()->create(['name' => $category/*, 'parent' => $parent*/]);
         }
     }
+
+    public static function helperFunctionComplaintFake($number = 40): void
+    {
+        $faker = FakerFactory::create();
+        for ($i = 0; $i < $number; $i++) {
+            $status_fake_random = $faker->randomElement([Complaint::status_unknown, Complaint::status_not_checked, Complaint::status_reviewed]);
+            Complaint::query()->create([
+                'user_id' => User::query()->inRandomOrder()->first()->id,
+                'description' => $faker->text(),
+                'status' => $status_fake_random,
+                'user_creator' => User::query()->inRandomOrder()->first()->id,
+                'user_editor' => User::query()->inRandomOrder()->first()->id,
+                'factor_id' => Factor::query()->inRandomOrder()->first()->id,
+                'gym_id' => Gym::query()->inRandomOrder()->first()->id,
+                'reserve_id' => Reserve::query()->inRandomOrder()->first()->id,
+                'reserve_template_id' => ReserveTemplate::query()->inRandomOrder()->first()->id,
+            ]);
+        }
+    }
+
 
     public static function helperFunctionAttributeFake(): void
     {
@@ -408,7 +429,7 @@ class GymDatabaseSeeder extends Seeder
             /** @var Reserve $reserve */
             $reserve = Reserve::query()->inRandomOrder()->first();
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
-            $factor->update(['total_price' => /*$factor->reserves()->sum('price')*/1000]);
+            $factor->update(['total_price' => /*$factor->reserves()->sum('price')*/ 1000]);
         }
     }
 
@@ -450,6 +471,7 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionSliderFake();
         self::helperFunctionFactorFake();
         self::helperFunctionFakePayment();
+        self::helperFunctionComplaintFake();
     }
 
 }

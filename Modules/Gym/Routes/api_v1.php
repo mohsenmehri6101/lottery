@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Gym\Http\Controllers\AttributeController;
 use Modules\Gym\Http\Controllers\CategoryController;
 use Modules\Gym\Http\Controllers\CommentController;
+use Modules\Gym\Http\Controllers\ComplaintController;
 use Modules\Gym\Http\Controllers\ReserveController;
 use Modules\Gym\Http\Controllers\ReserveTemplateController;
 use Modules\Gym\Http\Controllers\KeywordController;
@@ -36,6 +37,16 @@ Route::prefix('reserve_templates')->name('reserve_templates_')->group(function (
     Route::post('/', [ReserveTemplateController::class, 'store'])->middleware('auth:api')->name('store');
     Route::put('/{id}', [ReserveTemplateController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [ReserveTemplateController::class, 'destroy'])->middleware('auth:api')->name('destroy');
+});
+
+# complaints
+Route::prefix('complaints')->name('complaints_')->group(function () {
+    Route::get('/', [ComplaintController::class, 'index'])->name('index');
+    Route::get('statuses', [ComplaintController::class, 'statuses'])->name('statuses');
+    Route::get('/{id}', [ComplaintController::class, 'show'])->name('show');
+    Route::post('/', [ComplaintController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::put('/{id}', [ComplaintController::class, 'update'])->middleware('auth:api')->name('update');
+    Route::delete('/{id}', [ComplaintController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
 
 # reserves
