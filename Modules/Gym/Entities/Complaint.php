@@ -6,6 +6,7 @@ use App\Models\Traits\UserCreator;
 use App\Models\Traits\UserEditor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Authentication\Entities\User;
 use Modules\Payment\Entities\Factor;
 
@@ -28,6 +29,7 @@ class Complaint extends Model
 {
     use UserEditor;
     use UserCreator;
+    use SoftDeletes;
 
     protected $table = 'complaints';
 
