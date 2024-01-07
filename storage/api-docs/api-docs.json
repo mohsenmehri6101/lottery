@@ -6436,7 +6436,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "relations:list is",
+                        "description": "withs:list is:user,userCreator,userEditor,factor,gym,reserve,reserveTemplate",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -6474,6 +6474,15 @@
                 "summary": "update complaint",
                 "operationId": "4eea5a9090d92aeeb855fa7c4c865766",
                 "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
                     {
                         "name": "user_id",
                         "in": "query",

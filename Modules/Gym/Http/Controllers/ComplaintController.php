@@ -96,6 +96,7 @@ class ComplaintController extends Controller
      *     tags={"complaints"},
      *     summary="update complaint",
      *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="integer"),description="id"),
      *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="user_id"),
      *     @OA\Parameter(name="description",in="query",required=false, @OA\Schema(type="string"),description="description"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),

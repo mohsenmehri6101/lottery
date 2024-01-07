@@ -68,6 +68,7 @@ class ComplaintService
             $complaint = $this->complaintRepository->findOrFail($complaint_id);
 
             $this->complaintRepository->update($complaint, $fields);
+
             DB::commit();
 
             return $this->complaintRepository->findOrFail($complaint_id);
