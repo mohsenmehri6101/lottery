@@ -5,6 +5,7 @@ namespace Modules\Gym\Entities;
 use App\Models\Traits\UserCreator;
 use App\Models\Traits\UserEditor;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Authentication\Entities\User;
@@ -37,8 +38,6 @@ class Complaint extends Model
     const status_not_checked = 1;
     const status_reviewed = 2;
 
-    public $timestamps = false;
-
     protected $fillable = [
         'id',
         'user_id',
@@ -66,6 +65,7 @@ class Complaint extends Model
         'gym_id' => 'integer',
         'reserve_id' => 'integer',
         'reserve_template_id' => 'integer',
+        'common_complaint_id' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
@@ -81,6 +81,7 @@ class Complaint extends Model
         'gym',
         'reserve',
         'reserveTemplate',
+        'commonComplaint',
     ];
 
     protected static function boot(): void
@@ -161,6 +162,11 @@ class Complaint extends Model
             self::status_not_checked => 'بررسی نشده',
             self::status_reviewed => 'بررسی شده',
         ];
+    }
+
+    public function commonComplaint(): BelongsTo
+    {
+        return $this->belongsTo(CommonComplaint::class);
     }
 
 }

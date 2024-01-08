@@ -22,14 +22,24 @@ return new class extends Migration {
             $table->unsignedBigInteger('gym_id')->nullable()->comment('gym_id');
             $table->unsignedBigInteger('reserve_id')->nullable()->comment('reserve_id');
             $table->unsignedBigInteger('reserve_template_id')->nullable()->comment('reserve_template_id');
+            $table->unsignedBigInteger('common_complaint_id')->nullable()->comment('common_complaint_id');
 
             $table->timestamps();
             $table->softDeletes();
+        });
+
+
+        Schema::create('common_complaints', function (Blueprint $table) {
+            $table->comment('شکایات عمومی');
+            $table->id();
+            $table->text('text')->nullable()->comment('متن شکایت عمومی');
         });
     }
 
     public function down(): void
     {
         Schema::dropIfExists('complaints');
+        Schema::dropIfExists('common_complaints');
     }
+
 };
