@@ -28,6 +28,7 @@ class CommonComplaintController extends Controller
      *     @OA\Parameter(name="page",in="query",required=false, @OA\Schema(type="string"),description="page"),
      *     @OA\Parameter(name="id",in="query",required=false, @OA\Schema(type="integer"),description="id"),
      *     @OA\Parameter(name="text",in="query",required=false, @OA\Schema(type="string"),description="text"),
+     *     @OA\Parameter(name="search",in="query",required=false, @OA\Schema(type="string"),description="search"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
@@ -63,7 +64,6 @@ class CommonComplaintController extends Controller
      *     tags={"common-complaints"},
      *     summary="save common-complaints",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="user_id",in="query",required=true, @OA\Schema(type="integer"),description="user_id"),
      *     @OA\Parameter(name="text",in="query",required=true, @OA\Schema(type="string"),description="text"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),

@@ -23,6 +23,7 @@ class CommonComplaintIndexRequest extends FormRequest
             'page' => 'nullable',
             'id' => 'nullable|exists:common_complaints,id',
             'text' => 'nullable',
+            'search' => 'nullable',
 
             'withs' => 'nullable|array',
             'withs.*' => "nullable|string|in:$withs_allows",

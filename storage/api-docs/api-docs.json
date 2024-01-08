@@ -6204,6 +6204,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -6237,15 +6246,6 @@
                 "summary": "save common-complaints",
                 "operationId": "5c1019b1ba3f24ecab3c953e5d8b7b5f",
                 "parameters": [
-                    {
-                        "name": "user_id",
-                        "in": "query",
-                        "description": "user_id",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
                     {
                         "name": "text",
                         "in": "query",

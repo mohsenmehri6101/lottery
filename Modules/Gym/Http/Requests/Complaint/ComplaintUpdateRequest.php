@@ -19,6 +19,7 @@ class ComplaintUpdateRequest extends FormRequest
             'gym_id' => 'nullable|exists:gyms,id',
             'reserve_id' => 'nullable|exists:reserves,id',
             'reserve_template_id' => 'nullable|exists:reserve_templates,id',
+            'common_complaint_id' => 'nullable|exists:common_complaints,id',
         ];
     }
 

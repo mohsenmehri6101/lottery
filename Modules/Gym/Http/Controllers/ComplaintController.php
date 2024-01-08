@@ -34,6 +34,7 @@ class ComplaintController extends Controller
      *     @OA\Parameter(name="gym_id",in="query",required=false, @OA\Schema(type="integer"),description="gym_id"),
      *     @OA\Parameter(name="reserve_id",in="query",required=false, @OA\Schema(type="integer"),description="reserve_id"),
      *     @OA\Parameter(name="reserve_template_id",in="query",required=false, @OA\Schema(type="integer"),description="reserve_template_id"),
+     *     @OA\Parameter(name="common_complaint_id",in="query",required=false, @OA\Schema(type="integer"),description="common_complaint_id"),
      *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:list is:user,userCreator,userEditor,factor,gym,reserve,reserveTemplate"),
      *     @OA\Parameter(name="created_at",in="query",required=false, @OA\Schema(type="string"),description="created_at"),
      *     @OA\Parameter(name="updated_at",in="query",required=false, @OA\Schema(type="string"),description="updated_at"),
@@ -80,6 +81,7 @@ class ComplaintController extends Controller
      *     @OA\Parameter(name="gym_id",in="query",required=true, @OA\Schema(type="integer"),description="gym_id"),
      *     @OA\Parameter(name="reserve_id",in="query",required=true, @OA\Schema(type="integer"),description="reserve_id"),
      *     @OA\Parameter(name="reserve_template_id",in="query",required=true, @OA\Schema(type="integer"),description="reserve_template_id"),
+     *     @OA\Parameter(name="common_complaint_id",in="query",required=false, @OA\Schema(type="integer"),description="common_complaint_id"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
@@ -104,6 +106,7 @@ class ComplaintController extends Controller
      *     @OA\Parameter(name="gym_id",in="query",required=false, @OA\Schema(type="integer"),description="gym_id"),
      *     @OA\Parameter(name="reserve_id",in="query",required=false, @OA\Schema(type="integer"),description="reserve_id"),
      *     @OA\Parameter(name="reserve_template_id",in="query",required=false, @OA\Schema(type="integer"),description="reserve_template_id"),
+     *     @OA\Parameter(name="common_complaint_id",in="query",required=false, @OA\Schema(type="integer"),description="common_complaint_id"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
@@ -130,4 +133,5 @@ class ComplaintController extends Controller
         $status_delete = $this->complaintService->destroy($complaint_id);
         return $status_delete ? ResponseHelper::responseSuccessDelete() : ResponseHelper::responseFailedDelete();
     }
+
 }
