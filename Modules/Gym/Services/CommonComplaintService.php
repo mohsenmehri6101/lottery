@@ -5,10 +5,10 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Modules\Gym\Entities\CommonComplaint;
-use Modules\Gym\Http\Requests\Complaint\ComplaintIndexRequest;
-use Modules\Gym\Http\Requests\Complaint\ComplaintShowRequest;
-use Modules\Gym\Http\Requests\Complaint\ComplaintStoreRequest;
-use Modules\Gym\Http\Requests\Complaint\ComplaintUpdateRequest;
+use Modules\Gym\Http\Requests\CommonComplaint\CommonComplaintIndexRequest;
+use Modules\Gym\Http\Requests\CommonComplaint\CommonComplaintShowRequest;
+use Modules\Gym\Http\Requests\CommonComplaint\CommonComplaintStoreRequest;
+use Modules\Gym\Http\Requests\CommonComplaint\CommonComplaintUpdateRequest;
 use Modules\Gym\Http\Repositories\CommonComplaintRepository;
 
 class CommonComplaintService
@@ -17,7 +17,7 @@ class CommonComplaintService
     {
     }
 
-    public function index(ComplaintIndexRequest|array $request)
+    public function index(CommonComplaintIndexRequest|array $request)
     {
         try {
             $fields = $request->validated();
@@ -27,7 +27,7 @@ class CommonComplaintService
         }
     }
 
-    public function show(ComplaintShowRequest $request, $complaint_id)
+    public function show(CommonComplaintShowRequest $request, $common_complaint_id)
     {
         try {
             $fields = $request->validated();
@@ -37,57 +37,57 @@ class CommonComplaintService
              */
             extract($fields);
             $withs = $withs ?? [];
-            return $this->commonComplaintRepository->withRelations(relations: $withs)->findOrFail($complaint_id);
+            return $this->commonComplaintRepository->withRelations(relations: $withs)->findOrFail($common_complaint_id);
         } catch (Exception $exception) {
             throw $exception;
         }
     }
 
-    public function store(ComplaintStoreRequest $request)
+    public function store(CommonComplaintStoreRequest $request)
     {
         DB::beginTransaction();
         try {
             $fields = $request->validated();
 
-            $complaint = $this->commonComplaintRepository->create($fields);
+            $common_complaint = $this->commonComplaintRepository->create($fields);
             DB::commit();
-            return $complaint;
+            return $common_complaint;
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;
         }
     }
 
-    public function update(ComplaintUpdateRequest $request, $complaint_id)
+    public function update(CommonComplaintUpdateRequest $request, $common_complaint_id)
     {
         DB::beginTransaction();
         try {
             $fields = $request->validated();
 
-            /** @var CommonComplaint $complaint */
-            $complaint = $this->commonComplaintRepository->findOrFail($complaint_id);
+            /** @var CommonComplaint $common_complaint */
+            $common_complaint = $this->commonComplaintRepository->findOrFail($common_complaint_id);
 
-            $this->commonComplaintRepository->update($complaint, $fields);
+            $this->commonComplaintRepository->update($common_complaint, $fields);
 
             DB::commit();
 
-            return $this->commonComplaintRepository->findOrFail($complaint_id);
+            return $this->commonComplaintRepository->findOrFail($common_complaint_id);
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;
         }
     }
 
-    public function destroy($complaint_id)
+    public function destroy($common_complaint_id)
     {
         DB::beginTransaction();
         try {
             # find complaint
-            /** @var CommonComplaint $complaint */
-            $complaint = $this->commonComplaintRepository->findOrFail($complaint_id);
+            /** @var CommonComplaint $common_complaint */
+            $common_complaint = $this->commonComplaintRepository->findOrFail($common_complaint_id);
 
             # delete complaint
-            $status_delete_complaint = $this->commonComplaintRepository->delete($complaint);
+            $status_delete_complaint = $this->commonComplaintRepository->delete($common_complaint);
 
             DB::commit();
             return $status_delete_complaint;
