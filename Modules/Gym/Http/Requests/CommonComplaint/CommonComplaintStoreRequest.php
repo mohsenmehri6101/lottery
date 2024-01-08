@@ -12,5 +12,4 @@ class CommonComplaintStoreRequest extends FormRequest
             'text' => 'required|filled',
         ];
     }
-
 }

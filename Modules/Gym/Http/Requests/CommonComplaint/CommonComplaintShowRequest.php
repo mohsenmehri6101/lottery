@@ -12,7 +12,6 @@ class CommonComplaintShowRequest extends FormRequest
     {
         $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
     }
-
     public function rules(): array
     {
         $withs_allows = implode(',', CommonComplaint::$relations_);

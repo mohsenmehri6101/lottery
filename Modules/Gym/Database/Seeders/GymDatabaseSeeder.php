@@ -16,6 +16,7 @@ use Modules\Geographical\Entities\City;
 use Illuminate\Http\UploadedFile;
 use Modules\Gym\Entities\Attribute;
 use Modules\Gym\Entities\Category;
+use Modules\Gym\Entities\CommonComplaint;
 use Modules\Gym\Entities\Complaint;
 use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Entities\ReserveTemplate;
@@ -118,6 +119,17 @@ class GymDatabaseSeeder extends Seeder
                 'reserve_template_id' => ReserveTemplate::query()->inRandomOrder()->first()->id,
             ]);
         }
+    }
+
+    public static function helperFunctionCommonComplaintFake($number = 40): void
+    {
+        $faker = FakerFactory::create();
+        for ($i = 0; $i < $number; $i++) {
+            CommonComplaint::query()->insert([
+                'text'=>$faker->text(),
+            ]);
+        }
+
     }
 
 
@@ -471,6 +483,7 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionSliderFake();
         self::helperFunctionFactorFake();
         self::helperFunctionFakePayment();
+        self::helperFunctionCommonComplaintFake();
         self::helperFunctionComplaintFake();
     }
 

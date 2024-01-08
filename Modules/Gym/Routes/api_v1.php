@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Gym\Http\Controllers\AttributeController;
 use Modules\Gym\Http\Controllers\CategoryController;
 use Modules\Gym\Http\Controllers\CommentController;
+use Modules\Gym\Http\Controllers\CommonComplaintController;
 use Modules\Gym\Http\Controllers\ComplaintController;
 use Modules\Gym\Http\Controllers\ReserveController;
 use Modules\Gym\Http\Controllers\ReserveTemplateController;
@@ -50,13 +51,12 @@ Route::prefix('complaints')->name('complaints_')->group(function () {
 });
 
 # common_complaints
-Route::prefix('common_complaints')->name('common_complaints_')->group(function () {
-    Route::get('/', [ComplaintController::class, 'index'])->name('index');
-    Route::get('statuses', [ComplaintController::class, 'statuses'])->name('statuses');
-    Route::get('/{id}', [ComplaintController::class, 'show'])->name('show');
-    Route::post('/', [ComplaintController::class, 'store'])->middleware('auth:api')->name('store');
-    Route::put('/{id}', [ComplaintController::class, 'update'])->middleware('auth:api')->name('update');
-    Route::delete('/{id}', [ComplaintController::class, 'destroy'])->middleware('auth:api')->name('destroy');
+Route::prefix('common-complaints')->name('common_complaints_')->group(function () {
+    Route::get('/', [CommonComplaintController::class, 'index'])->name('index');
+    Route::get('/{id}', [CommonComplaintController::class, 'show'])->name('show');
+    Route::post('/', [CommonComplaintController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::put('/{id}', [CommonComplaintController::class, 'update'])->middleware('auth:api')->name('update');
+    Route::delete('/{id}', [CommonComplaintController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
 
 # reserves
