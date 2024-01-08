@@ -49,6 +49,16 @@ Route::prefix('complaints')->name('complaints_')->group(function () {
     Route::delete('/{id}', [ComplaintController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
 
+# common_complaints
+Route::prefix('common_complaints')->name('common_complaints_')->group(function () {
+    Route::get('/', [ComplaintController::class, 'index'])->name('index');
+    Route::get('statuses', [ComplaintController::class, 'statuses'])->name('statuses');
+    Route::get('/{id}', [ComplaintController::class, 'show'])->name('show');
+    Route::post('/', [ComplaintController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::put('/{id}', [ComplaintController::class, 'update'])->middleware('auth:api')->name('update');
+    Route::delete('/{id}', [ComplaintController::class, 'destroy'])->middleware('auth:api')->name('destroy');
+});
+
 # reserves
 Route::prefix('reserves')->name('reserves_')->group(function () {
     Route::get('/', [ReserveController::class, 'index'])->name('index');
