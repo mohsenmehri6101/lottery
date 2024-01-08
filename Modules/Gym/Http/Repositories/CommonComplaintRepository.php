@@ -23,4 +23,5 @@ class CommonComplaintRepository extends BaseRepository
             'text',
         ];
     }
+
 }
