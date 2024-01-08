@@ -138,22 +138,23 @@ class ReserveTemplateService
             $to = $to ?? null;
             $gym_id = $gym_id ?? null;
 
-            $reserve_templates = $this->index(['gym_id' => $gym_id]);
-            /** @var Reserve $reserves */
-            $reserves = Reserve::reserveBetweenDates(gym_id: $gym_id, startDate: $from, endDate: $to);
+            $reserve_templates = ReserveTemplate::query()
+                ->where('gym_id', $gym_id)
+                ->with(['reservesBetweenDates' => function ($query) use ($from, $to) {
+                    $query->whereDate('dated_at', '>=', $from)
+                        ->whereDate('dated_at', '<=', $to)
+                        ->limit(1);
+                }])
+                ->get();
 
-            $reserve_templates = $reserve_templates->map(function (ReserveTemplate $reserve_template) use ($reserves) {
-                $reserve_template['reserve'] = $reserves->filter(function (Reserve $reserve) use ($reserve_template) {
-                    Log::info([
-                        $reserve->reserve_template_id ===$reserve_template->id ,
-                        $reserve->reserve_template_id,
-                        $reserve_template->id,
-                        gettype($reserve->reserve_template_id),
-                        gettype($reserve_template->id)
-                    ]);
-                    return $reserve->reserve_template_id === $reserve_template->id;
-                }) ?? null;
-                return $reserve_template;
+            // Modify the structure of the result
+            $reserve_templates->transform(function ($template) {
+                $template->reserve = $template->relationLoaded('reservesBetweenDates') ?
+                    $template->reservesBetweenDates->first() : null;
+
+                unset($template->reservesBetweenDates);
+
+                return $template;
             });
 
             return $reserve_templates;

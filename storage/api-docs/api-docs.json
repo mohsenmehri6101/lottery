@@ -6532,6 +6532,15 @@
                         }
                     },
                     {
+                        "name": "common_complaint_id",
+                        "in": "query",
+                        "description": "common_complaint_id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "withs",
                         "in": "query",
                         "description": "withs:list is:user,userCreator,userEditor,factor,gym,reserve,reserveTemplate",
@@ -6658,6 +6667,15 @@
                         "in": "query",
                         "description": "reserve_template_id",
                         "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "common_complaint_id",
+                        "in": "query",
+                        "description": "common_complaint_id",
+                        "required": false,
                         "schema": {
                             "type": "integer"
                         }
@@ -6813,6 +6831,15 @@
                         "name": "reserve_template_id",
                         "in": "query",
                         "description": "reserve_template_id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "common_complaint_id",
+                        "in": "query",
+                        "description": "common_complaint_id",
                         "required": false,
                         "schema": {
                             "type": "integer"

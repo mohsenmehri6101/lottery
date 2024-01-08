@@ -5,6 +5,7 @@ namespace Modules\Gym\Entities;
 use App\Models\Traits\GetCastsModel;
 use App\Models\Traits\UserCreator;
 use App\Models\Traits\UserEditor;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -189,4 +190,13 @@ class ReserveTemplate extends Model
         return $this->hasMany(Reserve::class, 'reserve_template_id');
     }
 
+    public function reservesBetweenDates($startDate = null, $endDate = null): HasMany
+    {
+        $startDate = $startDate ?? Carbon::now()->startOfWeek()->subWeek(4)->format('Y-m-d');
+        $endDate = $endDate ?? Carbon::now()->format('Y-m-d');
+
+        return $this->hasMany(Reserve::class, 'reserve_template_id')
+            ->whereDate('dated_at', '>=', $startDate)
+            ->whereDate('dated_at', '<=', $endDate);
+    }
 }
