@@ -216,13 +216,12 @@ class GymDatabaseSeeder extends Seeder
         $faker = \Faker\Factory::create();
         $days = $faker->randomElement([7, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7]); // Randomly choose between 7, 5, or 6 (with a higher chance of 7)
         $interval = $faker->randomElement([5400, 7200]); // Randomly choose between 1.5 hours and 2 hours
-        $user_random_id = User::query()->inRandomOrder()->first()->id;
-
         // Generate a single random price for all records
-        $price = $faker->numberBetween(70000, 150000);
 
         // Loop through week_number from 1 to 7
         for ($week_number = 1; $week_number <= $days; $week_number++) {
+            $price = $faker->numberBetween(70000, 150000);
+            $user_random_id = User::query()->inRandomOrder()->first()->id;
             $from = $faker->randomElement(['06:00', '08:00', '10:00']); // Generate a new random start time for each day
             $current_hour = (int)substr($from, 0, 2); // Extract the hour part as an integer
 
@@ -232,7 +231,6 @@ class GymDatabaseSeeder extends Seeder
             // Continue generating records until it's near 22:00 or 24:00
             while ($current_hour < $max_hour) {
                 $to = date('H:i', strtotime($from) + $interval);
-
                 // Check if the end time exceeds the maximum allowed hour
                 if (strtotime($to) >= strtotime('24:00') || strtotime($to) >= strtotime('22:00')) {
                     break; // Exit the loop if it's near 22:00 or 24:00

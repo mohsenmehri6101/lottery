@@ -7103,7 +7103,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "relations:list is",
+                        "description": "relations:list is:userCreator, userEditor, city, scores, keywords, categories, images, urlImages, tags,sports, attributes, reserveTemplates, reserves",
                         "required": false,
                         "schema": {
                             "type": "string"
