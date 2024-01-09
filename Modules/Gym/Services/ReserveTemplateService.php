@@ -122,7 +122,6 @@ class ReserveTemplateService
         }
     }
 
-    // model version
     public function betweenDate(ReserveTemplateBetweenDateRequest $request)
     {
         try {
@@ -139,25 +138,87 @@ class ReserveTemplateService
             $to = $to ?? null;
             $gym_id = $gym_id ?? null;
 
-
-            $reserve_templates = ReserveTemplate::query()
-                ->where('gym_id', $gym_id)
-                ->with(['reservesBetweenDates' => function ($query) use ($from, $to) {
-                    $query->whereDate('dated_at', '>=', $from)
-                        ->whereDate('dated_at', '<=', $to)
-                        ->limit(1);
-                }])
+            $reserveTemplates = DB::table('reserve_templates')
+                ->where('reserve_templates.gym_id', $gym_id)
+                ->leftJoin('reserves', function ($join) use ($to, $from) {
+                    $join->on('reserve_templates.id', '=', 'reserves.reserve_template_id')
+                        ->whereDate('reserves.dated_at', '>=', $from)
+                        ->whereDate('reserves.dated_at', '<=', $to);
+                })
+                ->select(
+                    'reserve_templates.id',
+                    'reserve_templates.from',
+                    'reserve_templates.to',
+                    'reserve_templates.gym_id',
+                    'reserve_templates.week_number',
+                    'reserve_templates.price',
+//                    'reserve_templates.cod',
+//                    'reserve_templates.is_ball',
+                    'reserve_templates.gender_acceptance',
+//                    'reserve_templates.discount',
+                    'reserve_templates.status',
+//                    'reserve_templates.user_creator',
+//                    'reserve_templates.user_editor',
+//                    'reserve_templates.created_at',
+//                    'reserve_templates.updated_at',
+//                    'reserve_templates.deleted_at',
+                    'reserves.id as reserve_id',
+                    'reserves.status as reserve_status',
+                    'reserves.reserve_template_id',
+                    'reserves.gym_id as reserve_gym_id',
+                    'reserves.user_id',
+                    'reserves.payment_status',
+                    'reserves.user_creator as reserve_user_creator',
+                    'reserves.user_editor as reserve_user_editor',
+                    'reserves.dated_at',
+                    'reserves.reserved_at',
+                    'reserves.reserved_user_id',
+//                    'reserves.created_at as reserve_created_at',
+//                    'reserves.updated_at as reserve_updated_at',
+//                    'reserves.deleted_at as reserve_deleted_at'
+                )
                 ->get();
 
-            // Modify the structure of the result
-            $reserve_templates->transform(function ($template) {
-                $template->reserve = $template->relationLoaded('reservesBetweenDates') ?
-                    $template->reservesBetweenDates->first() : null;
+            $reserve_templates = [];
+            foreach ($reserveTemplates as $template) {
+                $data = [
+                    'id' => $template->id,
+                    'from' => $template->from,
+                    'to' => $template->to,
+                    'gym_id' => $template->gym_id,
+                    'week_number' => $template->week_number,
+                    'price' => $template->price,
+//                    'cod' => $template->cod,
+//                    'is_ball' => $template->is_ball,
+                    'gender_acceptance' => $template->gender_acceptance,
+//                    'discount' => $template->discount,
+                    'status' => $template->status,
+//                    'user_creator' => $template->user_creator,
+//                    'user_editor' => $template->user_editor,
+//                    'created_at' => $template->created_at,
+//                    'updated_at' => $template->updated_at,
+//                    'deleted_at' => $template->deleted_at,
+                    'reserve' => $template->reserve_id ? [
+                        'id' => $template->reserve_id,
+                        'status' => $template->reserve_status,
+                        'reserve_template_id' => $template->reserve_template_id,
+                        'gym_id' => $template->reserve_gym_id,
+                        'user_id' => $template->user_id,
+                        'payment_status' => $template->payment_status,
+//                        'user_creator' => $template->reserve_user_creator,
+//                        'user_editor' => $template->reserve_user_editor,
+                        'dated_at' => $template->dated_at,
+                        'reserved_at' => $template->reserved_at,
+                        'reserved_user_id' => $template->reserved_user_id,
+//                        'created_at' => $template->reserve_created_at,
+//                        'updated_at' => $template->reserve_updated_at,
+//                        'deleted_at' => $template->reserve_deleted_at,
+                    ] : null,
+                ];
 
-                unset($template->reservesBetweenDates);
-
-                return $template;
-            });
+                $reserve_templates[] = $data;
+            }
+            # see result
 
             return $reserve_templates;
 
@@ -165,7 +226,6 @@ class ReserveTemplateService
             throw $exception;
         }
     }
-    // model version
 
     public function gender_acceptances(Request $request): array|bool|int|string|null
     {
