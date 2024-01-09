@@ -152,16 +152,8 @@ class ReserveTemplateService
                     'reserve_templates.gym_id',
                     'reserve_templates.week_number',
                     'reserve_templates.price',
-//                    'reserve_templates.cod',
-//                    'reserve_templates.is_ball',
                     'reserve_templates.gender_acceptance',
-//                    'reserve_templates.discount',
                     'reserve_templates.status',
-//                    'reserve_templates.user_creator',
-//                    'reserve_templates.user_editor',
-//                    'reserve_templates.created_at',
-//                    'reserve_templates.updated_at',
-//                    'reserve_templates.deleted_at',
                     'reserves.id as reserve_id',
                     'reserves.status as reserve_status',
                     'reserves.reserve_template_id',
@@ -173,9 +165,6 @@ class ReserveTemplateService
                     'reserves.dated_at',
                     'reserves.reserved_at',
                     'reserves.reserved_user_id',
-//                    'reserves.created_at as reserve_created_at',
-//                    'reserves.updated_at as reserve_updated_at',
-//                    'reserves.deleted_at as reserve_deleted_at'
                 )
                 ->get();
 
@@ -188,16 +177,8 @@ class ReserveTemplateService
                     'gym_id' => $template->gym_id,
                     'week_number' => $template->week_number,
                     'price' => $template->price,
-//                    'cod' => $template->cod,
-//                    'is_ball' => $template->is_ball,
                     'gender_acceptance' => $template->gender_acceptance,
-//                    'discount' => $template->discount,
                     'status' => $template->status,
-//                    'user_creator' => $template->user_creator,
-//                    'user_editor' => $template->user_editor,
-//                    'created_at' => $template->created_at,
-//                    'updated_at' => $template->updated_at,
-//                    'deleted_at' => $template->deleted_at,
                     'reserve' => $template->reserve_id ? [
                         'id' => $template->reserve_id,
                         'status' => $template->reserve_status,
@@ -205,14 +186,9 @@ class ReserveTemplateService
                         'gym_id' => $template->reserve_gym_id,
                         'user_id' => $template->user_id,
                         'payment_status' => $template->payment_status,
-//                        'user_creator' => $template->reserve_user_creator,
-//                        'user_editor' => $template->reserve_user_editor,
                         'dated_at' => $template->dated_at,
                         'reserved_at' => $template->reserved_at,
                         'reserved_user_id' => $template->reserved_user_id,
-//                        'created_at' => $template->reserve_created_at,
-//                        'updated_at' => $template->reserve_updated_at,
-//                        'deleted_at' => $template->reserve_deleted_at,
                     ] : null,
                 ];
 
