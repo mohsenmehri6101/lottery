@@ -28,6 +28,7 @@ Route::get('/profile', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/contact-us', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/faqs', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/gyms', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/gyms/{id}', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/sports', [\App\Http\Controllers\HomeController::class, 'index']);
