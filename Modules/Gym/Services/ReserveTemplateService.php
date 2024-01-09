@@ -122,6 +122,7 @@ class ReserveTemplateService
         }
     }
 
+    // model version
     public function betweenDate(ReserveTemplateBetweenDateRequest $request)
     {
         try {
@@ -137,6 +138,7 @@ class ReserveTemplateService
             $from = $from ?? null;
             $to = $to ?? null;
             $gym_id = $gym_id ?? null;
+
 
             $reserve_templates = ReserveTemplate::query()
                 ->where('gym_id', $gym_id)
@@ -163,6 +165,7 @@ class ReserveTemplateService
             throw $exception;
         }
     }
+    // model version
 
     public function gender_acceptances(Request $request): array|bool|int|string|null
     {
