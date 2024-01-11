@@ -264,7 +264,7 @@ class GymDatabaseSeeder extends Seeder
         }
     }
 
-    public static function helperFunctionReservesFake($reserve_template_id = null, $count = null): void
+    public static function helperFunctionReservesFake($reserve_template_id = null, $count = 100): void
     {
         $faker = FakerFactory::create();
 
