@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Authentication\Entities\User;
+use Modules\Gym\Entities\Reserve;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Http\Repositories\FactorRepository;
 use Modules\Payment\Http\Repositories\PaymentRepository;
@@ -65,9 +66,7 @@ class PaymentService
 
             /** @var Factor $factor */
             $factor = $factorRepository->findOrFail($factor_id);
-
             /* --------------------------------------------------------- */
-
             /** @var PaymentPaypingService $PaymentPaypingService */
             $PaymentPaypingService = resolve('PaymentPaypingService');
 
@@ -80,7 +79,7 @@ class PaymentService
             $payerName = $factor?->user?->full_name ?? null;
             $description = isset($description) && filled($description) ? $description : $mobile;
 
-            /** @var $payment $payment */
+            /** @var Payment $payment */
             $payment = $factor->payments()->create([
                 'status'=>Payment::status_unpaid,
                 'resnumber'=>Payment::resnumberUnique(),
@@ -88,14 +87,20 @@ class PaymentService
                 'user_id'=>$user->id,
             ]);
 
-            $url = $PaymentPaypingService->createLinkPayment(
+
+            $url = Str::random();
+            /*$url = $PaymentPaypingService->createLinkPayment(
                 clientRefId: $payment->resnumber,
                 mobile: $mobile,
                 amount: $amount,
                 returnUrl: $returnUrl,
                 description: $description,
                 payerName: $payerName,
-            );
+            );*/
+
+            if(filled($url)){
+                $payment->factor()->reserves()->update(['status'=>Reserve::status_reserving]);
+            }
 
             return $url;
         } catch (Exception $exception) {

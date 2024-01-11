@@ -9173,6 +9173,44 @@
                 ]
             }
         },
+        "/api/v1/reserves/statuses": {
+            "get": {
+                "tags": [
+                    "reserves"
+                ],
+                "summary": "list statuses",
+                "operationId": "9d3cd5508ff25b486ac3a2f78df5dc80",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/reserve_templates": {
             "get": {
                 "tags": [

@@ -77,7 +77,6 @@ class Wallet extends Model
             if (is_null($item->user_id)) {
                 $item->user_id = get_user_id_login();
             }
-
         });
         static::updating(function ($item) {
             # user_editor

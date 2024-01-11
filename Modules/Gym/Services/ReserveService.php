@@ -178,9 +178,8 @@ class ReserveService
         }
     }
 
-    public function gender_acceptances(Request $request): array|bool|int|string|null
+    public function statuses(Request $request): array|bool|int|string|null
     {
-//        $status = $request->status ?? null;
         return Reserve::getStatusTitle();
     }
 

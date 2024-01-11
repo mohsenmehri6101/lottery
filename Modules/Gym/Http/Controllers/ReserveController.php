@@ -195,9 +195,9 @@ class ReserveController extends Controller
 
     /**
      * @OA\Get(
-     *     path=="/api/v1/reserves/between-date/statuses",
-     *     tags={"reserve_templates"},
-     *     summary="list gender-acceptance reserve_templates",
+     *     path="/api/v1/reserves/statuses",
+     *     tags={"reserves"},
+     *     summary="list statuses",
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="string"),description="status"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
@@ -205,10 +205,10 @@ class ReserveController extends Controller
      */
     public function statuses(Request $request): JsonResponse
     {
-        $gender_acceptances = $this->reserveService->statuses($request);
-        $gender_acceptances = collect($gender_acceptances)->map(function ($name, $id) {
-            return ["id" => $id, "name" => $name];
+        $statuses = $this->reserveService->statuses($request);
+        $statuses = collect($statuses)->map(function ($name, $id) {
+            return ['id' => $id, 'name' => $name];
         });
-        return ResponseHelper::responseSuccess(data: $gender_acceptances);
+        return ResponseHelper::responseSuccess(data: $statuses);
     }
 }
