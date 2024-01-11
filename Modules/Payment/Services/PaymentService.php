@@ -2,7 +2,6 @@
 
 namespace Modules\Payment\Services;
 
-use App\Exceptions\Contracts\CreateLinkPaymentException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,12 +10,12 @@ use Modules\Gym\Entities\Reserve;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Http\Repositories\FactorRepository;
 use Modules\Payment\Http\Repositories\PaymentRepository;
-use Modules\Payment\Http\Requests\Payment\PaymentCallBackRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentCreateLinkRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
 use Modules\Payment\Entities\Payment;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class PaymentService
 {
@@ -54,7 +53,15 @@ class PaymentService
     public function createLinkPayment(PaymentCreateLinkRequest $request): ?string
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $loginRequest = new PaymentCreateLinkRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $loginRequest->rules(),
+                    attributes: $loginRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             /**
              * @var $factor_id

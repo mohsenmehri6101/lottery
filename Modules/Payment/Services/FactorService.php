@@ -103,11 +103,19 @@ class FactorService
         }
     }
 
-    public function store(FactorStoreRequest $request)
+    public function store(FactorStoreRequest|array $request)
     {
         DB::beginTransaction();
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $loginRequest = new FactorStoreRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $loginRequest->rules(),
+                    attributes: $loginRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             /**
              * @var $reserve_id

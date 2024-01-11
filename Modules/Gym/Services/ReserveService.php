@@ -12,11 +12,15 @@ use Modules\Gym\Http\Repositories\ReserveRepository;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
+use Modules\Gym\Http\Requests\Reserve\ReserveStoreAndDoStuffRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveUpdateRequest;
 use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Http\Requests\Reserve\MyReserveRequest;
+use Modules\Payment\Entities\Factor;
+use Modules\Payment\Services\FactorService;
+use Modules\Payment\Services\PaymentService;
 
 class ReserveService
 {
@@ -88,6 +92,56 @@ class ReserveService
             $reserve = $this->reserveRepository->create($fields);
             DB::commit();
             return $reserve;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+    }
+
+    public function storeAndDoStuff(ReserveStoreAndDoStuffRequest $request): ?string
+    {
+        DB::beginTransaction();
+        try {
+            $fields = $request->validated();
+
+            /**
+             * @var $reserves
+             */
+            extract($fields);
+
+            $reserves = collect($reserves);
+
+            $reserveIds = [];
+            # save reserves
+            $reserves->each(function ($reserve) use ($reserveIds) {
+                $reserve_template_id = $reserve['reserve_template_id'];
+                if (!isset($reserve['gym_id']) || !filled($reserve['gym_id'])) {
+                    /** @var ReserveTemplate $reserveTemplate */
+                    $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
+                    $reserve['gym_id'] = $reserveTemplate->gym_id;
+                }
+
+                /** @var Reserve $reserveModel */
+                $reserveModel = $this->reserveRepository->create($reserve);
+                $reserveIds[] = $reserveModel->id;
+            });
+
+            # save factor
+            /** @var FactorService $factorService */
+            $factorService = resolve('FactorService');
+
+            /** @var Factor $factor */
+            $factor = $factorService->store(['reserve_ids' => $reserveIds, 'user_id' => get_user_id_login()]);
+
+            # create link payment
+            /** @var PaymentService $paymentService */
+            $paymentService = resolve('PaymentService');
+
+            $url = $paymentService->createLinkPayment(['factor_id' => $factor->id]);
+
+            DB::commit();
+            return $url;
+
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;

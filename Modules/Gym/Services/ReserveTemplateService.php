@@ -200,10 +200,10 @@ class ReserveTemplateService
 
             # select gym
             /** @var Gym $gym */
-            $gym = Gym::query()->find($gym_id)->with(['urlImages','sports','attributes']);
+            $gym = Gym::query()->with(['urlImages','sports','attributes'])->find($gym_id);
             # select gym
 
-            return ['reserve_templates'=>$reserve_templates,'gym'=>$gym];
+            return ['gym'=>$gym,'reserve_templates'=>$reserve_templates];
 
         } catch (Exception $exception) {
             throw $exception;

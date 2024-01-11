@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
+use Modules\Gym\Http\Requests\Reserve\ReserveStoreAndDoStuffRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveUpdateRequest;
@@ -113,6 +114,26 @@ class ReserveController extends Controller
     public function store(ReserveStoreRequest $request): JsonResponse
     {
         $reserve = $this->reserveService->store($request);
+        return $reserve ? ResponseHelper::responseSuccessStore(data: $reserve) : ResponseHelper::responseFailedStore();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/reserves/store-and-do-stuff",
+     *     tags={"reserves"},
+     *     summary="save reserve",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="reserve_template_id",in="query",required=true, @OA\Schema(type="integer"),description="reserve_template_id"),
+     *     @OA\Parameter(name="user_id",in="query",required=true, @OA\Schema(type="integer"),description="user_id"),
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Parameter(name="dated_at",in="query",required=true, @OA\Schema(type="string"),description="dated_at"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function storeAndDoStuff(ReserveStoreAndDoStuffRequest $request): JsonResponse
+    {
+        $reserve = $this->reserveService->storeAndDoStuff($request);
         return $reserve ? ResponseHelper::responseSuccessStore(data: $reserve) : ResponseHelper::responseFailedStore();
     }
 
