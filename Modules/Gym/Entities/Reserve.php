@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use JetBrains\PhpStorm\ArrayShape;
 use Modules\Authentication\Entities\User;
 use Modules\Payment\Entities\Factor;
 use Carbon\Carbon;
@@ -36,10 +35,7 @@ class Reserve extends Model
     const status_active = 1;
     const status_inactive = 2;
     const status_blocked = 3;
-
-    const payment_status_unknown = 0;
-    const payment_status_unpaid = 1;
-    const payment_status_paid = 2;
+    const status_reserving = 4;
 
     protected $table = 'reserves';
 
@@ -104,59 +100,24 @@ class Reserve extends Model
         });
     }
 
-    public static function getPaymentStatusTitle($status = null): array|bool|int|string|null
-    {
-        $statuses = self::getPaymentStatusPersian();
-        if (!is_null($status)) {
-            if (is_string_persian($status)) {
-                return array_search($status, $statuses) ?? null;
-            }
-            if (is_int($status) && in_array($status, array_keys($statuses))) {
-                return $statuses[$status] ?? null;
-            }
-            return null;
-        }
-        return $statuses;
-    }
-
-
-    public static function getStatusTitle($status = null): array|bool|int|string|null
-    {
-        $statuses = self::getPaymentStatusPersian();
-        if (!is_null($status)) {
-            if (is_string_persian($status)) {
-                return array_search($status, $statuses) ?? null;
-            }
-            if (is_int($status) && in_array($status, array_keys($statuses))) {
-                return $statuses[$status] ?? null;
-            }
-            return null;
-        }
-        return $statuses;
-    }
-
-    public static function getPaymentStatus(): array
-    {
-        return [
-            self::payment_status_unknown,
-            self::payment_status_unpaid,
-            self::payment_status_paid,
-        ];
-    }
-
     public function gym(): BelongsTo
     {
         return $this->belongsTo(Gym::class, 'gym_id');
     }
 
-    #[ArrayShape([self::payment_status_unknown => "string", self::payment_status_unpaid => "string", self::payment_status_paid => "string"])]
-    public static function getPaymentStatusPersian(): array
+    public static function getStatusTitle($status = null): array|bool|int|string|null
     {
-        return [
-            self::payment_status_unknown => 'نامشخص',
-            self::payment_status_unpaid => 'پرداخت نشده',
-            self::payment_status_paid => 'پرداخت شده',
-        ];
+        $statuses = self::getStatusPersian();
+        if (!is_null($status)) {
+            if (is_string_persian($status)) {
+                return array_search($status, $statuses) ?? null;
+            }
+            if (is_int($status) && in_array($status, array_keys($statuses))) {
+                return $statuses[$status] ?? null;
+            }
+            return null;
+        }
+        return $statuses;
     }
 
     public static function getStatusPersian(): array
@@ -166,6 +127,7 @@ class Reserve extends Model
             self::status_active => 'فعال',
             self::status_inactive => 'غیرفعال',
             self::status_blocked => 'بلاک شده',
+            self::status_reserving => 'در حال رزرو',
         ];
     }
 

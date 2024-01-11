@@ -63,6 +63,7 @@ Route::prefix('common-complaints')->name('common_complaints_')->group(function (
 Route::prefix('reserves')->name('reserves_')->group(function () {
     Route::get('/', [ReserveController::class, 'index'])->name('index');
     Route::get('/between-date', [ReserveController::class, 'reserveBetweenDates'])->name('between_date');
+    Route::get('/statuses', [ReserveController::class, 'reserveBetweenDates'])->name('between_date');
     Route::get('/my-reserves', [ReserveController::class, 'myReserve'])->name('my-reserves');
     Route::get('/{id}', [ReserveController::class, 'show'])->middleware('auth:api')->name('show');
     Route::post('/', [ReserveController::class, 'store'])->middleware('auth:api')->name('store');

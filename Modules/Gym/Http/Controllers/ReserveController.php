@@ -3,6 +3,7 @@
 namespace Modules\Gym\Http\Controllers;
 
 use App\Helper\Response\ResponseHelper;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
@@ -192,4 +193,22 @@ class ReserveController extends Controller
         return ResponseHelper::responseSuccess(data: $reserves);
     }
 
+    /**
+     * @OA\Get(
+     *     path=="/api/v1/reserves/between-date/statuses",
+     *     tags={"reserve_templates"},
+     *     summary="list gender-acceptance reserve_templates",
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="string"),description="status"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function statuses(Request $request): JsonResponse
+    {
+        $gender_acceptances = $this->reserveService->statuses($request);
+        $gender_acceptances = collect($gender_acceptances)->map(function ($name, $id) {
+            return ["id" => $id, "name" => $name];
+        });
+        return ResponseHelper::responseSuccess(data: $gender_acceptances);
+    }
 }

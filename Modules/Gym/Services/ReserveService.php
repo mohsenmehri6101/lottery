@@ -4,6 +4,7 @@ namespace Modules\Gym\Services;
 
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Gym\Entities\ReserveTemplate;
@@ -157,7 +158,6 @@ class ReserveService
         }
     }
 
-
     public function reserveBetweenDates(ReserveBetweenDateRequest $request): Collection|array
     {
         try {
@@ -176,6 +176,12 @@ class ReserveService
         } catch (Exception $exception) {
             throw $exception;
         }
+    }
+
+    public function gender_acceptances(Request $request): array|bool|int|string|null
+    {
+//        $status = $request->status ?? null;
+        return Reserve::getStatusTitle();
     }
 
 }
