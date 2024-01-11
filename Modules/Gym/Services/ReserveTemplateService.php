@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Http\Repositories\ReserveTemplateRepository;
 use Modules\Gym\Http\Repositories\GymRepository;
@@ -198,9 +199,8 @@ class ReserveTemplateService
             # see result
 
             # select gym
-            /** @var GymService $gymService */
-            $gymService = resolve('GymService');
-            $gym = $gymService->show(['withs'=>['urlImages','sports','attributes']]);
+            /** @var Gym $gym */
+            $gym = Gym::query()->find($gym_id)->with(['urlImages','sports','attributes']);
             # select gym
 
             return ['reserve_templates'=>$reserve_templates,'gym'=>$gym];
