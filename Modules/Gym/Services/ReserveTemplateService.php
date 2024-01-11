@@ -152,6 +152,7 @@ class ReserveTemplateService
                     'reserve_templates.gym_id',
                     'reserve_templates.week_number',
                     'reserve_templates.price',
+                    'reserve_templates.discount',
                     'reserve_templates.gender_acceptance',
                     'reserve_templates.status',
                     'reserves.id as reserve_id',
@@ -177,6 +178,7 @@ class ReserveTemplateService
                     'gym_id' => $template->gym_id,
                     'week_number' => $template->week_number,
                     'price' => $template->price,
+                    'discount' => $template->discount,
                     'gender_acceptance' => $template->gender_acceptance,
                     'status' => $template->status,
                     'reserve' => $template->reserve_id ? [
@@ -191,12 +193,17 @@ class ReserveTemplateService
                         'reserved_user_id' => $template->reserved_user_id,
                     ] : null,
                 ];
-
                 $reserve_templates[] = $data;
             }
             # see result
 
-            return $reserve_templates;
+            # select gym
+            /** @var GymService $gymService */
+            $gymService = resolve('GymService');
+            $gym = $gymService->show(['withs'=>['urlImages','sports','attributes']]);
+            # select gym
+
+            return ['reserve_templates'=>$reserve_templates,'gym'=>$gym];
 
         } catch (Exception $exception) {
             throw $exception;

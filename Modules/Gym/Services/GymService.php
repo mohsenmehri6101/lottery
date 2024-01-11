@@ -16,6 +16,7 @@ use Modules\Gym\Http\Requests\Gym\GymShowRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
+use Illuminate\Support\Facades\Validator;
 
 class GymService
 {
@@ -87,15 +88,25 @@ class GymService
         }
     }
 
-    public function show(GymShowRequest $request, $gym_id)
+    public function show(GymShowRequest|array $request, $gym_id)
     {
         try {
-            $fields = $request->validated();
+
+            if (is_array($request)) {
+                $userStoreRequest = new GymShowRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $userStoreRequest->rules(),
+                    attributes: $userStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             /**
              * @var $withs
              */
             extract($fields);
+
             $withs = $withs ?? [];
             return $this->gymRepository->withRelations(relations: $withs)->findOrFail($gym_id);
         } catch (Exception $exception) {
