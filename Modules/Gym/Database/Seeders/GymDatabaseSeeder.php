@@ -264,7 +264,7 @@ class GymDatabaseSeeder extends Seeder
         }
     }
 
-    public static function helperFunctionReservesFake($reserve_template_id = null, $count = 100): void
+    public static function helperFunctionReservesFake($reserve_template_id = null, $count = 400): void
     {
         $faker = FakerFactory::create();
 
@@ -279,7 +279,7 @@ class GymDatabaseSeeder extends Seeder
             $georgian_date = $faker->dateTimeThisMonth();
 
             // Convert the Georgian date to a Carbon\Carbon object
-            $carbon_date = Carbon::instance($georgian_date);
+            $carbon_date = self::getRandomDateThisWeek();/*Carbon::instance($georgian_date);*/
 
             // Format the Carbon date as 'Y-m-d' (date format)
             $formatted_georgian_date = $carbon_date->format('Y-m-d');
@@ -312,6 +312,21 @@ class GymDatabaseSeeder extends Seeder
                 Reserve::query()->create($reserve_fake);
             }
         }
+    }
+
+    private static function getRandomDateThisWeek(): Carbon
+    {
+        $currentDate = Carbon::now();
+        $startOfWeek = $currentDate->copy()->startOfWeek();
+        $endOfWeek = $currentDate->copy()->endOfWeek();
+
+        // Generate a random timestamp within the current week
+        $randomTimestamp = mt_rand($startOfWeek->timestamp, $endOfWeek->timestamp);
+
+        // Create a Carbon object from the random timestamp
+        $randomDate = Carbon::createFromTimestamp($randomTimestamp);
+
+        return $randomDate;
     }
 
     function helperFunctionUserFake($count = 60): void
