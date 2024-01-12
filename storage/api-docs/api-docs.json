@@ -9042,6 +9042,79 @@
                 ]
             }
         },
+        "/api/v1/reserves/store-and-do-stuff": {
+            "post": {
+                "tags": [
+                    "reserves"
+                ],
+                "summary": "Store and do stuff for reserves",
+                "operationId": "ecb275db02e93071adae08330e299df1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "reserves": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "reserve_template_id": {
+                                                    "description": "ID of the reserve template",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "gym_id": {
+                                                    "description": "ID of the gym",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "user_id": {
+                                                    "description": "ID of the user",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "dated_at": {
+                                                    "description": "Date of the reserve",
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2024-01-12"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/reserves/blocks": {
             "post": {
                 "tags": [

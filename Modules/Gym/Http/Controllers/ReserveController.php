@@ -117,19 +117,29 @@ class ReserveController extends Controller
         return $reserve ? ResponseHelper::responseSuccessStore(data: $reserve) : ResponseHelper::responseFailedStore();
     }
 
+
     /**
      * @OA\Post(
      *     path="/api/v1/reserves/store-and-do-stuff",
      *     tags={"reserves"},
-     *     summary="save reserve",
+     *     summary="Store and do stuff for reserves",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="reserve_template_id",in="query",required=true, @OA\Schema(type="integer"),description="reserve_template_id"),
-     *     @OA\Parameter(name="user_id",in="query",required=true, @OA\Schema(type="integer"),description="user_id"),
-     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
-     *     @OA\Parameter(name="dated_at",in="query",required=true, @OA\Schema(type="string"),description="dated_at"),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="reserves", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="reserve_template_id", type="integer", description="ID of the reserve template", example=1),
+     *                     @OA\Property(property="gym_id", type="integer", description="ID of the gym", example=1),
+     *                     @OA\Property(property="user_id", type="integer", description="ID of the user", example=1),
+     *                     @OA\Property(property="dated_at", type="string", format="date", description="Date of the reserve", example="2024-01-12"),
+     *                 )
+     *             ),
+     *         ),
+     *     ),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
-     *  )
+     * )
      */
     public function storeAndDoStuff(ReserveStoreAndDoStuffRequest $request): JsonResponse
     {
