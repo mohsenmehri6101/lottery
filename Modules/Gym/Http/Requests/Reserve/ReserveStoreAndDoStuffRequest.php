@@ -17,6 +17,8 @@ class ReserveStoreAndDoStuffRequest extends FormRequest
             'reserves.*.reserve_template_id' => 'required|exists:reserve_templates,id',
             'reserves.*.gym_id' => 'required|exists:gyms,id',
             'reserves.*.user_id' => 'nullable|exists:users,id',
+            'reserves.*.dated_at' => 'required|unique:reserves,dated_at',
+            
             //            'reserves.*.dated_at' => [
             //                'required',
             //                function ($attribute, $value, $fail) {

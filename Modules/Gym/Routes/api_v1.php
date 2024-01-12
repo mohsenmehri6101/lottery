@@ -73,7 +73,6 @@ Route::prefix('reserves')->name('reserves_')->group(function () {
     Route::delete('/{id}', [ReserveController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
 
-
 # sports
 Route::prefix('sports')->name('sports_')->group(function () {
     Route::get('/', [SportController::class, 'index'])->name('index');
