@@ -319,14 +319,12 @@ class GymDatabaseSeeder extends Seeder
         $currentDate = Carbon::now();
         $startOfWeek = $currentDate->copy()->startOfWeek();
         $endOfWeek = $currentDate->copy()->endOfWeek();
-
         // Generate a random timestamp within the current week
         $randomTimestamp = mt_rand($startOfWeek->timestamp, $endOfWeek->timestamp);
-
         // Create a Carbon object from the random timestamp
-        $randomDate = Carbon::createFromTimestamp($randomTimestamp);
-
-        return $randomDate;
+        return  Carbon::createFromTimestamp($randomTimestamp);
+        //
+        //        return $randomDate;
     }
 
     function helperFunctionUserFake($count = 60): void
