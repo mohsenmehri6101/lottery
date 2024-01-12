@@ -113,7 +113,7 @@ class ReserveService
 
             $reserveIds = [];
             # save reserves
-            $reserves->each(function ($reserve) use ($reserveIds) {
+            $reserves->each(function ($reserve) use (&$reserveIds) {
                 $reserve_template_id = $reserve['reserve_template_id'];
                 if (!isset($reserve['gym_id']) || !filled($reserve['gym_id'])) {
                     /** @var ReserveTemplate $reserveTemplate */
@@ -136,14 +136,12 @@ class ReserveService
             # create link payment
             /** @var PaymentService $paymentService */
             $paymentService = resolve('PaymentService');
-
             $url = $paymentService->createLinkPayment(['factor_id' => $factor->id]);
 
             DB::commit();
             return $url;
-
         } catch (Exception $exception) {
-            DB::rollBack();
+             DB::rollBack();
             throw $exception;
         }
     }

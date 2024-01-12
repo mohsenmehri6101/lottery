@@ -50,7 +50,7 @@ class PaymentService
         }
     }
 
-    public function createLinkPayment(PaymentCreateLinkRequest $request): ?string
+    public function createLinkPayment(PaymentCreateLinkRequest|array $request): ?string
     {
         try {
             if (is_array($request)) {
@@ -106,11 +106,14 @@ class PaymentService
             );*/
 
             if(filled($url)){
-                $payment->factor()->reserves()->update(['status'=>Reserve::status_reserving]);
+                /** @var Factor $factor */
+                $factor = $payment->factor;
+                $factor->reserves()->update(['status' => Reserve::status_reserving]);
             }
 
             return $url;
         } catch (Exception $exception) {
+            dd($exception->getMessage());
             throw new $exception;
         }
     }

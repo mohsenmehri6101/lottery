@@ -144,7 +144,7 @@ class ReserveController extends Controller
     public function storeAndDoStuff(ReserveStoreAndDoStuffRequest $request): JsonResponse
     {
         $reserve = $this->reserveService->storeAndDoStuff($request);
-        return $reserve ? ResponseHelper::responseSuccessStore(data: $reserve) : ResponseHelper::responseFailedStore();
+        return $reserve ? ResponseHelper::responseSuccessStore(data: ['url'=>$reserve]) : ResponseHelper::responseFailedStore();
     }
 
     /**
