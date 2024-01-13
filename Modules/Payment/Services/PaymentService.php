@@ -95,19 +95,19 @@ class PaymentService
             ]);
 
 
-            # $url = Str::random();
-            $url = $PaymentPaypingService->createLinkPayment(
+            $url = Str::random();
+            /*$url = $PaymentPaypingService->createLinkPayment(
                 clientRefId: $payment->resnumber,
                 mobile: $mobile,
                 amount: $amount,
                 returnUrl: $returnUrl,
                 description: $description,
                 payerName: $payerName,
-            );
+            );*/
 
             if(filled($url)){
                 /** @var Factor $factor */
-                $factor = $payment->factor;
+//                $factor = $payment->factor;
                 $factor->reserves()->update(['status' => Reserve::status_reserving]);
             }
 

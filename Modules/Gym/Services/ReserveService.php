@@ -139,9 +139,11 @@ class ReserveService
             $url = $paymentService->createLinkPayment(['factor_id' => $factor->id]);
 
             DB::commit();
-            return $url;
+
+            return ['url' => $url, 'factor' => $factor->toArray()];
+
         } catch (Exception $exception) {
-             DB::rollBack();
+            DB::rollBack();
             throw $exception;
         }
     }

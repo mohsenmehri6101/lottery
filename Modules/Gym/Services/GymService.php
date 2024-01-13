@@ -272,7 +272,6 @@ class GymService
             DB::commit();
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
         } catch (Exception $exception) {
-            dd($exception->getLine(),$exception->getMessage());
             DB::rollBack();
             throw $exception;
         }
