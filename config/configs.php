@@ -9,7 +9,7 @@ return [
             'length_code'=>6,
         ],
         'otp' => [
-            'expired_time' => 20,/*todo time is seconds ??!! */
+            'expired_time' => 75,/*todo time is seconds ??!! */
             'min_number_random' => 11111,
             'max_number_random' => 99999,
         ],
