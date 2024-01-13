@@ -36,6 +36,7 @@ class GymServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Modules\Gym\Console\ImageFakeDeleteCommand::class,
+                \Modules\Gym\Console\GymDeleteReservedCommand::class,
             ]);
         }
     }

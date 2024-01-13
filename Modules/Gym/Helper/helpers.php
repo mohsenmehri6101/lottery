@@ -24,12 +24,12 @@ if (!function_exists('helperDeleteFiles')) {
     }
 }
 
-if (!function_exists('deleteAllReserve')) {
-    function deleteAllReserve(): bool
+if (!function_exists('deleteReservedWithStatusReserving')) {
+    function deleteReservedWithStatusReserving(): bool
     {
-        /** @var \Modules\Gym\Entities\Reserve $reserves_with_status_status_reserving */
-        $reserves_with_status_status_reserving = \Modules\Gym\Entities\Reserve::query()
-            ->where('status',\Modules\Gym\Entities\Reserve::status_reserving)
+        /** @var Modules\Gym\Entities\Reserve $reserves_with_status_status_reserving */
+        $reserves_with_status_status_reserving = Modules\Gym\Entities\Reserve::query()
+            ->where('status',Modules\Gym\Entities\Reserve::status_reserving)
             ->where('reserved_at', '<=', Carbon\Carbon::now())
             ->forceDelete();
         return true;
