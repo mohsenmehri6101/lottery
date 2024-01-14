@@ -19,6 +19,7 @@ return new class extends Migration {
                     $table->unsignedBigInteger('user_id')->nullable()->comment('user_id');
                     $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
                     $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
+                    $table->timestamp('timed_at')->nullable();
                     $table->timestamps();
                     $table->softDeletes();
                 });
