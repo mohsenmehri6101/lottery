@@ -21,7 +21,6 @@ class GymStoreRequest extends FormRequest
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'user_id' => 'nullable|exists:users,id',
             'profit_share_percentage' => 'nullable|min:0|max:100',
-
             'city_id' => 'required|numeric|exists:cities,id',
             'latitude' => 'nullable',
             'longitude' => 'nullable',
@@ -57,8 +56,14 @@ class GymStoreRequest extends FormRequest
             'images' => 'nullable|array',
             'images.*' => 'required|mimes:png,jpg,jpeg',
 
-            'time_template' => 'nullable',
-            'start_time' => 'nullable'
+            # reserve template data
+            'time_template.*' => 'nullable|array',
+            'time_template.*.from' => 'required_with:time_template.*.to|date_format:H:i',
+            'time_template.*.to' => 'required_with:time_template.*.from|date_format:H:i',
+            'time_template.*.break_time' => 'required|numeric|min:0',
+            'time_template.*.price' => 'required|numeric|min:0',
+            'time_template.*.gender_acceptance' => "required|numeric|in:$status_gender_acceptances",
+
         ];
     }
 

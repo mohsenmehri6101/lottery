@@ -257,24 +257,27 @@ class GymService
         }
     }
 
-    public function saveSectionReserveTemplate(Gym $gym,$from='08:00',$to='24:00',$week_numbers=[1,2,3,4,5,6,7],$break_time=2): void
+    public function saveSectionReserveTemplate(Gym $gym, $start_time = '08:00', $max_hour = '24:00', $break_time = 2, $price = 0, $gender_acceptance = null): void
     {
-        $start_time = $start_time ?? '08:00';
-        for ($week_number = 1; $week_number <= 7; $week_number++) {
-                $from = $start_time;
-                $max_hour = 24;
-                while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
-                    $to = date('H:i', strtotime($from) + ($break_time * 3600));
-                    ReserveTemplate::query()->create([
-                        'from' => $from,
-                        'to' => $to,
-                        'gym_id' => $gym->id,
-                        'week_number' => $week_number,
-                        'price' => $price ?? 0,
-                        'gender_acceptance' => $gender_acceptance ?? Gym::status_active,
-                    ]);
-                    $from = date('H:i', strtotime($from) + ($break_time * 3600));
-                }
+        $week_numbers = [1, 2, 3, 4, 5, 6, 7];
+
+        foreach ($week_numbers as $week_number) {
+            $from = $start_time;
+
+            while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
+                $to = date('H:i', strtotime($from) + ($break_time * 3600));
+
+                ReserveTemplate::create([
+                    'from' => $from,
+                    'to' => $to,
+                    'gym_id' => $gym->id,
+                    'week_number' => $week_number,
+                    'price' => $price,
+                    'gender_acceptance' => $gender_acceptance ?? Gym::status_active,
+                ]);
+
+                $from = date('H:i', strtotime($from) + ($break_time * 3600));
+            }
         }
     }
 

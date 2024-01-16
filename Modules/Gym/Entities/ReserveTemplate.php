@@ -199,4 +199,5 @@ class ReserveTemplate extends Model
             ->whereDate('dated_at', '>=', $startDate)
             ->whereDate('dated_at', '<=', $endDate);
     }
+
 }

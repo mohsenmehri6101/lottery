@@ -119,6 +119,7 @@ class GymController extends Controller
         return $gym ? ResponseHelper::responseSuccessShow(data: $gym) : ResponseHelper::responseFailedShow();
     }
 
+
     /**
      * @OA\Post(
      *     path="/api/v1/gyms",
@@ -139,23 +140,37 @@ class GymController extends Controller
      *     @OA\Parameter(name="keyword_id",in="query",required=false, @OA\Schema(type="integer"),description="Keyword ID"),
      *     @OA\Parameter(name="keywords",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of keyword IDs"),
      *     @OA\Parameter(name="sport_id",in="query",required=false, @OA\Schema(type="integer"),description="Sport ID"),
-     *     @OA\Parameter(name="time_template",in="query",required=false, @OA\Schema(type="string"),description="time_template"),
-     *     @OA\Parameter(name="start_time",in="query",required=false, @OA\Schema(type="string"),description="start_time"),
      *     @OA\Parameter(name="sports",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of sport IDs"),
      *     @OA\Parameter(name="attribute_id",in="query",required=false, @OA\Schema(type="integer"),description="Attribute ID"),
      *     @OA\Parameter(name="attributes",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of attribute IDs"),
      *     @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="multipart/form-data",
-     *              @OA\Schema(
-     *                  required={"images"},
-     *                  @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files")
-     *              )
-     *          )
-     *      ),
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"images", "time_template"},
+     *                 @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
+     *                 @OA\Property(property="time_template", type="array", @OA\Items(
+     *                     @OA\Property(property="from", type="string", format="H:i", description="Start time"),
+     *                     @OA\Property(property="to", type="string", format="H:i", description="End time"),
+     *                     @OA\Property(property="break_time", type="number", format="float", description="Break time in hours"),
+     *                     @OA\Property(property="price", type="number", format="float", description="Price"),
+     *                     @OA\Property(property="gender_acceptance", type="number", description="Gender acceptance status"),
+     *                 ), description="Array of reserve template data"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"images"},
+     *                 @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files")
+     *             )
+     *         )
+     *     ),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
-     *  )
+     * )
      */
     public function store(GymStoreRequest $request): JsonResponse
     {
