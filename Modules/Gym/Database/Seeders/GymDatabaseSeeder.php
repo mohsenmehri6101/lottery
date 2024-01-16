@@ -174,6 +174,7 @@ class GymDatabaseSeeder extends Seeder
                     'short_address' => $persianFaker->persianُShortAddress(),
                     'score' => $faker->numberBetween(1, 5),
                     'status' => $faker->numberBetween(0, 2),
+                    'profit_share_percentage' => $faker->numberBetween(1, 12),
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
                     'like_count' => $faker->numberBetween(15, 85),
                     'dislike_count' => $faker->numberBetween(10, 90),

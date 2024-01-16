@@ -7074,6 +7074,15 @@
                         }
                     },
                     {
+                        "name": "profit_share_percentage",
+                        "in": "query",
+                        "description": "profit_share_percentage",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "user_id",
                         "in": "query",
                         "description": "user_id",
@@ -7212,6 +7221,15 @@
                         "name": "status",
                         "in": "query",
                         "description": "Gym status",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "profit_share_percentage",
+                        "in": "query",
+                        "description": "profit_share_percentage",
                         "required": false,
                         "schema": {
                             "type": "integer"
@@ -7550,6 +7568,15 @@
                         }
                     },
                     {
+                        "name": "profit_share_percentage",
+                        "in": "query",
+                        "description": "profit_share_percentage",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "user_creator",
                         "in": "query",
                         "description": "user_creator",
@@ -7726,6 +7753,15 @@
                         "name": "status",
                         "in": "query",
                         "description": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "profit_share_percentage",
+                        "in": "query",
+                        "description": "profit_share_percentage",
                         "required": false,
                         "schema": {
                             "type": "string"
