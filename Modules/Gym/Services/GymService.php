@@ -17,7 +17,6 @@ use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
 use Illuminate\Support\Facades\Validator;
-
 class GymService
 {
     public function __construct(public GymRepository $gymRepository)
