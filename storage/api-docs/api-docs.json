@@ -7383,6 +7383,14 @@
                                                     "type": "number",
                                                     "format": "float"
                                                 },
+                                                "week_numbers": {
+                                                    "description": "Array of week numbers [1,2,3,4,5,6,7]",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "integer",
+                                                        "format": "int32"
+                                                    }
+                                                },
                                                 "gender_acceptance": {
                                                     "description": "Gender acceptance status",
                                                     "type": "number"

@@ -17,6 +17,7 @@ use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
 use Illuminate\Support\Facades\Validator;
+
 class GymService
 {
     public function __construct(public GymRepository $gymRepository)
@@ -67,11 +68,11 @@ class GymService
 
             $user_id = get_user_id_login();
 
-            $fields=[...$fields,'user_id'=>$user_id];
+            $fields = [...$fields, 'user_id' => $user_id];
 
             $query = $this->gymRepository->queryFull(inputs: $fields);
 
-            $query= $query->whereNotNull('user_id');
+            $query = $query->whereNotNull('user_id');
 
             $query = $query
                 ->when($max_price, function ($query_) use ($max_price) {
@@ -246,7 +247,13 @@ class GymService
             }
 
             # save reserve_template
-            $this->saveSectionReserveTemplate($gym);
+            $from = $from ?? '08:00';
+            $to = $to ?? '24:00';
+            $break_time = $break_time ?? 2;
+            $price = $price ?? 0;
+            $gender_acceptance = $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown;
+            $week_numbers = $week_numbers ?? [1, 2, 3, 4, 5, 6, 7];
+            $this->saveSectionReserveTemplate(gym: $gym, week_numbers: $week_numbers, start_time: $from, max_hour: $to, break_time: $break_time, price: $price, gender_acceptance: $gender_acceptance);
 
             DB::commit();
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
@@ -256,17 +263,13 @@ class GymService
         }
     }
 
-    public function saveSectionReserveTemplate(Gym $gym, $start_time = '08:00', $max_hour = '24:00', $break_time = 2, $price = 0, $gender_acceptance = null): void
+    public function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '24:00', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
-        $week_numbers = [1, 2, 3, 4, 5, 6, 7];
-
         foreach ($week_numbers as $week_number) {
             $from = $start_time;
-
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
-
-                ReserveTemplate::create([
+                ReserveTemplate::query()->create([
                     'from' => $from,
                     'to' => $to,
                     'gym_id' => $gym->id,
