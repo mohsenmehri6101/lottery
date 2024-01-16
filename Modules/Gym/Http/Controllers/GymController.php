@@ -154,6 +154,7 @@ class GymController extends Controller
      *                     @OA\Property(property="to", type="string", format="H:i", description="End time"),
      *                     @OA\Property(property="break_time", type="number", format="float", description="Break time in hours"),
      *                     @OA\Property(property="price", type="number", format="float", description="Price"),
+     *                     @OA\Property(property="week_numbers", type="array", @OA\Items(type="integer", format="int32"), description="Array of week numbers [1,2,3,4,5,6,7]"),
      *                     @OA\Property(property="gender_acceptance", type="number", description="Gender acceptance status"),
      *                 ), description="Array of reserve template data"),
      *             )

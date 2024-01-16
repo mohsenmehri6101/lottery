@@ -7308,24 +7308,6 @@
                         }
                     },
                     {
-                        "name": "time_template",
-                        "in": "query",
-                        "description": "time_template",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "start_time",
-                        "in": "query",
-                        "description": "start_time",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "sports",
                         "in": "query",
                         "description": "Array of sport IDs",
@@ -7364,7 +7346,8 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "images"
+                                    "images",
+                                    "time_template"
                                 ],
                                 "properties": {
                                     "images": {
@@ -7373,6 +7356,39 @@
                                         "items": {
                                             "type": "file",
                                             "format": "binary"
+                                        }
+                                    },
+                                    "time_template": {
+                                        "description": "Array of reserve template data",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "from": {
+                                                    "description": "Start time",
+                                                    "type": "string",
+                                                    "format": "H:i"
+                                                },
+                                                "to": {
+                                                    "description": "End time",
+                                                    "type": "string",
+                                                    "format": "H:i"
+                                                },
+                                                "break_time": {
+                                                    "description": "Break time in hours",
+                                                    "type": "number",
+                                                    "format": "float"
+                                                },
+                                                "price": {
+                                                    "description": "Price",
+                                                    "type": "number",
+                                                    "format": "float"
+                                                },
+                                                "gender_acceptance": {
+                                                    "description": "Gender acceptance status",
+                                                    "type": "number"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     }
                                 },

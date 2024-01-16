@@ -60,10 +60,10 @@ class GymStoreRequest extends FormRequest
             'time_template.*' => 'nullable|array',
             'time_template.*.from' => 'required_with:time_template.*.to|date_format:H:i',
             'time_template.*.to' => 'required_with:time_template.*.from|date_format:H:i',
-            'time_template.*.break_time' => 'required|numeric|min:0',
+            'time_template.*.break_time' => 'required|numeric|min:1',
             'time_template.*.price' => 'required|numeric|min:0',
             'time_template.*.gender_acceptance' => "required|numeric|in:$status_gender_acceptances",
-
+            'time_template.*.week_numbers' => "required|integer|in:1,2,3,4,5,6,7",
         ];
     }
 

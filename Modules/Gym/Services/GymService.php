@@ -131,14 +131,14 @@ class GymService
              * @var $attribute_id
              * @var $attributes
              * @var $images
-             * @var $time_template
-             * @var $start_time
              * @var $price
              * @var $profit_share_percentage
              * @var $gender_acceptance
+             * @var $time_template
              */
             extract($fields);
             unset(
+                $fields['time_template'],
                 $fields['tag_id'],
                 $fields['tags'],
                 $fields['keyword_id'],
@@ -149,7 +149,6 @@ class GymService
                 $fields['attributes'],
                 $fields['category_id'],
                 $fields['categories'],
-                $fields['time_template'],
             );
 
             $withs_result = [];
