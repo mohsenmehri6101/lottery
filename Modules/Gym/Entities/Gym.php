@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Authentication\Entities\User;
 use Modules\Geographical\Entities\City;
@@ -236,7 +237,7 @@ class Gym extends Model
         return $this->hasMany(Image::class)->select('url', 'gym_id');
     }
 
-    public function urlImages()
+    public function urlImages(): HasMany
     {
         return $this->hasMany(Image::class)->select('url', 'gym_id');
     }
@@ -305,7 +306,7 @@ class Gym extends Model
             ->addSelect('reserves.id as reserve_id');
     }
 
-    public static function getReserveTemplateBetweenDate($gym_id, $from = null, $to = null)
+    public static function getReserveTemplateBetweenDate($gym_id, $from = null, $to = null): Collection
     {
         if ($from === null) {
             $now = Carbon::now();
@@ -332,8 +333,7 @@ class Gym extends Model
             ->where(function ($query) use ($from, $to) {
                 $query->whereBetween('reserves.dated_at', [$from, $to])
                     ->orWhereNull('reserves.dated_at');
-            })
-            ->get();
+            })->get();
     }
 
 }
