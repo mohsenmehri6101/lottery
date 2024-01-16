@@ -5,7 +5,6 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Modules\Gym\Http\Repositories\GymRepository;
 use Modules\Gym\Http\Requests\Category\CategoryIndexRequest;
 use Modules\Gym\Http\Requests\Category\CategoryShowRequest;
 use Modules\Gym\Http\Requests\Category\CategoryStoreRequest;

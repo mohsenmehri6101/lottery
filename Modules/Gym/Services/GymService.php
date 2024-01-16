@@ -247,32 +247,37 @@ class GymService
             }
 
             # save reserve_template
-            $time_template = $time_template ?? 2;/*todo not default set(should be not default set)*/
-            $start_time = $start_time ?? '08:00';
-            if(isset($time_template) && filled($time_template)){
-                for ($week_number = 1; $week_number <= 7; $week_number++) {
-                    $from = $start_time;
-                    $max_hour = 24;
-                    while (strtotime($from) + ($time_template * 3600) <= strtotime("$max_hour:00")) {
-                        $to = date('H:i', strtotime($from) + ($time_template * 3600));
-                        ReserveTemplate::query()->create([
-                            'from' => $from,
-                            'to' => $to,
-                            'gym_id' => $gym->id,
-                            'week_number' => $week_number,
-                            'price' => $price ?? 0,
-                            'gender_acceptance' => $gender_acceptance ?? Gym::status_active,
-                        ]);
-                        $from = date('H:i', strtotime($from) + ($time_template * 3600));
-                    }
-                }
-            }
+            $this->saveSectionReserveTemplate($gym);
 
             DB::commit();
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;
+        }
+    }
+
+    public function saveSectionReserveTemplate(Gym $gym,$from='08:00',$to='24:00',$week_numbers=[1,2,3,4,5,6,7],$break_time=2): void
+    {
+        $break_time = $break_time ?? 2;
+        $start_time = $start_time ?? '08:00';
+        if(isset($break_time) && filled($break_time)){
+            for ($week_number = 1; $week_number <= 7; $week_number++) {
+                $from = $start_time;
+                $max_hour = 24;
+                while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
+                    $to = date('H:i', strtotime($from) + ($break_time * 3600));
+                    ReserveTemplate::query()->create([
+                        'from' => $from,
+                        'to' => $to,
+                        'gym_id' => $gym->id,
+                        'week_number' => $week_number,
+                        'price' => $price ?? 0,
+                        'gender_acceptance' => $gender_acceptance ?? Gym::status_active,
+                    ]);
+                    $from = date('H:i', strtotime($from) + ($break_time * 3600));
+                }
+            }
         }
     }
 
