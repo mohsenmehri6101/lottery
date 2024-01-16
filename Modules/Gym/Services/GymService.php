@@ -259,10 +259,8 @@ class GymService
 
     public function saveSectionReserveTemplate(Gym $gym,$from='08:00',$to='24:00',$week_numbers=[1,2,3,4,5,6,7],$break_time=2): void
     {
-        $break_time = $break_time ?? 2;
         $start_time = $start_time ?? '08:00';
-        if(isset($break_time) && filled($break_time)){
-            for ($week_number = 1; $week_number <= 7; $week_number++) {
+        for ($week_number = 1; $week_number <= 7; $week_number++) {
                 $from = $start_time;
                 $max_hour = 24;
                 while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
@@ -277,7 +275,6 @@ class GymService
                     ]);
                     $from = date('H:i', strtotime($from) + ($break_time * 3600));
                 }
-            }
         }
     }
 
