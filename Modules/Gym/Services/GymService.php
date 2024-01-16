@@ -90,7 +90,6 @@ class GymService
     public function show(GymShowRequest|array $request, $gym_id)
     {
         try {
-
             if (is_array($request)) {
                 $userStoreRequest = new GymShowRequest();
                 $fields = Validator::make(data: $request,
@@ -135,6 +134,7 @@ class GymService
              * @var $time_template
              * @var $start_time
              * @var $price
+             * @var $profit_share_percentage
              * @var $gender_acceptance
              */
             extract($fields);
@@ -260,8 +260,8 @@ class GymService
                             'to' => $to,
                             'gym_id' => $gym->id,
                             'week_number' => $week_number,
-                            'price' => $price ?? null,
-                            'gender_acceptance' => $gender_acceptance ?? null,
+                            'price' => $price ?? 0,
+                            'gender_acceptance' => $gender_acceptance ?? Gym::status_active,
                         ]);
                         $from = date('H:i', strtotime($from) + ($time_template * 3600));
                     }
