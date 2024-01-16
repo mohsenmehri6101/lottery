@@ -283,5 +283,4 @@ class GymController extends Controller
         });
         return ResponseHelper::responseSuccess(data: $gyms_status);
     }
-
 }
