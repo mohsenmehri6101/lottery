@@ -1,6 +1,5 @@
 <?php
 
-
 use JetBrains\PhpStorm\NoReturn;
 
 if (!function_exists('dd_json')) {
