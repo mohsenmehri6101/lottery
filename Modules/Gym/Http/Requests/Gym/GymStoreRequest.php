@@ -20,6 +20,7 @@ class GymStoreRequest extends FormRequest
             'status' => "nullable|numeric|in:$list_status_allowable",
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'user_id' => 'nullable|exists:users,id',
+            'profit_share_percentage' => 'nullable|min:0|max:100',
 
             'city_id' => 'required|numeric|exists:cities,id',
             'latitude' => 'nullable',

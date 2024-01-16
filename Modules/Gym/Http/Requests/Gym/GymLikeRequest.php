@@ -13,4 +13,5 @@ class GymLikeRequest extends FormRequest
             'type' => 'required|filled|string|in:like,dislike',
         ];
     }
+
 }

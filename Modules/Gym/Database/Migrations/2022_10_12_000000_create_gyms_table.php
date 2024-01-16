@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->tinyInteger('status')->nullable()->default(0)->comment('status');
             $table->bigInteger('like_count')->default(0)->comment('like count');
             $table->bigInteger('dislike_count')->default(0)->comment('dislike count');
+            $table->tinyInteger('profit_share_percentage')->nullable()->comment('مقدار سهم سود(سایت) از این سالن ورزشی');
             $table->unsignedBigInteger('user_id')->nullable()->comment('user_id');
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
             $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');

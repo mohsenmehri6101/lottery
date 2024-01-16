@@ -20,5 +20,4 @@ class DeleteImageGymRequest extends FormRequest
             'images.*' => 'required|filled|exists:images_gyms,id',
         ];
     }
-
 }

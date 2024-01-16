@@ -26,6 +26,7 @@ class MyGymsRequest extends FormRequest
             'page' => 'nullable',
             'id' => 'nullable|exists:gyms,id',
             'search' => 'nullable|filled|min:3',
+            'profit_share_percentage' => 'nullable|min:0|max:100',
             'name' => 'nullable',
             'description' => 'nullable',
             'price' => 'nullable',

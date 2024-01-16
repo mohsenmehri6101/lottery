@@ -30,6 +30,7 @@ use Modules\Geographical\Entities\City;
  * @property integer $gender_acceptance
  * @property integer $like_count
  * @property integer $dislike_count
+ * @property integer $profit_share_percentage
  * @property integer $user_id
  * @property boolean $is_ball
  * @property integer $user_creator
@@ -62,6 +63,7 @@ class Gym extends Model
         'gender_acceptance',
         'like_count',
         'dislike_count',
+        'profit_share_percentage',
         'is_ball',
         'user_id',
         'user_creator',
@@ -85,6 +87,7 @@ class Gym extends Model
         'gender_acceptance' => 'integer',
         'like_count' => 'integer',
         'dislike_count' => 'integer',
+        'profit_share_percentage' => 'integer',
         'is_ball' => 'boolean',
         'user_id' => 'integer',
         'user_creator' => 'integer',

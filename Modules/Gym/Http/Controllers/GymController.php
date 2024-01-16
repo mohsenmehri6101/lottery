@@ -44,6 +44,7 @@ class GymController extends Controller
      *     @OA\Parameter(name="dislike_count",in="query",required=false, @OA\Schema(type="integer"),description="dislike_count"),
      *     @OA\Parameter(name="score",in="query",required=false, @OA\Schema(type="integer"),description="score"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="integer"),description="profit_share_percentage"),
      *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="user_id"),
      *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="integer"),description="user_creator"),
      *     @OA\Parameter(name="user_editor",in="query",required=false, @OA\Schema(type="integer"),description="user_editor"),
@@ -83,6 +84,7 @@ class GymController extends Controller
      *     @OA\Parameter(name="dislike_count",in="query",required=false, @OA\Schema(type="integer"),description="dislike_count"),
      *     @OA\Parameter(name="score",in="query",required=false, @OA\Schema(type="integer"),description="score"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="integer"),description="profit_share_percentage"),
      *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="integer"),description="user_creator"),
      *     @OA\Parameter(name="user_editor",in="query",required=false, @OA\Schema(type="integer"),description="user_editor"),
      *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is"),
@@ -118,7 +120,7 @@ class GymController extends Controller
     }
 
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/api/v1/gyms",
      *     tags={"gyms"},
      *     summary="ذخیره باشگاه ورزشی",
@@ -129,6 +131,7 @@ class GymController extends Controller
      *     @OA\Parameter(name="city_id",in="query",required=true, @OA\Schema(type="integer"),description="City ID"),
      *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="Gym user_id"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="Gym status"),
+     *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="integer"),description="profit_share_percentage"),
      *     @OA\Parameter(name="tag_id",in="query",required=false, @OA\Schema(type="integer"),description="Tag ID"),
      *     @OA\Parameter(name="tags",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of tag IDs"),
      *     @OA\Parameter(name="category_id",in="query",required=false, @OA\Schema(type="integer"),description="Category ID"),
@@ -190,6 +193,7 @@ class GymController extends Controller
      *     @OA\Parameter(name="price",in="query",required=false, @OA\Schema(type="string"),description="price"),
      *     @OA\Parameter(name="city_id",in="query",required=true, @OA\Schema(type="string"),description="city_id"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="string"),description="status"),
+     *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="string"),description="profit_share_percentage"),
      *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="string"),description="user_id"),
      *     @OA\Parameter(name="tag_id",in="query",required=false, @OA\Schema(type="integer"),description="Tag ID"),
      *     @OA\Parameter(name="tags",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of tag IDs"),
@@ -265,4 +269,5 @@ class GymController extends Controller
         });
         return ResponseHelper::responseSuccess(data: $gyms_status);
     }
+
 }

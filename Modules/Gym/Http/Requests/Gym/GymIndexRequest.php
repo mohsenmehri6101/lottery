@@ -32,6 +32,7 @@ class GymIndexRequest extends FormRequest
             'max_price' => 'nullable',
             'min_price' => 'nullable',
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
+            'profit_share_percentage' => 'nullable|min:0|max:100',
 
             'city_id' => 'nullable|exists:cities,id',
             'short_address' => "nullable",
@@ -51,5 +52,4 @@ class GymIndexRequest extends FormRequest
             'deleted_at' => 'nullable',
         ];
     }
-
 }
