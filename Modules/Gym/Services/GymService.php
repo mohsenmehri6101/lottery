@@ -5,6 +5,7 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -267,14 +268,15 @@ class GymService
     {
         foreach ($week_numbers as $week_number) {
             $from = $start_time;
-            while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
+            $max_hour_ = $max_hour == '23:59' ? '24:00' : $max_hour;
+            while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour_:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
-                if (strtotime($to) > strtotime("$max_hour:00")) {
+                $max_hour_ = $max_hour == '23:59' ? '24:00' : $max_hour;
+                if (strtotime($to) > strtotime("$max_hour_:00")) {
                     break;
                 }
 
                 $to = $to == '23:59' ? '24:00' : $to;
-
                 ReserveTemplate::query()->create([
                     'from' => $from,
                     'to' => $to,
