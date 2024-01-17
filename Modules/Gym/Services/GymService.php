@@ -542,6 +542,7 @@ class GymService
             $withs = $withs ?? [];
             $withs=array_values($withs);
             $lists = [];
+
             if(in_array('gyms', $withs)){
                 /** @var GymService $GymService */
                 $GymService = resolve('GymService');
@@ -574,7 +575,6 @@ class GymService
             }
 
             return $lists;
-
         } catch (Exception $exception) {
             throw $exception;
         }
