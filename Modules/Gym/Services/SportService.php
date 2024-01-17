@@ -24,7 +24,15 @@ class SportService
     public function index(SportIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $sportStoreRequest = new SportIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $sportStoreRequest->rules(),
+                    attributes: $sportStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
             return $this->sportRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;

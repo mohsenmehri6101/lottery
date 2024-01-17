@@ -24,7 +24,16 @@ class AttributeService
     public function index(AttributeIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $attributeStoreRequest = new AttributeIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $attributeStoreRequest->rules(),
+                    attributes: $attributeStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
+
             return $this->attributeRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;

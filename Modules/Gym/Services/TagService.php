@@ -25,7 +25,16 @@ class TagService
     public function index(TagIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $tagStoreRequest = new TagIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $tagStoreRequest->rules(),
+                    attributes: $tagStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
+
             return $this->tagRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;

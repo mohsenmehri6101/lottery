@@ -28,7 +28,6 @@ class GymService
     public function index(GymIndexRequest|array $request)
     {
         try {
-
             if (is_array($request)) {
                 $gymStoreRequest = new GymIndexRequest();
                 $fields = Validator::make(data: $request,
@@ -38,7 +37,6 @@ class GymService
             } else {
                 $fields = $request->validated();
             }
-
             /**
              * @var $max_price
              * @var $min_price

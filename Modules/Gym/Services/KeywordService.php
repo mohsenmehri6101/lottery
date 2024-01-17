@@ -25,7 +25,15 @@ class KeywordService
     public function index(KeywordIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $keywordStoreRequest = new KeywordIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $keywordStoreRequest->rules(),
+                    attributes: $keywordStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
             return $this->keywordRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;
