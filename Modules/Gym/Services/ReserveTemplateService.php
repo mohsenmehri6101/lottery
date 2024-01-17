@@ -5,9 +5,7 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\Gym;
-use Modules\Gym\Entities\Reserve;
 use Modules\Gym\Http\Repositories\ReserveTemplateRepository;
 use Modules\Gym\Http\Repositories\GymRepository;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateBetweenDateRequest;
@@ -123,7 +121,7 @@ class ReserveTemplateService
         }
     }
 
-    public function betweenDate(ReserveTemplateBetweenDateRequest $request)
+    public function betweenDate(ReserveTemplateBetweenDateRequest $request): array
     {
         try {
             $fields = $request->validated();
@@ -221,5 +219,4 @@ class ReserveTemplateService
         $status = $request->status ?? null;
         return ReserveTemplate::getStatusTitle();
     }
-
 }

@@ -593,5 +593,4 @@ class GymService
             throw $exception;
         }
     }
-
 }
