@@ -21,6 +21,7 @@ class GymController extends Controller
     {
     }
 
+
     /**
      * @OA\Get(
      *     path="/api/v1/gyms",
@@ -100,6 +101,7 @@ class GymController extends Controller
         return ResponseHelper::responseSuccessIndex(data: $gyms);
     }
 
+
     /**
      * @OA\Get(
      *     path="/api/v1/gyms/{id}",
@@ -157,16 +159,15 @@ class GymController extends Controller
      *             )
      *         )
      *     ),
-     *         @OA\RequestBody(
-     *                @OA\MediaType(
-     *                mediaType="multipart/form-data",
-     *                @OA\Schema(
-     *                    required={"images"},
-     *                    @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
-     *                    @OA\Property(property="week_numbers", type="array", @OA\Items(type="integer", format="int32"), description="Array of week numbers"),
-     *                )
-     *            )
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"images"},
+     *                 @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files")
+     *             )
      *         )
+     *     ),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      * )

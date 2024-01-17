@@ -248,7 +248,7 @@ class GymService
 
             # save reserve_template
             $from = $from ?? '08:00';
-            $to = $to ?? '24:00';
+            $to = $to ?? '00:00';
             $break_time = $break_time ?? 2;
             $price = $price ?? 0;
             $gender_acceptance = $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown;
@@ -263,20 +263,24 @@ class GymService
         }
     }
 
-    public function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '24:00', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
+    public function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '00:00', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
         foreach ($week_numbers as $week_number) {
             $from = $start_time;
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
-                ReserveTemplate::query()->create([
-                    'from' => $from,
-                    'to' => $to,
-                    'gym_id' => $gym->id,
-                    'week_number' => $week_number,
-                    'price' => $price,
-                    'gender_acceptance' => $gender_acceptance ?? Gym::status_active,
-                ]);
+                if (strtotime($to) > strtotime("$max_hour:00")) {
+                    break; // Exit the loop if 'to' exceeds 'max_hour'
+                }
+
+                 ReserveTemplate::query()->create([
+                 'from' => $from,
+                 'to' => $to,
+                 'gym_id' => $gym->id,
+                 'week_number' => $week_number,
+                 'price' => $price,
+                 'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown,
+                 ]);
 
                 $from = date('H:i', strtotime($from) + ($break_time * 3600));
             }
