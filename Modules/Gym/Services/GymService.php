@@ -5,6 +5,8 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Modules\Geographical\Services\CityService;
+use Modules\Geographical\Services\ProvinceService;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -533,14 +535,16 @@ class GymService
     {
         try {
             $fields = $request->validated();
+
             /**
              * @var $withs
              */
             extract($fields);
+
             $withs = $withs ?? [];
             $withs=array_values($withs);
-            $lists = [];
 
+            $lists = [];
             if(in_array('gyms', $withs)){
                 /** @var GymService $GymService */
                 $GymService = resolve('GymService');
@@ -570,6 +574,18 @@ class GymService
                 $AttributeService = resolve('AttributeService');
                 $attribute_list = $AttributeService->index([])->toArray()['data'];
                 $lists['attributes']= $attribute_list;
+            }
+            if(in_array('cities', $withs)){
+                /** @var CityService $CityService */
+                $CityService = resolve('AttributeService');
+                $city_list = $AttributeService->index([])->toArray()['data'];
+                $lists['cities']= $city_list;
+            }
+            if(in_array('provinces', $withs)){
+                /** @var ProvinceService $CityService */
+                $ProvinceService = resolve('AttributeService');
+                $province_list = $AttributeService->index([])->toArray()['data'];
+                $lists['provinces']= $province_list;
             }
 
             return $lists;

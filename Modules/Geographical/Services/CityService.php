@@ -10,17 +10,27 @@ use Modules\Geographical\Http\Requests\City\CityIndexRequest;
 use Modules\Geographical\Http\Requests\City\CityShowRequest;
 use Modules\Geographical\Http\Requests\City\CityStoreRequest;
 use Modules\Geographical\Http\Requests\City\CityUpdateRequest;
+use Illuminate\Support\Facades\Validator;
 
 class CityService
 {
     public function __construct(public CityRepository $cityRepository)
     {
     }
-
     public function index(CityIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $cityStoreRequest = new CityIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $cityStoreRequest->rules(),
+                    attributes: $cityStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
+
+
             return $this->cityRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;

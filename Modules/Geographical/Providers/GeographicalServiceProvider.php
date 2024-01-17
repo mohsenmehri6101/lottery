@@ -22,6 +22,7 @@ class GeographicalServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->addDependencyInjection();
     }
 
     protected function registerConfig(): void
@@ -76,4 +77,25 @@ class GeographicalServiceProvider extends ServiceProvider
         return $paths;
     }
 
+    protected function addDependencyInjection(): void
+    {
+        # CityService CityRepository
+        $cityRepository = new \Modules\Geographical\Http\Repositories\CityRepository();
+        $this->app->singleton('CityRepository', function ($app) use ($cityRepository) {
+            return $cityRepository;
+        });
+        $this->app->singleton('CityService', function ($app) use ($cityRepository) {
+            return new \Modules\Geographical\Services\CityService($cityRepository);
+        });
+
+        # province
+        $provinceRepository = new \Modules\Geographical\Http\Repositories\ProvinceRepository();
+        $this->app->singleton('ProvinceRepository', function ($app) use ($provinceRepository) {
+            return $provinceRepository;
+        });
+        $this->app->singleton('ProvinceService', function ($app) use ($provinceRepository) {
+            return new \Modules\Geographical\Services\ProvinceService($provinceRepository);
+        });
+
+    }
 }
