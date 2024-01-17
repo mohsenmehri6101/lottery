@@ -5,6 +5,7 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -267,11 +268,22 @@ class GymService
     {
         foreach ($week_numbers as $week_number) {
             $from = $start_time;
+
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
                 if (strtotime($to) > strtotime("$max_hour:00")) {
                     break; // Exit the loop if 'to' exceeds 'max_hour'
                 }
+
+
+                Log::info([
+                    'from' => $from,
+                    'to' => $to,
+                    'gym_id' => $gym->id,
+                    'week_number' => $week_number,
+                    'price' => $price,
+                    'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown
+                ]);
 
                  ReserveTemplate::query()->create([
                  'from' => $from,
