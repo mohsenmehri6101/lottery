@@ -268,14 +268,11 @@ class GymService
     {
         foreach ($week_numbers as $week_number) {
             $from = $start_time;
-            $max_hour_ = $max_hour == '23:59' ? '24:00' : $max_hour;
-            while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour_:00")) {
+            while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
-                $max_hour_ = $max_hour == '23:59' ? '24:00' : $max_hour;
-                if (strtotime($to) > strtotime("$max_hour_:00")) {
+                if (strtotime($to) > strtotime("$max_hour:00")) {
                     break;
                 }
-
                 $to = $to == '23:59' ? '24:00' : $to;
                 ReserveTemplate::query()->create([
                     'from' => $from,
@@ -285,7 +282,6 @@ class GymService
                     'price' => $price,
                     'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown,
                 ]);
-
                 $from = date('H:i', strtotime($from) + ($break_time * 3600));
             }
         }
