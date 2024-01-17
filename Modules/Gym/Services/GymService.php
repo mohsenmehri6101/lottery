@@ -5,7 +5,6 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -249,12 +248,12 @@ class GymService
 
             # save reserve_template
             $from = $from ?? '08:00';
-            $to = $to ?? '00:00';
+            $to = $to ?? '23:59';
             $break_time = $break_time ?? 2;
             $price = $price ?? 0;
             $gender_acceptance = $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown;
             $week_numbers = $week_numbers ?? [1, 2, 3, 4, 5, 6, 7];
-            $this->saveSectionReserveTemplate(gym: $gym, week_numbers: $week_numbers, start_time: $from, max_hour: $to, break_time: $break_time, price: $price, gender_acceptance: $gender_acceptance);
+            self::saveSectionReserveTemplate(gym: $gym, week_numbers: $week_numbers, start_time: $from, max_hour: $to, break_time: $break_time, price: $price, gender_acceptance: $gender_acceptance);
 
             DB::commit();
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
@@ -264,35 +263,26 @@ class GymService
         }
     }
 
-    public function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '00:00', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
+    public static function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
         foreach ($week_numbers as $week_number) {
             $from = $start_time;
-
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
                 if (strtotime($to) > strtotime("$max_hour:00")) {
-                    break; // Exit the loop if 'to' exceeds 'max_hour'
+                    break;
                 }
 
+                $to = $to == '23:59' ? '24:00' : $to;
 
-                Log::info([
+                ReserveTemplate::query()->create([
                     'from' => $from,
                     'to' => $to,
                     'gym_id' => $gym->id,
                     'week_number' => $week_number,
                     'price' => $price,
-                    'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown
+                    'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown,
                 ]);
-
-                 ReserveTemplate::query()->create([
-                 'from' => $from,
-                 'to' => $to,
-                 'gym_id' => $gym->id,
-                 'week_number' => $week_number,
-                 'price' => $price,
-                 'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown,
-                 ]);
 
                 $from = date('H:i', strtotime($from) + ($break_time * 3600));
             }
