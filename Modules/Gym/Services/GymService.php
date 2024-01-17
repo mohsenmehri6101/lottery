@@ -5,7 +5,6 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -17,6 +16,7 @@ use Modules\Gym\Http\Requests\Gym\GymShowRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
+use Modules\Gym\Http\Requests\Gym\GetInitializeRequestsSelectors;
 use Illuminate\Support\Facades\Validator;
 
 class GymService
@@ -28,7 +28,16 @@ class GymService
     public function index(GymIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+
+            if (is_array($request)) {
+                $gymStoreRequest = new GymIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $gymStoreRequest->rules(),
+                    attributes: $gymStoreRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             /**
              * @var $max_price
@@ -521,4 +530,54 @@ class GymService
         $status = $request->status ?? null;
         return Gym::getStatusGymTitle();
     }
+
+    public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors $request): array
+    {
+        try {
+            $fields = $request->validated();
+            /**
+             * @var $withs
+             */
+            extract($fields);
+            $withs = $withs ?? [];
+            $withs=array_values($withs);
+            $lists = [];
+            if(in_array('gyms', $withs)){
+                /** @var GymService $GymService */
+                $GymService = resolve('GymService');
+                $gym_list = $GymService->index([])->toArray()['data'];
+                $lists['gyms']= $gym_list;
+            }
+            if(in_array('tags', $withs)){
+                /** @var TagService $TagService */
+                $TagService = resolve('TagService');
+                $tag_list = $TagService->index([])->toArray()['data'];
+                $lists['tags']= $tag_list;
+            }
+            if(in_array('sports', $withs)){
+                /** @var SportService $SportService */
+                $SportService = resolve('SportService');
+                $sport_list = $SportService->index([])->toArray()['data'];
+                $lists['sports']= $sport_list;
+            }
+            if(in_array('keywords', $withs)){
+                /** @var KeywordService $KeywordService */
+                $KeywordService = resolve('KeywordService');
+                $keyword_list = $KeywordService->index([])->toArray()['data'];
+                $lists['keywords']= $keyword_list;
+            }
+            if(in_array('attributes', $withs)){
+                /** @var AttributeService $AttributeService */
+                $AttributeService = resolve('AttributeService');
+                $attribute_list = $AttributeService->index([])->toArray()['data'];
+                $lists['attributes']= $attribute_list;
+            }
+
+            return $lists;
+
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
 }

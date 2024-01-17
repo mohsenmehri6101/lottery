@@ -6,6 +6,7 @@ use App\Helper\Response\ResponseHelper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\Gym\DeleteImageGymRequest;
+use Modules\Gym\Http\Requests\Gym\GetInitializeRequestsSelectors;
 use Modules\Gym\Http\Requests\Gym\GymIndexRequest;
 use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
 use Modules\Gym\Http\Requests\Gym\GymShowRequest;
@@ -20,7 +21,6 @@ class GymController extends Controller
     public function __construct(public GymService $gymService)
     {
     }
-
 
     /**
      * @OA\Get(
@@ -283,6 +283,22 @@ class GymController extends Controller
             return ['id' => $id, 'name' => $name];
         });
         return ResponseHelper::responseSuccess(data: $gyms_status);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/get-initialize-requests-selectors",
+     *     tags={"gyms"},
+     *     summary="Get initialization data for selectors",
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:gyms,tags,categories,sports,attributes,keywords,cities,provinces"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     * )
+     */
+    public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors $request): JsonResponse
+    {
+        $lists = $this->gymService->getInitializeRequestsSelectors($request);
+        return ResponseHelper::responseSuccess(data: $lists);
     }
 
 }

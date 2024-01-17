@@ -8123,6 +8123,44 @@
                 }
             }
         },
+        "/api/v1/get-initialize-requests-selectors": {
+            "get": {
+                "tags": [
+                    "gyms"
+                ],
+                "summary": "Get initialization data for selectors",
+                "operationId": "d86499aa7348a57a7c696069c4b9b2c3",
+                "parameters": [
+                    {
+                        "name": "withs",
+                        "in": "query",
+                        "description": "relations:gyms,tags,categories,sports,attributes,keywords,cities,provinces",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/keywords": {
             "get": {
                 "tags": [
