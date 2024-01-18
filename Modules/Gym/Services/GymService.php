@@ -531,10 +531,18 @@ class GymService
         return Gym::getStatusGymTitle();
     }
 
-    public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors $request): array
+    public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $get_initialize_requests_selectors = new GetInitializeRequestsSelectors();
+                $fields = Validator::make(data: $request,
+                    rules: $get_initialize_requests_selectors->rules(),
+                    attributes: $get_initialize_requests_selectors->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             /**
              * @var $withs
@@ -542,50 +550,56 @@ class GymService
             extract($fields);
 
             $withs = $withs ?? [];
-            $withs=array_values($withs);
+            $withs = array_values($withs);
 
             $lists = [];
-            if(in_array('gyms', $withs)){
+            if (in_array('gyms', $withs)) {
                 /** @var GymService $GymService */
                 $GymService = resolve('GymService');
-                $gym_list = $GymService->index([])->toArray()['data'];
-                $lists['gyms']= $gym_list;
+                $gyms = $GymService->index([])->toArray()['data'];
+                $lists['gyms'] = $gyms;
             }
-            if(in_array('tags', $withs)){
+            if (in_array('tags', $withs)) {
                 /** @var TagService $TagService */
                 $TagService = resolve('TagService');
-                $tag_list = $TagService->index([])->toArray()['data'];
-                $lists['tags']= $tag_list;
+                $tags = $TagService->index([])->toArray()['data'];
+                $lists['tags'] = $tags;
             }
-            if(in_array('sports', $withs)){
+            if (in_array('sports', $withs)) {
                 /** @var SportService $SportService */
                 $SportService = resolve('SportService');
-                $sport_list = $SportService->index([])->toArray()['data'];
-                $lists['sports']= $sport_list;
+                $sports = $SportService->index([])->toArray()['data'];
+                $lists['sports'] = $sports;
             }
-            if(in_array('keywords', $withs)){
+            if (in_array('keywords', $withs)) {
                 /** @var KeywordService $KeywordService */
                 $KeywordService = resolve('KeywordService');
-                $keyword_list = $KeywordService->index([])->toArray()['data'];
-                $lists['keywords']= $keyword_list;
+                $keywords = $KeywordService->index([])->toArray()['data'];
+                $lists['keywords'] = $keywords;
             }
-            if(in_array('attributes', $withs)){
+            if (in_array('attributes', $withs)) {
                 /** @var AttributeService $AttributeService */
                 $AttributeService = resolve('AttributeService');
-                $attribute_list = $AttributeService->index([])->toArray()['data'];
-                $lists['attributes']= $attribute_list;
+                $attributes = $AttributeService->index([])->toArray()['data'];
+                $lists['attributes'] = $attributes;
             }
-            if(in_array('cities', $withs)){
+            if (in_array('cities', $withs)) {
                 /** @var CityService $CityService */
-                $CityService = resolve('AttributeService');
-                $city_list = $AttributeService->index([])->toArray()['data'];
-                $lists['cities']= $city_list;
+                $CityService = resolve('CityService');
+                $cities = $CityService->index([])->toArray()['data'];
+                $lists['cities'] = $cities;
             }
-            if(in_array('provinces', $withs)){
+            if (in_array('provinces', $withs)) {
                 /** @var ProvinceService $CityService */
-                $ProvinceService = resolve('AttributeService');
-                $province_list = $AttributeService->index([])->toArray()['data'];
-                $lists['provinces']= $province_list;
+                $ProvinceService = resolve('ProvinceService');
+                $provinces = $ProvinceService->index([])->toArray()['data'];
+                $lists['provinces'] = $provinces;
+            }
+            if (in_array('gender_acceptances', $withs)) {
+                /** @var ReserveTemplateService $ReserveTemplateService */
+                $ReserveTemplateService = resolve('ReserveTemplateService');
+                $genderAcceptances = $ReserveTemplateService->gender_acceptances([]);
+                $lists['gender_acceptances'] = $genderAcceptances;
             }
 
             return $lists;
@@ -593,4 +607,5 @@ class GymService
             throw $exception;
         }
     }
+
 }

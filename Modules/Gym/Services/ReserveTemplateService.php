@@ -208,7 +208,7 @@ class ReserveTemplateService
         }
     }
 
-    public function gender_acceptances(Request $request): array|bool|int|string|null
+    public function gender_acceptances(Request|array $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
         return ReserveTemplate::getStatusGenderAcceptanceTitle();
@@ -219,4 +219,5 @@ class ReserveTemplateService
         $status = $request->status ?? null;
         return ReserveTemplate::getStatusTitle();
     }
+
 }

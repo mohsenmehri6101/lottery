@@ -4,6 +4,7 @@ namespace Modules\Geographical\Services;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Modules\Geographical\Entities\Province;
 use Modules\Geographical\Http\Repositories\ProvinceRepository;
 use Modules\Geographical\Http\Requests\Province\ProvinceIndexRequest;
@@ -20,7 +21,16 @@ class ProvinceService
     public function index(ProvinceIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $provinceIndexRequest = new ProvinceIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $provinceIndexRequest->rules(),
+                    attributes: $provinceIndexRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
+
             return $this->provinceRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;

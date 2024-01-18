@@ -15,7 +15,6 @@ use Modules\Gym\Http\Controllers\SeederController;
 use Modules\Gym\Http\Controllers\SportController;
 use Modules\Gym\Http\Controllers\TagController;
 
-
 Route::get('/get-initialize-requests-selectors', [GymController::class, 'getInitializeRequestsSelectors'])->name('index');
 
 # gyms

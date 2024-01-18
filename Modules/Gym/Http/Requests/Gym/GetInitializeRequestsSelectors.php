@@ -13,13 +13,11 @@ class GetInitializeRequestsSelectors extends FormRequest
 
     public function rules(): array
     {
-        $lists = ['gyms','tags','categories','sports','attributes','keywords','cities','provinces'];
+        $lists = ['gyms','tags','categories','sports','attributes','keywords','cities','provinces','gender_acceptances'];
         $withs_allows = implode(',', $lists);
-
         return [
             'withs' => 'nullable|array',
             'withs.*' => "nullable|string|in:$withs_allows",
         ];
-
     }
 }
