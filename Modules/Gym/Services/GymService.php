@@ -589,17 +589,29 @@ class GymService
                 $cities = $CityService->index([])->toArray()['data'];
                 $lists['cities'] = $cities;
             }
+
             if (in_array('provinces', $withs)) {
-                /** @var ProvinceService $CityService */
+                /** @var ProvinceService $ProvinceService */
                 $ProvinceService = resolve('ProvinceService');
                 $provinces = $ProvinceService->index([])->toArray()['data'];
                 $lists['provinces'] = $provinces;
             }
+
+            if (in_array('categories', $withs)) {
+                /** @var CategoryService $CategoryService */
+                $CategoryService = resolve('CategoryService');
+                $categories = $CategoryService->index([])->toArray()['data'];
+                $lists['categories'] = $categories;
+            }
+
             if (in_array('gender_acceptances', $withs)) {
                 /** @var ReserveTemplateService $ReserveTemplateService */
                 $ReserveTemplateService = resolve('ReserveTemplateService');
-                $genderAcceptances = $ReserveTemplateService->gender_acceptances([]);
-                $lists['gender_acceptances'] = $genderAcceptances;
+                $gender_acceptances = $ReserveTemplateService->gender_acceptances([]);
+                $gender_acceptances = collect($gender_acceptances)->map(function ($name, $id) {
+                    return ['id' => $id, 'name' => $name];
+                });
+                $lists['gender_acceptances'] = $gender_acceptances;
             }
 
             return $lists;

@@ -25,7 +25,16 @@ class CategoryService
     public function index(CategoryIndexRequest|array $request)
     {
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $categoryIndexRequest = new CategoryIndexRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $categoryIndexRequest->rules(),
+                    attributes: $categoryIndexRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
+
             return $this->categoryRepository->resolve_paginate(
                 inputs: $fields,
                 orderByColumn: $fields['order_by'] ?? 'id',
