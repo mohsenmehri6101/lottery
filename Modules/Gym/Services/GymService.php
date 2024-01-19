@@ -31,10 +31,10 @@ class GymService
     {
         try {
             if (is_array($request)) {
-                $gymStoreRequest = new GymIndexRequest();
+                $gymIndexRequest = new GymIndexRequest();
                 $fields = Validator::make(data: $request,
-                    rules: $gymStoreRequest->rules(),
-                    attributes: $gymStoreRequest->attributes(),
+                    rules: $gymIndexRequest->rules(),
+                    attributes: $gymIndexRequest->attributes(),
                 )->validate();
             } else {
                 $fields = $request->validated();
@@ -257,13 +257,16 @@ class GymService
             }
 
             # save reserve_template
-            $from = $from ?? '08:00';
-            $to = $to ?? '23:59';
-            $break_time = $break_time ?? 2;
-            $price = $price ?? 0;
-            $gender_acceptance = $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown;
-            $week_numbers = $week_numbers ?? [1, 2, 3, 4, 5, 6, 7];
-            self::saveSectionReserveTemplate(gym: $gym, week_numbers: $week_numbers, start_time: $from, max_hour: $to, break_time: $break_time, price: $price, gender_acceptance: $gender_acceptance);
+            if(isset($time_template) && count($time_template)){
+                $from = $time_template['from'] ?? '08:00';
+                $to = $time_template['to'] ?? '23:59';
+                $break_time = $time_template['break_time'] ?? 2;
+                $price = $time_template['price'] ?? 0;
+                $gender_acceptance = $time_template['gender_acceptance'] ?? ReserveTemplate::status_gender_acceptance_unknown;
+                $week_numbers = $time_template['week_numbers'] ?? [1, 2, 3, 4, 5, 6, 7];
+                self::saveSectionReserveTemplate(gym: $gym, week_numbers: $week_numbers, start_time: $from, max_hour: $to, break_time: $break_time, price: $price, gender_acceptance: $gender_acceptance);
+                $withs_result[] = 'reserveTemplates';
+            }
 
             DB::commit();
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);

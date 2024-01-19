@@ -163,7 +163,7 @@ class GymController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"images"},
+     *                 required={""},
      *                 @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files")
      *             )
      *         )

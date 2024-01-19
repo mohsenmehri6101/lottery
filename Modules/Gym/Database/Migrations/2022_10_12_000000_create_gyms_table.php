@@ -14,11 +14,11 @@ return new class extends Migration {
             $table->text('description')->nullable()->comment('توضیحات');
             $table->decimal('price', 15, 3)->default(0)->comment('قیمت');
             // info locations
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable()->comment('عرض جغرافیایی');
+            $table->string('longitude')->nullable()->comment('طول جغرافیایی');
             $table->unsignedBigInteger('city_id')->nullable()->comment('city_id');
-            $table->text('address')->nullable();
-            $table->text('short_address')->nullable();
+            $table->text('address')->nullable()->comment('آدرس کامل');
+            $table->text('short_address')->nullable()->comment('آدرس کوتاه');
             // info locations
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
