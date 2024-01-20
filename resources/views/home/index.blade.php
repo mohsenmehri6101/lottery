@@ -8,6 +8,6 @@
 </head>
 <body>
 <div id="app"></div>
-<script type="module" crossorigin src="{{ url('assets/index-8f802c9e.js') }}"></script>
+<script type="module" crossorigin src="{{ url('assets/index-020e98f3.js') }}"></script>
 </body>
 </html>
