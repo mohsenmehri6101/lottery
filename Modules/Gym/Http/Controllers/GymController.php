@@ -143,22 +143,22 @@ class GymController extends Controller
      *     @OA\Parameter(name="attribute_id",in="query",required=false, @OA\Schema(type="integer"),description="Attribute ID"),
      *     @OA\Parameter(name="attributes",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of attribute IDs"),
      *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"images", "time_template"},
-     *                 @OA\Property(property="images",type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
-     *                 @OA\Property(property="time_template", type="array", @OA\Items(
-     *                     @OA\Property(property="from", type="string", format="H:i", description="Start time"),
-     *                     @OA\Property(property="to", type="string", format="H:i", description="End time"),
-     *                     @OA\Property(property="break_time", type="number", format="float", description="Break time in hours"),
-     *                     @OA\Property(property="price", type="number", format="float", description="Price"),
-     *                     @OA\Property(property="week_numbers", type="array", @OA\Items(type="integer", format="int32"), description="Array of week numbers [1,2,3,4,5,6,7]"),
-     *                     @OA\Property(property="gender_acceptance", type="number", description="Gender acceptance status"),
-     *                 ), description="Array of reserve template data"),
-     *             )
-     *         )
-     *     ),
+     *      @OA\MediaType(
+     *          mediaType="multipart/form-data",
+     *          @OA\Schema(
+     *              required={"time_template"},
+     *              @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
+     *              @OA\Property(property="time_template", type="array", @OA\Items(
+     *                  @OA\Property(property="from", type="string", format="H:i", description="Start time"),
+     *                  @OA\Property(property="to", type="string", format="H:i", description="End time"),
+     *                  @OA\Property(property="break_time", type="number", format="float", description="Break time in hours"),
+     *                  @OA\Property(property="price", type="number", format="float", description="Price"),
+     *                  @OA\Property(property="gender_acceptance", type="number", description="Gender acceptance status"),
+     *                  @OA\Property(property="week_numbers", type="array", @OA\Items(type="integer", format="int32"), description="Array of week numbers [1,2,3,4,5,6,7]"),
+     *              ), description="Array of reserve template data"),
+     *          )
+     *      )
+     *  ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",

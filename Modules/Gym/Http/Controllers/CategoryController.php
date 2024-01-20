@@ -12,7 +12,6 @@ use Modules\Gym\Http\Requests\Category\DeleteCategoryToGymRequest;
 use Modules\Gym\Http\Requests\Category\SyncCategoryToGymRequest;
 use Modules\Gym\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
-
 class CategoryController extends Controller
 {
     public function __construct(public CategoryService $categoryService)

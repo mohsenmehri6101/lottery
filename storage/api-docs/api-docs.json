@@ -7346,7 +7346,6 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "images",
                                     "time_template"
                                 ],
                                 "properties": {
@@ -7383,6 +7382,10 @@
                                                     "type": "number",
                                                     "format": "float"
                                                 },
+                                                "gender_acceptance": {
+                                                    "description": "Gender acceptance status",
+                                                    "type": "number"
+                                                },
                                                 "week_numbers": {
                                                     "description": "Array of week numbers [1,2,3,4,5,6,7]",
                                                     "type": "array",
@@ -7390,10 +7393,6 @@
                                                         "type": "integer",
                                                         "format": "int32"
                                                     }
-                                                },
-                                                "gender_acceptance": {
-                                                    "description": "Gender acceptance status",
-                                                    "type": "number"
                                                 }
                                             },
                                             "type": "object"
