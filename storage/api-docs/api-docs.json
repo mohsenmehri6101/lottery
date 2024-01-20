@@ -9755,6 +9755,15 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -9798,6 +9807,100 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/reserve_templates/multiple": {
+            "put": {
+                "tags": [
+                    "reserve_templates"
+                ],
+                "summary": "update reserve_template",
+                "operationId": "f08049daebcd71f9f895324581df1d70",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reserve_templates"
+                                ],
+                                "properties": {
+                                    "reserve_templates": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "from": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "to": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "gym_id": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "week_number": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "price": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "cod": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "gender_acceptance": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "discount": {
+                                                    "type": "numeric",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success",

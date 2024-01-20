@@ -10,6 +10,7 @@ use Modules\Gym\Http\Repositories\ReserveTemplateRepository;
 use Modules\Gym\Http\Repositories\GymRepository;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateBetweenDateRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateIndexRequest;
+use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateMultipleUpdateRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateShowRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateStoreRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateUpdateRequest;
@@ -26,10 +27,10 @@ class ReserveTemplateService
     {
         try {
             if (is_array($request)) {
-                $reserveStoreRequest = new ReserveTemplateIndexRequest();
+                $reserveIndexRequest = new ReserveTemplateIndexRequest();
                 $fields = Validator::make(data: $request,
-                    rules: $reserveStoreRequest->rules(),
-                    attributes: $reserveStoreRequest->attributes(),
+                    rules: $reserveIndexRequest->rules(),
+                    attributes: $reserveIndexRequest->attributes(),
                 )->validate();
             } else {
                 $fields = $request->validated();
@@ -83,11 +84,19 @@ class ReserveTemplateService
         }
     }
 
-    public function update(ReserveTemplateUpdateRequest $request, $reserve_template_id)
+    public function update(ReserveTemplateUpdateRequest|array $request, $reserve_template_id)
     {
         DB::beginTransaction();
         try {
-            $fields = $request->validated();
+            if (is_array($request)) {
+                $reserveUpdateRequest = new ReserveTemplateUpdateRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $reserveUpdateRequest->rules(),
+                    attributes: $reserveUpdateRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             /** @var ReserveTemplate $reserveTemplate */
             $reserveTemplate = $this->reserveTemplateRepository->findOrFail($reserve_template_id);
@@ -96,6 +105,31 @@ class ReserveTemplateService
             DB::commit();
 
             return $this->reserveTemplateRepository->findOrFail($reserve_template_id);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+    }
+
+
+    public function multipleUpdate(ReserveTemplateMultipleUpdateRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $fields = $request->validated();
+
+            $reserve_templates= $fields['reserve_templates'];
+
+            if(count($reserve_templates)){
+                foreach($reserve_templates as $reserve_template){
+                    $reserve_template_id=$reserve_template['id'] ?? null;
+                    unset($reserve_template['id']);
+                    $this->update($reserve_template,$reserve_template_id);
+                }
+            }
+
+            DB::commit();
+            return [];
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;

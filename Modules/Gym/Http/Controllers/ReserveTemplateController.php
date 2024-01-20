@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateBetweenDateRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateIndexRequest;
+use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateMultipleUpdateRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateShowRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateStoreRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateUpdateRequest;
@@ -101,7 +102,9 @@ class ReserveTemplateController extends Controller
      *     @OA\Parameter(name="gym_id",in="query",required=false, @OA\Schema(type="integer"),description="gym_id"),
      *     @OA\Parameter(name="week_number",in="query",required=false, @OA\Schema(type="integer"),description="week_number"),
      *     @OA\Parameter(name="price",in="query",required=false, @OA\Schema(type="string"),description="price"),
-     *     @OA\Parameter(name="cod",in="query",required=false, @OA\Schema(type="integer"),description="cod"),     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Parameter(name="cod",in="query",required=false, @OA\Schema(type="integer"),description="cod"),
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
      */
@@ -109,6 +112,44 @@ class ReserveTemplateController extends Controller
     {
         $reserve_template = $this->reserveTemplateService->update($request, $reserve_template_id);
         return $reserve_template ? ResponseHelper::responseSuccessUpdate(data: $reserve_template) : ResponseHelper::responseFailedUpdate();
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/reserve_templates/multiple",
+     *     tags={"reserve_templates"},
+     *     summary="update reserve_templates",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"reserve_templates"},
+     *             properties={
+     *                 @OA\Property(property="reserve_templates", type="array", @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="from", type="string", nullable=true),
+     *                     @OA\Property(property="to", type="string", nullable=true),
+     *                     @OA\Property(property="gym_id", type="integer", nullable=true),
+     *                     @OA\Property(property="week_number", type="integer", nullable=true),
+     *                     @OA\Property(property="price", type="string", nullable=true),
+     *                     @OA\Property(property="cod", type="integer", nullable=true),
+     *                     @OA\Property(property="status", type="integer", nullable=true),
+     *                     @OA\Property(property="gender_acceptance", type="integer", nullable=true),
+     *                     @OA\Property(property="discount", type="numeric", nullable=true),
+     *                 )),
+     *             },
+     *         ),
+     *     ),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     * )
+     */
+    public function multipleUpdate(ReserveTemplateMultipleUpdateRequest $request): JsonResponse
+    {
+        $reserve_template = $this->reserveTemplateService->multipleUpdate($request);
+        return ResponseHelper::responseSuccessUpdate(data: $reserve_template);
     }
 
     /**

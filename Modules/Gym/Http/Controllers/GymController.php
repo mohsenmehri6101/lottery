@@ -149,12 +149,12 @@ class GymController extends Controller
      *              required={"time_template"},
      *              @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
      *              @OA\Property(property="time_template", type="array", @OA\Items(
-     *                  @OA\Property(property="from", type="string", format="H:i", description="Start time"),
-     *                  @OA\Property(property="to", type="string", format="H:i", description="End time"),
-     *                  @OA\Property(property="break_time", type="number", format="float", description="Break time in hours"),
-     *                  @OA\Property(property="price", type="number", format="float", description="Price"),
-     *                  @OA\Property(property="gender_acceptance", type="number", description="Gender acceptance status"),
-     *                  @OA\Property(property="week_numbers", type="array", @OA\Items(type="integer", format="int32"), description="Array of week numbers [1,2,3,4,5,6,7]"),
+     *              @OA\Property(property="from", type="string", format="H:i", description="Start time"),
+     *              @OA\Property(property="to", type="string", format="H:i", description="End time"),
+     *              @OA\Property(property="break_time", type="number", format="float", description="Break time in hours"),
+     *              @OA\Property(property="price", type="number", format="float", description="Price"),
+     *              @OA\Property(property="gender_acceptance", type="number", description="Gender acceptance status"),
+     *              @OA\Property(property="week_numbers", type="array", @OA\Items(type="integer", format="int32"), description="Array of week numbers [1,2,3,4,5,6,7]"),
      *              ), description="Array of reserve template data"),
      *          )
      *      )
