@@ -9837,7 +9837,7 @@
                 "tags": [
                     "reserve_templates"
                 ],
-                "summary": "update reserve_template",
+                "summary": "update reserve_templates",
                 "operationId": "f08049daebcd71f9f895324581df1d70",
                 "requestBody": {
                     "required": true,

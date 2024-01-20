@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+//use Intervention\Image\ImageManager as Image;
+//use Intervention\Image\Facades\Image;
 use Exception;
 
 class ImageService
@@ -114,7 +115,7 @@ class ImageService
         return random_string(length: $length, start_with: $start_with, end_with: $end_with);
     }
 
-    public static function deleteImages(Model $model, $relation = null, $strict = true)
+    public static function deleteImages(Model $model, $relation = null, $strict = true): bool
     {
         DB::beginTransaction();
         try {
