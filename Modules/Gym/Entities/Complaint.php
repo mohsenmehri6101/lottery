@@ -92,7 +92,6 @@ class Complaint extends Model
             if (is_null($item?->user_creator)) {
                 $item->user_creator = set_user_creator();
             }
-
             # user_editor
             if (is_null($item->user_editor)) {
                 $item->user_editor = set_user_creator();
@@ -168,5 +167,4 @@ class Complaint extends Model
     {
         return $this->belongsTo(CommonComplaint::class);
     }
-
 }

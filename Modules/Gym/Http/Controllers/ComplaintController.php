@@ -133,5 +133,4 @@ class ComplaintController extends Controller
         $status_delete = $this->complaintService->destroy($complaint_id);
         return $status_delete ? ResponseHelper::responseSuccessDelete() : ResponseHelper::responseFailedDelete();
     }
-
 }

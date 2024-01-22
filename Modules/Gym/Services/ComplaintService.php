@@ -48,7 +48,6 @@ class ComplaintService
         DB::beginTransaction();
         try {
             $fields = $request->validated();
-
             $complaint = $this->complaintRepository->create($fields);
             DB::commit();
             return $complaint;
@@ -63,14 +62,10 @@ class ComplaintService
         DB::beginTransaction();
         try {
             $fields = $request->validated();
-
             /** @var Complaint $complaint */
             $complaint = $this->complaintRepository->findOrFail($complaint_id);
-
             $this->complaintRepository->update($complaint, $fields);
-
             DB::commit();
-
             return $this->complaintRepository->findOrFail($complaint_id);
         } catch (Exception $exception) {
             DB::rollBack();
@@ -85,10 +80,8 @@ class ComplaintService
             # find complaint
             /** @var Complaint $complaint */
             $complaint = $this->complaintRepository->findOrFail($complaint_id);
-
             # delete complaint
             $status_delete_complaint = $this->complaintRepository->delete($complaint);
-
             DB::commit();
             return $status_delete_complaint;
         } catch (Exception $exception) {
@@ -96,4 +89,5 @@ class ComplaintService
             throw $exception;
         }
     }
+
 }

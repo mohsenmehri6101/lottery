@@ -42,5 +42,4 @@ class ComplaintIndexRequest extends FormRequest
             'deleted_at' => 'nullable',
         ];
     }
-
 }
