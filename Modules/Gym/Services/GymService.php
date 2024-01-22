@@ -115,8 +115,8 @@ class GymService
              * @var $withs
              */
             extract($fields);
-
             $withs = $withs ?? [];
+            $withs = convert_withs_from_string_to_array(withs: $withs);
             return $this->gymRepository->withRelations(relations: $withs)->findOrFail($gym_id);
         } catch (Exception $exception) {
             throw $exception;
