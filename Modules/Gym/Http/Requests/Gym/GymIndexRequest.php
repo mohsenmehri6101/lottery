@@ -47,6 +47,7 @@ class GymIndexRequest extends FormRequest
             'user_editor' => 'nullable|exists:users,id',
             'withs' => 'nullable|array',
             'withs.*' => "nullable|string|in:$withs_allows",
+            'dated_at' => 'nullable',
             'created_at' => 'nullable',
             'updated_at' => 'nullable',
             'deleted_at' => 'nullable',

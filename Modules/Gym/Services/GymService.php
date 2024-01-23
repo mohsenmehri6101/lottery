@@ -3,12 +3,15 @@
 namespace Modules\Gym\Services;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
 use Modules\Gym\Http\Repositories\GymRepository;
+use Modules\Gym\Http\Repositories\ReserveRepository;
 use Modules\Gym\Http\Requests\Gym\DeleteImageGymRequest;
 use Modules\Gym\Http\Requests\Gym\GymIndexRequest;
 use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
@@ -25,6 +28,7 @@ class GymService
     public function __construct(public GymRepository $gymRepository)
     {
     }
+
     public function index(GymIndexRequest|array $request)
     {
         try {
@@ -32,33 +36,56 @@ class GymService
                 $gymIndexRequest = new GymIndexRequest();
                 $fields = Validator::make(data: $request,
                     rules: $gymIndexRequest->rules(),
-                    attributes: $gymIndexRequest->attributes(),
+                    attributes: $gymIndexRequest->attributes()
                 )->validate();
             } else {
                 $fields = $request->validated();
             }
+
             /**
-             * @var $max_price
              * @var $min_price
+             * @var $max_price
+             * @var $withs
+             * @var $dated_at
              */
             extract($fields);
 
+            /* ------------------------------------------ */
+
             $max_price = $max_price ?? null;
             $min_price = $min_price ?? null;
+            $dated_at = $dated_at ?? null;
+            $withs = $withs ?? [];
+            unset($fields['withs']);
 
-            $query = $this->gymRepository->queryFull(inputs: $fields);
+            if( isset($fields['dated_at']) && filled($fields['dated_at']) ){
+                $withs[]='reserves';
+            }
+
+            $query = $this->gymRepository->queryFull(inputs: $fields, relations: $withs);
 
             $query = $query->when($max_price, function ($query_) use ($max_price) {
                 return $query_->where('price', '<=', $max_price);
             })->when($min_price, function ($query_) use ($min_price) {
                 return $query_->where('price', '>=', $min_price);
             });
+
+            $query = $query->whereHas('reserves', function (Builder $query) use ($dated_at) {
+                return $query->when(filled($dated_at), function ($queryReserve) use ($dated_at) {
+                    /** @var ReserveRepository $reserveRepository */
+                    $reserveRepository = resolve('ReserveRepository');
+                    $fields_reserves = ['dated_at'=>$dated_at];
+                    return $reserveRepository->queryByInputs(query: $queryReserve, inputs: $fields_reserves);
+                });
+            });
+
             return $this->gymRepository->resolve_paginate(query: $query);
 
         } catch (Exception $exception) {
             throw $exception;
         }
     }
+
     public function myGyms(MyGymsRequest|array $request)
     {
         try {
@@ -94,6 +121,7 @@ class GymService
             throw $exception;
         }
     }
+
     public function show(GymShowRequest|array $request, $gym_id)
     {
         try {
@@ -118,6 +146,7 @@ class GymService
             throw $exception;
         }
     }
+
     public function store(GymStoreRequest $request)
     {
         DB::beginTransaction();
@@ -270,6 +299,7 @@ class GymService
             throw $exception;
         }
     }
+
     public static function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
         foreach ($week_numbers as $week_number) {
@@ -292,6 +322,7 @@ class GymService
             }
         }
     }
+
     public function like(GymLikeRequest $request): int
     {
         DB::beginTransaction();
@@ -315,6 +346,7 @@ class GymService
             throw $exception;
         }
     }
+
     public function update(GymUpdateRequest $request, $gym_id)
     {
         DB::beginTransaction();
@@ -451,6 +483,7 @@ class GymService
             throw $exception;
         }
     }
+
     public function destroy($gym_id)
     {
         DB::beginTransaction();
@@ -469,6 +502,7 @@ class GymService
             throw $exception;
         }
     }
+
     public function deleteImage(DeleteImageGymRequest $request, $gym_id): bool
     {
         DB::beginTransaction();
@@ -512,15 +546,18 @@ class GymService
             throw $exception;
         }
     }
+
     public static function updateScore($gym_id): float|int
     {
         return Gym::updateScore($gym_id);
     }
+
     public function gymStatus(Request $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
         return Gym::getStatusGymTitle();
     }
+
     public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
@@ -588,6 +625,7 @@ class GymService
             throw $exception;
         }
     }
+
     private function getCachedList($serviceKey, $method, $cacheKey)
     {
         $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors', 30);

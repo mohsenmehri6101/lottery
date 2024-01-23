@@ -16,4 +16,5 @@ class ReserveRepository extends BaseRepository
     {
         return Reserve::$relations_;
     }
+
 }

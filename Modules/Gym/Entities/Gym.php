@@ -19,13 +19,13 @@ use Modules\Geographical\Entities\City;
 /**
  * @property integer $id
  * @property integer $name
- * @property string  $description
- * @property string  $price
- * @property string  $latitude
- * @property string  $longitude
+ * @property string $description
+ * @property string $price
+ * @property string $latitude
+ * @property string $longitude
  * @property integer $city_id
- * @property string  $address
- * @property string  $short_address
+ * @property string $address
+ * @property string $short_address
  * @property integer $score
  * @property integer $status
  * @property integer $gender_acceptance
@@ -43,6 +43,7 @@ use Modules\Geographical\Entities\City;
 class Gym extends Model
 {
     use SoftDeletes, UserCreator, UserEditor;
+
     const status_unknown = 0;
     const status_active = 1;
     const status_block = 2;
@@ -262,16 +263,9 @@ class Gym extends Model
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
 
-    public function reserves(): HasManyThrough
+    public function reserves(): HasMany
     {
-        return $this->hasManyThrough(
-            Reserve::class,
-            ReserveTemplate::class,
-            'gym_id',
-            'reserve_template_id',
-            'id',
-            'id'
-        );
+        return $this->hasMany(Reserve::class);
     }
 
     public function user(): BelongsTo

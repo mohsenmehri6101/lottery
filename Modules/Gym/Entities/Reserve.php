@@ -80,6 +80,11 @@ class Reserve extends Model
         'factors',
     ];
 
+    public function gym(): BelongsTo
+    {
+        return $this->belongsTo(Gym::class);
+    }
+
     protected static function boot(): void
     {
         parent::boot();
@@ -100,11 +105,6 @@ class Reserve extends Model
                 $item->user_editor = set_user_creator();
             }
         });
-    }
-
-    public function gym(): BelongsTo
-    {
-        return $this->belongsTo(Gym::class, 'gym_id');
     }
 
     public static function getStatusTitle($status = null): array|bool|int|string|null
