@@ -20,6 +20,7 @@ use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
 use Modules\Gym\Http\Requests\Gym\GetInitializeRequestsSelectors;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class GymService
 {
@@ -534,6 +535,7 @@ class GymService
         return Gym::getStatusGymTitle();
     }
 
+
     public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
@@ -556,71 +558,65 @@ class GymService
             $withs = array_values($withs);
 
             $lists = [];
-            if (in_array('gyms', $withs)) {
-                /** @var GymService $GymService */
-                $GymService = resolve('GymService');
-                $gyms = $GymService->index([])->toArray()['data'];
-                $lists['gyms'] = $gyms;
-            }
-            if (in_array('tags', $withs)) {
-                /** @var TagService $TagService */
-                $TagService = resolve('TagService');
-                $tags = $TagService->index([])->toArray()['data'];
-                $lists['tags'] = $tags;
-            }
-            if (in_array('sports', $withs)) {
-                /** @var SportService $SportService */
-                $SportService = resolve('SportService');
-                $sports = $SportService->index([])->toArray()['data'];
-                $lists['sports'] = $sports;
-            }
-            if (in_array('keywords', $withs)) {
-                /** @var KeywordService $KeywordService */
-                $KeywordService = resolve('KeywordService');
-                $keywords = $KeywordService->index([])->toArray()['data'];
-                $lists['keywords'] = $keywords;
-            }
-            if (in_array('attributes', $withs)) {
-                /** @var AttributeService $AttributeService */
-                $AttributeService = resolve('AttributeService');
-                $attributes = $AttributeService->index([])->toArray()['data'];
-                $lists['attributes'] = $attributes;
-            }
-            if (in_array('cities', $withs)) {
-                /** @var CityService $CityService */
-                $CityService = resolve('CityService');
-                $cities = $CityService->index([])->toArray()['data'];
-                $lists['cities'] = $cities;
-            }
 
-            if (in_array('provinces', $withs)) {
-                /** @var ProvinceService $ProvinceService */
-                $ProvinceService = resolve('ProvinceService');
-                $provinces = $ProvinceService->index([])->toArray()['data'];
-                $lists['provinces'] = $provinces;
-            }
+            foreach ($withs as $with) {
+                $cacheKey = "initialize_requests_selectors_$with";
 
-            if (in_array('categories', $withs)) {
-                /** @var CategoryService $CategoryService */
-                $CategoryService = resolve('CategoryService');
-                $categories = $CategoryService->index([])->toArray()['data'];
-                $lists['categories'] = $categories;
-            }
+                // Check if the data is available in the cache
+                if (Cache::has($cacheKey)) {
+                    $lists[$with] = Cache::get($cacheKey);
+                } else {
+                    switch ($with) {
+                        case 'gyms':
+                            $lists[$with] = $this->getCachedList('GymService', 'index', 'gyms');
+                            break;
+                        case 'tags':
+                            $lists[$with] = $this->getCachedList('TagService', 'index', 'tags');
+                            break;
+                        case 'sports':
+                            $lists[$with] = $this->getCachedList('SportService', 'index', 'sports');
+                            break;
+                        case 'keywords':
+                            $lists[$with] = $this->getCachedList('KeywordService', 'index', 'keywords');
+                            break;
+                        case 'attributes':
+                            $lists[$with] = $this->getCachedList('AttributeService', 'index', 'attributes');
+                            break;
+                        case 'cities':
+                            $lists[$with] = $this->getCachedList('CityService', 'index', 'cities');
+                            break;
+                        case 'provinces':
+                            $lists[$with] = $this->getCachedList('ProvinceService', 'index', 'provinces');
+                            break;
+                        case 'categories':
+                            $lists[$with] = $this->getCachedList('CategoryService', 'index', 'categories');
+                            break;
+                        case 'gender_acceptances':
+                            $lists[$with] = $this->getCachedList('ReserveTemplateService', 'gender_acceptances', 'gender_acceptances');
+                            break;
+                        default:
+                            // Handle unknown $with values or log a warning
+                            break;
+                    }
 
-            if (in_array('gender_acceptances', $withs)) {
-                /** @var ReserveTemplateService $ReserveTemplateService */
-                $ReserveTemplateService = resolve('ReserveTemplateService');
-                $gender_acceptances = $ReserveTemplateService->gender_acceptances([]);
-                $gender_acceptances = collect($gender_acceptances)->map(function ($name, $id) {
-                    return ['id' => $id, 'name' => $name];
-                });
-                $lists['gender_acceptances'] = $gender_acceptances;
+                    // Set data in cache for 30 minutes
+                    Cache::put($cacheKey, $lists[$with], now()->addMinutes(30));
+                }
             }
 
             return $lists;
         } catch (Exception $exception) {
             throw $exception;
         }
+    }
+    private function getCachedList($serviceKey, $method, $cacheKey)
+    {
+        $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors',30);
+        $service = resolve($serviceKey);
+        $data = $service->$method([])->toArray()['data'];
+        return Cache::remember("initialize_requests_selectors_$cacheKey", now()->addMinutes($minute_cache_time), function () use ($data) {
+            return $data;
+        });
     }
 
 }
