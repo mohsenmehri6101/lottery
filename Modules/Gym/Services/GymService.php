@@ -597,5 +597,4 @@ class GymService
             return $data;
         });
     }
-
 }
