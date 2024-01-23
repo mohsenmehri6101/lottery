@@ -5,8 +5,6 @@ namespace Modules\Gym\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Modules\Geographical\Services\CityService;
-use Modules\Geographical\Services\ProvinceService;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -27,7 +25,6 @@ class GymService
     public function __construct(public GymRepository $gymRepository)
     {
     }
-
     public function index(GymIndexRequest|array $request)
     {
         try {
@@ -62,7 +59,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function myGyms(MyGymsRequest|array $request)
     {
         try {
@@ -98,7 +94,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function show(GymShowRequest|array $request, $gym_id)
     {
         try {
@@ -123,7 +118,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function store(GymStoreRequest $request)
     {
         DB::beginTransaction();
@@ -276,7 +270,6 @@ class GymService
             throw $exception;
         }
     }
-
     public static function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
         foreach ($week_numbers as $week_number) {
@@ -299,7 +292,6 @@ class GymService
             }
         }
     }
-
     public function like(GymLikeRequest $request): int
     {
         DB::beginTransaction();
@@ -323,7 +315,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function update(GymUpdateRequest $request, $gym_id)
     {
         DB::beginTransaction();
@@ -460,7 +451,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function destroy($gym_id)
     {
         DB::beginTransaction();
@@ -479,7 +469,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function deleteImage(DeleteImageGymRequest $request, $gym_id): bool
     {
         DB::beginTransaction();
@@ -523,18 +512,15 @@ class GymService
             throw $exception;
         }
     }
-
     public static function updateScore($gym_id): float|int
     {
         return Gym::updateScore($gym_id);
     }
-
     public function gymStatus(Request $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
         return Gym::getStatusGymTitle();
     }
-
     public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
@@ -603,7 +589,7 @@ class GymService
             throw $exception;
         }
     }
-
+    
     private function getCachedList($serviceKey, $method, $cacheKey)
     {
         $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors', 30);
@@ -613,5 +599,4 @@ class GymService
             return $data;
         });
     }
-
 }
