@@ -258,7 +258,7 @@ class GymService
             }
 
             # save reserve_template
-            if(isset($time_template) && count($time_template)){
+            if (isset($time_template) && count($time_template)) {
                 $from = $time_template['from'] ?? '08:00';
                 $to = $time_template['to'] ?? '23:59';
                 $break_time = $time_template['break_time'] ?? 2;
@@ -535,7 +535,6 @@ class GymService
         return Gym::getStatusGymTitle();
     }
 
-
     public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
@@ -553,15 +552,11 @@ class GymService
              * @var $withs
              */
             extract($fields);
-
             $withs = $withs ?? [];
             $withs = array_values($withs);
-
             $lists = [];
-
             foreach ($withs as $with) {
                 $cacheKey = "initialize_requests_selectors_$with";
-
                 // Check if the data is available in the cache
                 if (Cache::has($cacheKey)) {
                     $lists[$with] = Cache::get($cacheKey);
@@ -603,15 +598,15 @@ class GymService
                     Cache::put($cacheKey, $lists[$with], now()->addMinutes(30));
                 }
             }
-
             return $lists;
         } catch (Exception $exception) {
             throw $exception;
         }
     }
+
     private function getCachedList($serviceKey, $method, $cacheKey)
     {
-        $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors',30);
+        $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors', 30);
         $service = resolve($serviceKey);
         $data = $service->$method([])->toArray()['data'];
         return Cache::remember("initialize_requests_selectors_$cacheKey", now()->addMinutes($minute_cache_time), function () use ($data) {
