@@ -579,7 +579,6 @@ class GymService
                             // Handle unknown $with values or log a warning
                             break;
                     }
-
                     // Set data in cache for 30 minutes
                     Cache::put($cacheKey, $lists[$with], now()->addMinutes(30));
                 }
@@ -589,7 +588,6 @@ class GymService
             throw $exception;
         }
     }
-    
     private function getCachedList($serviceKey, $method, $cacheKey)
     {
         $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors', 30);
@@ -599,4 +597,5 @@ class GymService
             return $data;
         });
     }
+
 }
