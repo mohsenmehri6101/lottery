@@ -610,7 +610,15 @@ class GymService
                             $lists[$with] = $this->getCachedList('CategoryService', 'index', 'categories');
                             break;
                         case 'gender_acceptances':
-                            $lists[$with] = $this->getCachedList('ReserveTemplateService', 'gender_acceptances', 'gender_acceptances');
+                            {
+                                /** @var ReserveTemplateService $ReserveTemplateService */
+                                $ReserveTemplateService = resolve('ReserveTemplateService');
+                                $gender_acceptances = $ReserveTemplateService->gender_acceptances([]);
+                                $gender_acceptances = collect($gender_acceptances)->map(function ($name, $id) {
+                                    return ['id' => $id, 'name' => $name];
+                                });
+                                $lists[$with] = $gender_acceptances;
+                            }
                             break;
                         default:
                             // Handle unknown $with values or log a warning

@@ -291,7 +291,7 @@ class GymController extends Controller
      *     path="/api/v1/get-initialize-requests-selectors",
      *     tags={"gyms"},
      *     summary="Get initialization data for selectors",
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:gyms,tags,categories,sports,attributes,keywords,cities,provinces"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:gyms,tags,categories,sports,attributes,keywords,cities,provinces,gender_acceptances"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      * )

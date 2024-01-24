@@ -7119,6 +7119,15 @@
                         }
                     },
                     {
+                        "name": "dated_at",
+                        "in": "query",
+                        "description": "dated_at",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "created_at",
                         "in": "query",
                         "description": "created_at",
@@ -8133,7 +8142,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "relations:gyms,tags,categories,sports,attributes,keywords,cities,provinces",
+                        "description": "relations:gyms,tags,categories,sports,attributes,keywords,cities,provinces,gender_acceptances",
                         "required": false,
                         "schema": {
                             "type": "string"
