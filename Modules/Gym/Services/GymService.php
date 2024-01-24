@@ -624,6 +624,7 @@ class GymService
                             // Handle unknown $with values or log a warning
                             break;
                     }
+
                     // Set data in cache for 30 minutes
                     Cache::put($cacheKey, $lists[$with], now()->addMinutes(30));
                 }
