@@ -58,8 +58,8 @@ class GymService
             $withs = $withs ?? [];
             unset($fields['withs']);
 
-            if( isset($fields['dated_at']) && filled($fields['dated_at']) ){
-                $withs[]='reserves';
+            if (isset($fields['dated_at']) && filled($fields['dated_at'])) {
+                $withs[] = 'reserves';
             }
 
             $query = $this->gymRepository->queryFull(inputs: $fields, relations: $withs);
@@ -70,12 +70,14 @@ class GymService
                 return $query_->where('price', '>=', $min_price);
             });
 
-            $query = $query->whereHas('reserves', function (Builder $query) use ($dated_at) {
-                return $query->when(filled($dated_at), function ($queryReserve) use ($dated_at) {
-                    /** @var ReserveRepository $reserveRepository */
-                    $reserveRepository = resolve('ReserveRepository');
-                    $fields_reserves = ['dated_at'=>$dated_at];
-                    return $reserveRepository->queryByInputs(query: $queryReserve, inputs: $fields_reserves);
+            $query = $query->when(isset($withs['reserves']) && filled($withs['reserves']), function ($queryReserve) use ($dated_at) {
+                $queryReserve->whereHas('reserves', function (Builder $query) use ($dated_at) {
+                    return $query->when(filled($dated_at), function ($queryReserve) use ($dated_at) {
+                        /** @var ReserveRepository $reserveRepository */
+                        $reserveRepository = resolve('ReserveRepository');
+                        $fields_reserves = ['dated_at' => $dated_at];
+                        return $reserveRepository->queryByInputs(query: $queryReserve, inputs: $fields_reserves);
+                    });
                 });
             });
 
