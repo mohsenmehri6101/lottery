@@ -128,12 +128,13 @@ class UserService
                 directionOrderBy: $direction_by ?? 'desc',
             );
 
-            $query = $query->whereHas('userDetail', function (Builder $query) use ($withs, $fields_user_details_table) {
-                // todo array_search('userDetail', $withs)
-                return $query->when(/*array_search('userDetail', $withs) && */ count($fields_user_details_table) > 0, function ($queryUserDetail) use ($fields_user_details_table) {
-                    /** @var UserDetailRepository $userDetailRepository */
-                    $userDetailRepository = resolve('UserDetailRepository');
-                    return $userDetailRepository->queryByInputs(query: $queryUserDetail, inputs: $fields_user_details_table);
+            $query = $query->when(isset($withs['userDetail']) && filled($withs['userDetail']), function (Builder $user_query) use ($withs, $fields_user_details_table) {
+                return $user_query->whereHas('userDetail', function (Builder $query) use ($withs, $fields_user_details_table) {
+                    return $query->when(count($fields_user_details_table) > 0, function ($queryUserDetail) use ($fields_user_details_table) {
+                        /** @var UserDetailRepository $userDetailRepository */
+                        $userDetailRepository = resolve('UserDetailRepository');
+                        return $userDetailRepository->queryByInputs(query: $queryUserDetail, inputs: $fields_user_details_table);
+                    });
                 });
             });
 
@@ -199,7 +200,7 @@ class UserService
              */
             extract($fields);
 
-            if (!isset($mobile) || !filled($mobile)){
+            if (!isset($mobile) || !filled($mobile)) {
                 throw new Exception('ورود تلفن همراه برای ثبت نام ضروری است');
             }
 

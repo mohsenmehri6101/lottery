@@ -102,7 +102,6 @@ class GymController extends Controller
         return ResponseHelper::responseSuccessIndex(data: $gyms);
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/v1/gyms/{id}",

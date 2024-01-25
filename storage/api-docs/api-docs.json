@@ -438,6 +438,15 @@
                         }
                     },
                     {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "query",
                         "description": "username",
@@ -503,7 +512,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "withs",
+                        "description": "withs:userCreator,userEditor,gyms,userDetail,events,notifications,readNotifications,unreadNotifications,roles,permissions",
                         "required": false,
                         "schema": {
                             "type": "string"
