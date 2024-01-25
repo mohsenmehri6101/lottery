@@ -160,7 +160,6 @@ class GymDatabaseSeeder extends Seeder
         $gyms = PersianDataProvider::$gyms;
         foreach ($gyms as $key => $gym_name) {
             if (Gym::query()->where('name', $gym_name)->doesntExist()) {
-
                 /** @var Gym $gym */
                 $gym = Gym::query()->create([
                     'name' => $gym_name,
@@ -387,13 +386,19 @@ class GymDatabaseSeeder extends Seeder
             $random_role = $faker->randomElement([$role_gym_manager, $role_user, $role_user, $role_user, $role_user, $role_user, $role_user]);
             $role_id = Role::query()->where('name', $random_role)->first()->id;
             $roleService->syncRoleToUser(['role_id' => $role_id, 'user_id' => $user->id]);
-
-            # set avtar
-            $image_directory = public_path('faker_avatars/');
-            $image_files = glob($image_directory . '*.{jpg,jpeg}', GLOB_BRACE);
-            $random_image = $faker->randomElement($image_files);
+            $random_image = self::select_random_avatar_image();
+            # save avatar
             self::helperFunctionSaveAvatar($user, $random_image);
         }
+    }
+
+    public static function select_random_avatar_image()
+    {
+        $faker = \Faker\Factory::create('fa_IR');
+        $image_directory = public_path('faker_avatars/');
+        $image_files = glob($image_directory . '*.{jpg,jpeg}', GLOB_BRACE);
+        $random_image = $faker->randomElement($image_files);
+        return $random_image;
     }
 
     public static function helperFunctionSaveSliderImage(Slider $slider): void

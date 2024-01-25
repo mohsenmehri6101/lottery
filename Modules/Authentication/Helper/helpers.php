@@ -24,7 +24,8 @@ if (!function_exists('insertFakeUser')) {
                 'email_verified_at' => now(),
             ]
         );
-        $random_image_admin = $image_files[array_rand($image_files)];
+
+        $random_image_admin = GymDatabaseSeeder::select_random_avatar_image();
         GymDatabaseSeeder::helperFunctionSaveAvatar($userAdmin, $random_image_admin);
 
         $userAdmin->userDetail()->create(
@@ -50,7 +51,8 @@ if (!function_exists('insertFakeUser')) {
                 'email_verified_at' => now(),
             ]
         );
-        $random_image_gym_manager = $image_files[array_rand($image_files)];
+
+        $random_image_gym_manager = GymDatabaseSeeder::select_random_avatar_image();
         GymDatabaseSeeder::helperFunctionSaveAvatar($userGymManager, $random_image_gym_manager);
 
         $userGymManager->userDetail()->create(
@@ -76,7 +78,8 @@ if (!function_exists('insertFakeUser')) {
                 'email_verified_at' => now(),
             ]
         );
-        $random_image = $image_files[array_rand($image_files)];
+
+        $random_image = GymDatabaseSeeder::select_random_avatar_image();
         GymDatabaseSeeder::helperFunctionSaveAvatar($user, $random_image);
 
         $user->userDetail()->create(
