@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateBetweenDateRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateIndexRequest;
+use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateMultipleStoreRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateMultipleUpdateRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateShowRequest;
 use Modules\Gym\Http\Requests\ReserveTemplate\ReserveTemplateStoreRequest;
@@ -151,6 +152,45 @@ class ReserveTemplateController extends Controller
         $reserve_template = $this->reserveTemplateService->multipleUpdate($request);
         return ResponseHelper::responseSuccessUpdate(data: $reserve_template);
     }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/reserve_templates/multiple",
+     *     tags={"reserve_templates"},
+     *     summary="update reserve_templates",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"reserve_templates"},
+     *             properties={
+     *                 @OA\Property(property="reserve_templates", type="array", @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="from", type="string", nullable=false),
+     *                     @OA\Property(property="to", type="string", nullable=false),
+     *                     @OA\Property(property="gym_id", type="integer", nullable=false),
+     *                     @OA\Property(property="week_number", type="integer", nullable=false),
+     *                     @OA\Property(property="price", type="string", nullable=true),
+     *                     @OA\Property(property="cod", type="integer", nullable=true),
+     *                     @OA\Property(property="status", type="integer", nullable=true),
+     *                     @OA\Property(property="gender_acceptance", type="integer", nullable=true),
+     *                     @OA\Property(property="discount", type="numeric", nullable=true),
+     *                 )),
+     *             },
+     *         ),
+     *     ),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     * )
+     */
+    public function multipleStore(ReserveTemplateMultipleStoreRequest $request): JsonResponse
+    {
+        $reserve_templates = $this->reserveTemplateService->multipleStore($request);
+        return ResponseHelper::responseSuccessUpdate(data: $reserve_templates);
+    }
+
 
     /**
      * @OA\Delete(

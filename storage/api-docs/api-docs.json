@@ -9933,6 +9933,95 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "reserve_templates"
+                ],
+                "summary": "update reserve_templates",
+                "operationId": "c40d5e348eabdeedfb3cd41bb128399d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reserve_templates"
+                                ],
+                                "properties": {
+                                    "reserve_templates": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "from": {
+                                                    "type": "string",
+                                                    "nullable": false
+                                                },
+                                                "to": {
+                                                    "type": "string",
+                                                    "nullable": false
+                                                },
+                                                "gym_id": {
+                                                    "type": "integer",
+                                                    "nullable": false
+                                                },
+                                                "week_number": {
+                                                    "type": "integer",
+                                                    "nullable": false
+                                                },
+                                                "price": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "cod": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "gender_acceptance": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "discount": {
+                                                    "type": "numeric",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/reserve_templates/between-date": {

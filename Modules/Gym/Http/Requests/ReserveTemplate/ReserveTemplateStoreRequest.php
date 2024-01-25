@@ -17,7 +17,7 @@ class ReserveTemplateStoreRequest extends FormRequest
             'to' => 'required',
             'gym_id' => 'required|exists:gyms,id',
             'week_number' => 'required|numeric|min:1|max:7',
-            'price' => 'required',
+            'price' => 'nullable',
             'cod' => 'nullable|boolean',
             'is_ball' => 'nullable|boolean',
             'gender_acceptance' => "nullable|numeric|in:$statuses_gender_acceptance",

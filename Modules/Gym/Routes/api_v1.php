@@ -38,6 +38,7 @@ Route::prefix('reserve_templates')->name('reserve_templates_')->group(function (
     Route::get('between-date', [ReserveTemplateController::class, 'betweenDate'])->name('between_date');
     Route::get('/{id}', [ReserveTemplateController::class, 'show'])->name('show');
     Route::post('/', [ReserveTemplateController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::post('multiple', [ReserveTemplateController::class, 'multipleStore'])->middleware('auth:api')->name('multiple.store');
     Route::put('multiple', [ReserveTemplateController::class, 'multipleUpdate'])->middleware('auth:api')->name('multiple.update');
     Route::put('/{id}', [ReserveTemplateController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [ReserveTemplateController::class, 'destroy'])->middleware('auth:api')->name('destroy');
