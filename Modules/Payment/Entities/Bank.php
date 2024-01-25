@@ -12,20 +12,16 @@ use Illuminate\Database\Eloquent\Model;
 class Bank extends Model
 {
     protected $table = 'banks';
-
     public $timestamps = false;
     protected $fillable = [
         'id',
         'name',
         'persian_name',
     ];
-
     public static array $relations_ = [];
-
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'persian_name' => 'string',
     ];
-
 }
