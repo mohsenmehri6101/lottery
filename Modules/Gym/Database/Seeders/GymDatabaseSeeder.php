@@ -132,7 +132,6 @@ class GymDatabaseSeeder extends Seeder
 
     }
 
-
     public static function helperFunctionAttributeFake(): void
     {
         $attributes = PersianDataProvider::$attributes;
@@ -453,6 +452,7 @@ class GymDatabaseSeeder extends Seeder
             /** @var Reserve $reserve */
             $reserve = Reserve::query()->inRandomOrder()->first();
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
+            // todo from test payment panel.
             $factor->update(['total_price' => /*$factor->reserves()->sum('price')*/ 1000]);
         }
     }
