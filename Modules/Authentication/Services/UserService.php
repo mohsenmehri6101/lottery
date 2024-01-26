@@ -139,7 +139,7 @@ class UserService
             });
 
             if (count($role_ids) > 0) {
-                $query = $query->when(isset($withs['roles']) && filled($withs['roles']),function(Builder $query_role){
+                $query = $query->when(in_array('roles',$withs),function(Builder $query_role) use ($role_ids) {
                     return $query_role->whereHas('roles', function ($queryRoles) use ($role_ids) {
                         $queryRoles->whereIn('id', $role_ids);
                     });

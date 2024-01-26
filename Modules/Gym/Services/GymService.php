@@ -69,7 +69,7 @@ class GymService
                 return $query_->where('price', '>=', $min_price);
             });
 
-            $query = $query->when(isset($withs['reserves']) && filled($withs['reserves']), function ($queryReserve) use ($dated_at) {
+            $query = $query->when(in_array('reserves', $withs), function ($queryReserve) use ($dated_at) {
                 $queryReserve->whereHas('reserves', function (Builder $query) use ($dated_at) {
                     return $query->when(filled($dated_at), function ($queryReserve) use ($dated_at) {
                         /** @var ReserveRepository $reserveRepository */
