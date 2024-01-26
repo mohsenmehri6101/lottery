@@ -58,13 +58,13 @@ class GymStoreRequest extends FormRequest
 
             # reserve template data
             'time_template.*' => 'nullable|array',
-            'time_template.from' => 'required|date_format:H:i',
-            'time_template.to' => 'required|date_format:H:i',
-            'time_template.break_time' => 'required|numeric|min:1',
-            'time_template.price' => 'required|numeric|min:0',
-            'time_template.gender_acceptance' => "required|numeric|in:$status_gender_acceptances",
-            'time_template.week_numbers' => 'required|array',
-            'time_template.week_numbers.*' => 'required|integer|in:1,2,3,4,5,6,7',
+            'time_template.from' => 'nullable|date_format:H:i',
+            'time_template.to' => 'nullable|date_format:H:i',
+            'time_template.break_time' => 'nullable|numeric|min:1',
+            'time_template.price' => 'nullable|numeric|min:0',
+            'time_template.gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
+            'time_template.week_numbers' => 'nullable|array',
+            'time_template.week_numbers.*' => 'nullable|integer|in:1,2,3,4,5,6,7',
         ];
     }
 

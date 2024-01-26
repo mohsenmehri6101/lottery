@@ -173,6 +173,7 @@ class GymService
              * @var $time_template
              */
             extract($fields);
+
             unset(
                 $fields['time_template'],
                 $fields['tag_id'],

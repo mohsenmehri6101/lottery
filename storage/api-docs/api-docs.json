@@ -7364,7 +7364,7 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "time_template"
+                                    ""
                                 ],
                                 "properties": {
                                     "images": {

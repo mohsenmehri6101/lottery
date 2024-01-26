@@ -146,7 +146,7 @@ class GymController extends Controller
      *      @OA\MediaType(
      *          mediaType="multipart/form-data",
      *          @OA\Schema(
-     *              required={"time_template"},
+     *              required={""},
      *              @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
      *              @OA\Property(property="time_template", type="array", @OA\Items(
      *              @OA\Property(property="from", type="string", format="H:i", description="Start time"),
@@ -300,5 +300,4 @@ class GymController extends Controller
         $lists = $this->gymService->getInitializeRequestsSelectors($request);
         return ResponseHelper::responseSuccess(data: $lists);
     }
-
 }
