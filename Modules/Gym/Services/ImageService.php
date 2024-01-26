@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+//use Image;
+use Intervention\Image\Image as Image;
 //use Intervention\Image\ImageManager as Image;
 //use Intervention\Image\Facades\Image;
 use Exception;
@@ -42,7 +44,6 @@ class ImageService
             if ($image_webp) {
                 #convert image to webp format
                 $img_ext = "webp";
-
                 $imageEncoded = Image::make($image->getRealPath())->encode(format: $img_ext, quality: 40)->save($image->getRealPath());
                 $image = new UploadedFile($imageEncoded->basePath(), $imageEncoded->filename);
             }
@@ -88,6 +89,7 @@ class ImageService
             throw $exception;
         }
     }
+
 
     private static function destinationPath($destinationPath = null)
     {
