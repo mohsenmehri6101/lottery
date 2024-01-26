@@ -27,7 +27,6 @@ class UserService
     public function __construct(public UserRepository $userRepository, public UserDetailRepository $userDetailRepository)
     {
     }
-
     public function index(UserIndexRequest $request)
     {
         try {
@@ -152,7 +151,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function show(UserShowRequest $request, $user_id)
     {
         try {
@@ -168,7 +166,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function store(UserStoreRequest|array $request)
     {
         DB::beginTransaction();
@@ -261,7 +258,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function newUser(NewUserRequest|array $request)
     {
         DB::beginTransaction();
@@ -338,7 +334,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function update(UserUpdateRequest|array $request, $user_id)
     {
         DB::beginTransaction();
@@ -428,7 +423,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function destroy($user_id): bool
     {
         DB::beginTransaction();
@@ -451,7 +445,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function deleteAvatar($user_id): bool
     {
         DB::beginTransaction();
@@ -473,7 +466,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function checkProfile(CheckProfileRequest $request): array
     {
         $fields = $request->validated();
@@ -547,7 +539,6 @@ class UserService
             'null_columns' => $nullColumns,
         ];
     }
-
     public function updateProfile(UpdateProfileRequest $request)
     {
         DB::beginTransaction();
@@ -608,7 +599,6 @@ class UserService
             throw $exception;
         }
     }
-
     public static function saveAvatar($avatar, User $user): void
     {
         $avatar = $avatar ?? null;
@@ -621,7 +611,6 @@ class UserService
             $user->update();
         }
     }
-
     public function updateAvatar(UpdateAvatarRequest $request): bool
     {
         DB::beginTransaction();
@@ -645,17 +634,14 @@ class UserService
             throw $exception;
         }
     }
-
     public function listStatusUser(): array|bool|int|string|null
     {
         return User::getStatusUserTitle();
     }
-
     public function listStatusGender(): array|bool|int|string|null
     {
         return UserDetail::getStatusGenderTitle();
     }
-
     public static function convertUserToId($user = null, $default = null)
     {
         if (is_null($user)) {
@@ -682,7 +668,6 @@ class UserService
 
         return ($user && $user?->exists()) ? $user->first()?->id : $default;
     }
-
     public static function getUser($user = null, $email = null, $mobile = null, $username = null, $user_id = null, $withs = [])
     {
         if (is_null($user) && is_null($email) && is_null($mobile) && is_null($username) && is_null($user_id)) {
@@ -713,7 +698,6 @@ class UserService
             });
         return $user->exists() ? $user->first() : null;
     }
-
     public static function prepare_users(...$users): \Illuminate\Support\Collection
     {
         # prepare users
@@ -736,5 +720,4 @@ class UserService
         $users = $users->unique();
         return $users;
     }
-
 }
