@@ -82,6 +82,7 @@ class UserService
             }
 
             $fields_users_table = [
+                'search' => $search ?? null,
                 'id' => $id ?? null,
                 'code' => $code ?? null,
                 'parent_code' => $parent_code ?? null,

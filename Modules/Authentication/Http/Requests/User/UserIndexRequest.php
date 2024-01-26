@@ -119,4 +119,5 @@ class UserIndexRequest extends FormRequest
             'users_details_deleted_at' => trans('custom.authentication.user_details.fields.deleted_at'),
         ];
     }
+
 }
