@@ -241,6 +241,7 @@ class GymService
                 $keywords[] = $keyword_id;
                 $keywords = array_unique($keywords);
             }
+
             if (count($keywords) > 0) {
                 /** @var KeywordService $keywordService */
                 $keywordService = resolve('KeywordService');
@@ -255,6 +256,7 @@ class GymService
                 $categories[] = $category_id;
                 $categories = array_unique($categories);
             }
+
             if (count($categories) > 0) {
                 /** @var CategoryService $categoryService */
                 $categoryService = resolve('CategoryService');
