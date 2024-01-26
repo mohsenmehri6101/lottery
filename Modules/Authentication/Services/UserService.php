@@ -139,8 +139,10 @@ class UserService
             });
 
             if (count($role_ids) > 0) {
-                $query = $query->whereHas('roles', function ($queryRoles) use ($role_ids) {
-                    $queryRoles->whereIn('id', $role_ids);
+                $query = $query->when(isset($withs['roles']) && filled($withs['roles']),function(Builder $query_role){
+                    return $query_role->whereHas('roles', function ($queryRoles) use ($role_ids) {
+                        $queryRoles->whereIn('id', $role_ids);
+                    });
                 });
             }
 

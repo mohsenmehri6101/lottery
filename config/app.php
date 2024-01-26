@@ -159,7 +159,6 @@ return [
         # package developer
         L5Swagger\L5SwaggerServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
-        Intervention\Image\Image::class,
         # package developer
 
         /*

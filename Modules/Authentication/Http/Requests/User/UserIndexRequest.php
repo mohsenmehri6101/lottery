@@ -20,6 +20,7 @@ class UserIndexRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
+        $this->merge(['role_ids' => convert_withs_from_string_to_array(withs: $this->get(key: 'role_ids'))]);
     }
 
     public function rules(): array
@@ -27,8 +28,8 @@ class UserIndexRequest extends FormRequest
         $statuses_gender = implode(',', UserDetail::getStatusGender());
         $statuses_user = implode(',', User::getStatusUser());
 
-        $fillables=(new User())->getFillable();
-        $list_fillable=convert_array_to_string($fillables);
+        $fillables = (new User())->getFillable();
+        $list_fillable = convert_array_to_string($fillables);
 
         $relations_permissible = implode(',', User::$relations_ ?? []);
 
