@@ -6,10 +6,10 @@
     <title>
 		عنوان
 	</title>
-    <link rel="stylesheet" href='{{ url("assets/index-eb4f470f.css") }}'>
+    <link rel="stylesheet" href='{{ url("assets/index-3c5c7f42.css") }}'>
 </head>
 <body>
 <div id="app"></div>
-<script type="module" crossorigin src="{{ url('assets/index-74f558c7.js') }}"></script>
+<script type="module" crossorigin src="{{ url('assets/index-33a0fa12.js') }}"></script>
 </body>
 </html>

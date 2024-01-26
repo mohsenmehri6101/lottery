@@ -53,7 +53,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionSaveAvatar(User $user, $image): void
     {
         $image = new UploadedFile($image, basename($image));
@@ -65,7 +64,6 @@ class GymDatabaseSeeder extends Seeder
             $user->save();
         }
     }
-
     public static function helperFunctionKeywordFake(): void
     {
         $keywords = PersianDataProvider::$keywords;
@@ -75,7 +73,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionTagFake(): void
     {
         $tags = PersianDataProvider::$tags;
@@ -85,7 +82,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionCategoryFake(): void
     {
         # $faker = FakerFactory::create();
@@ -101,7 +97,6 @@ class GymDatabaseSeeder extends Seeder
             Category::query()->create(['name' => $category/*, 'parent' => $parent*/]);
         }
     }
-
     public static function helperFunctionComplaintFake($number = 40): void
     {
         $faker = FakerFactory::create();
@@ -120,7 +115,6 @@ class GymDatabaseSeeder extends Seeder
             ]);
         }
     }
-
     public static function helperFunctionCommonComplaintFake($number = 40): void
     {
         $faker = FakerFactory::create();
@@ -131,7 +125,6 @@ class GymDatabaseSeeder extends Seeder
         }
 
     }
-
     public static function helperFunctionAttributeFake(): void
     {
         $attributes = PersianDataProvider::$attributes;
@@ -141,7 +134,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionSportFake(): void
     {
         $sports = PersianDataProvider::$sports;
@@ -151,7 +143,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionGymFake(): void
     {
         $faker = FakerFactory::create();
@@ -209,7 +200,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionReserveTemplatesFake(int $gym_id): void
     {
         $faker = \Faker\Factory::create();
@@ -262,7 +252,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionReservesFake($reserve_template_id = null, $count = 400): void
     {
         $faker = FakerFactory::create();
@@ -312,7 +301,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     private static function getRandomDateThisWeek(): Carbon
     {
         $currentDate = Carbon::now();
@@ -325,7 +313,6 @@ class GymDatabaseSeeder extends Seeder
         //
         //        return $randomDate;
     }
-
     function helperFunctionUserFake($count = 60): void
     {
         $faker = \Faker\Factory::create('fa_IR');
@@ -391,7 +378,6 @@ class GymDatabaseSeeder extends Seeder
             self::helperFunctionSaveAvatar($user, $random_image);
         }
     }
-
     public static function select_random_avatar_image()
     {
         $faker = \Faker\Factory::create('fa_IR');
@@ -400,7 +386,6 @@ class GymDatabaseSeeder extends Seeder
         $random_image = $faker->randomElement($image_files);
         return $random_image;
     }
-
     public static function helperFunctionSaveSliderImage(Slider $slider): void
     {
         $faker = FakerFactory::create();
@@ -417,7 +402,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionSliderFake($count = 15): void
     {
         $faker = FakerFactory::create();
@@ -441,7 +425,6 @@ class GymDatabaseSeeder extends Seeder
             self::helperFunctionSaveSliderImage($slider);
         }
     }
-
     public static function helperFunctionFactorFake(int $number_record = 70): void
     {
         $faker = FakerFactory::create();
@@ -461,7 +444,6 @@ class GymDatabaseSeeder extends Seeder
             $factor->update(['total_price' => /*$factor->reserves()->sum('price')*/ 1000]);
         }
     }
-
     public static function helperFunctionFakePayment($number = 80): void
     {
         $faker = FakerFactory::create();
@@ -480,12 +462,10 @@ class GymDatabaseSeeder extends Seeder
             ]);
         }
     }
-
     public static function deleteImages(): void
     {
         Artisan::call('gym:delete-images', ['--all' => true]);
     }
-
     public function run(): void
     {
         self::deleteImages();
@@ -503,5 +483,4 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionCommonComplaintFake();
         self::helperFunctionComplaintFake();
     }
-
 }

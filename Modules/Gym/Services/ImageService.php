@@ -5,18 +5,14 @@ namespace Modules\Gym\Services;
 use App\Exceptions\Contracts\DeveloperException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-//use Image;
-use Intervention\Image\Image as Image;
-//use Intervention\Image\ImageManager as Image;
-//use Intervention\Image\Facades\Image;
 use Exception;
 
 class ImageService
 {
     use  HelpersFileTrait;
+
     const default_is_cover = false;
     const default_is_public = false;
     const default_is_water_mark = false;
@@ -30,23 +26,17 @@ class ImageService
         bool $is_public = self::default_is_public,
         bool $is_water_mark = self::default_is_water_mark,
         $destinationPath = null,
-        $relation = null
+        $relation = null,
+        $name_in_request = null
     )
     {
         DB::beginTransaction();
         try {
             if ($image instanceof Request) {
-                $image = $image?->get('image') ?? $image?->get('file') ?? null;
+                $image = $image?->get($name_in_request) ?? $image?->get('image') ?? $image?->get('file') ?? null;
             }
 
             $img_ext = null;
-            $image_webp = config_(key:'configs.images.image_webp',default: true,title: 'عکس ها فشرده سازی و تبدیل به فرمت webp شوند؟');
-            if ($image_webp) {
-                #convert image to webp format
-                $img_ext = "webp";
-                $imageEncoded = Image::make($image->getRealPath())->encode(format: $img_ext, quality: 40)->save($image->getRealPath());
-                $image = new UploadedFile($imageEncoded->basePath(), $imageEncoded->filename);
-            }
 
             $client_original_extension = self::getClientOriginalExtension($image);
             $original_name_image = self::getClientOriginalName($image);
