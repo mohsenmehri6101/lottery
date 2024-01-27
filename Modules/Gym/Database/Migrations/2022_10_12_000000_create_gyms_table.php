@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Gym\Entities\Gym;
 
 return new class extends Migration {
     public function up(): void
@@ -23,7 +24,7 @@ return new class extends Migration {
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
             $table->integer('score')->nullable()->default(0)->comment('score');
-            $table->tinyInteger('status')->nullable()->default(0)->comment('status');
+            $table->tinyInteger('status')->nullable()->default(Gym::status_active)->comment('status');
             $table->bigInteger('like_count')->default(0)->comment('like count');
             $table->bigInteger('dislike_count')->default(0)->comment('dislike count');
             $table->tinyInteger('profit_share_percentage')->nullable()->comment('مقدار سهم سود(سایت) از این سالن ورزشی');

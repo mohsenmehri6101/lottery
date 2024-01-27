@@ -43,7 +43,6 @@ use Modules\Geographical\Entities\City;
 class Gym extends Model
 {
     use SoftDeletes, UserCreator, UserEditor;
-
     const status_unknown = 0;
     const status_active = 1;
     const status_block = 2;

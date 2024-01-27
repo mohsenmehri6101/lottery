@@ -391,6 +391,9 @@ class GymService
 
             $this->gymRepository->update($gym, $fields);
 
+
+            $withs_result = [];
+
             # set tags
             $tag_id = $tag_id ?? null;
             $tags = $tags ?? [];
@@ -403,6 +406,7 @@ class GymService
                 /** @var TagService $tagService */
                 $tagService = resolve('TagService');
                 $tagService->syncTagToGym(['gym_id' => $gym->id, 'tags' => $tags, 'detach' => $tag_detach]);
+                $withs_result[] = 'tags';
             }
             # set categories
             $category_id = $category_id ?? null;
@@ -416,6 +420,7 @@ class GymService
                 /** @var CategoryService $categoryService */
                 $categoryService = resolve('CategoryService');
                 $categoryService->syncCategoryToGym(['gym_id' => $gym->id, 'categories' => $categories, 'detach' => $category_detach]);
+                $withs_result[] = 'categories';
             }
 
             # set sport
@@ -460,10 +465,8 @@ class GymService
                 $withs_result[] = 'keywords';
             }
 
-
             # save images
             $images = $images ?? [];
-
             if (count($images)) {
                 foreach ($images as $image) {
                     if ($image) {
@@ -477,11 +480,12 @@ class GymService
                         }
                     }
                 }
+                $withs_result[] = 'urlImages';
             }
-
+            # save images
             DB::commit();
-
-            return $this->gymRepository->findOrFail($gym_id);
+            
+            return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;

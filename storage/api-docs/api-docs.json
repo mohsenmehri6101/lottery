@@ -7925,13 +7925,39 @@
                     {
                         "name": "images",
                         "in": "query",
-                        "description": "images",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "description": "Array of image files",
+                            "type": "array",
+                            "items": {
+                                "type": "file",
+                                "format": "binary"
+                            }
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    ""
+                                ],
+                                "properties": {
+                                    "images": {
+                                        "description": "Array of image files",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "file",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success",

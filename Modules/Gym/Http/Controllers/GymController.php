@@ -220,7 +220,16 @@ class GymController extends Controller
      *     @OA\Parameter(name="sports",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of sport IDs"),
      *     @OA\Parameter(name="attribute_id",in="query",required=false, @OA\Schema(type="integer"),description="Attribute ID"),
      *     @OA\Parameter(name="attributes",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="integer")),description="Array of attribute IDs"),
-     *     @OA\Parameter(name="images",in="query",required=false, @OA\Schema(type="string"),description="images"),
+     *     @OA\Parameter(name="images",in="query",required=false, @OA\Schema(type="array", @OA\Items(type="file", format="binary"), description="Array of image files")),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *          mediaType="multipart/form-data",
+     *          @OA\Schema(
+     *              required={""},
+     *              @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files"),
+     *         )
+     *       )
+     *     ),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
