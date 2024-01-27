@@ -484,7 +484,7 @@ class GymService
             }
             # save images
             DB::commit();
-            
+
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
         } catch (Exception $exception) {
             DB::rollBack();

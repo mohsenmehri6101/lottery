@@ -24,6 +24,7 @@ Route::prefix('gyms')->name('gyms_')->group(function () {
     Route::get('gym-status', [GymController::class, 'gymsStatus'])->name('gym_status');
     Route::get('/{id}', [GymController::class, 'show'])->name('show');
     Route::post('/', [GymController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::post('/{id}', [GymController::class, 'update'])->middleware('auth:api')->name('post_update');
     Route::post('/like', [GymController::class, 'like'])->middleware('auth:api')->name('like');
     Route::put('/{id}', [GymController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [GymController::class, 'destroy'])->middleware('auth:api')->name('destroy');
