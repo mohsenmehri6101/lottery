@@ -248,7 +248,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "withs:userCreator,userEditor,gyms,userDetail,events,notifications,readNotifications,unreadNotifications,roles,permissions",
+                        "description": "withs:userCreator,userEditor,gyms,userDetail,events,notifications,readNotifications,unreadNotifications,roles,permissions,check_profile",
                         "required": false,
                         "schema": {
                             "type": "string"

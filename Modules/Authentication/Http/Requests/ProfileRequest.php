@@ -14,7 +14,7 @@ class ProfileRequest extends FormRequest
 
     public function rules(): array
     {
-        $withs_allows = implode(',', User::$relations_,'');
+        $withs_allows = implode(',', ['check_profile',...User::$relations_]);
 
         return [
             'withs' => 'nullable|array',

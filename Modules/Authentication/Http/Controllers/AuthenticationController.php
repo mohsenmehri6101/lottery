@@ -113,15 +113,15 @@ class AuthenticationController extends Controller
      *     tags={"authentication"},
      *     summary="اطلاعات پروفایل",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:userCreator,userEditor,gyms,userDetail,events,notifications,readNotifications,unreadNotifications,roles,permissions"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:userCreator,userEditor,gyms,userDetail,events,notifications,readNotifications,unreadNotifications,roles,permissions,check_profile"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
      */
     public function profile(ProfileRequest $request): JsonResponse
     {
-        $user = $this->authenticationService->profile($request);
-        return ResponseHelper::responseSuccess(data: $user);
+        $data = $this->authenticationService->profile($request);
+        return ResponseHelper::responseSuccess(data: $data);
     }
 
     public function resendOtp(RegisterResendCodeRequest $request): JsonResponse

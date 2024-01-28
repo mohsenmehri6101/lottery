@@ -96,10 +96,23 @@ class AuthenticationService
              * @var $withs
              */
             extract($fields);
-            $withs = $withs || [];
-            // todo use repository because cache system.
-            return User::query()->where('id',get_user_id_login())->with('UserDetail')->first();
+            $withs = $withs ?? [];
 
+            $check_profile= in_array('check_profile',$withs);
+
+            $result =[];
+
+            $user =User::query()->where('id',get_user_id_login())->with('UserDetail')->first();
+            $result['user']= $user;
+
+            if($check_profile){
+                /** @var UserService $userService */
+                $userService = resolve('UserService');
+                $check_profile_information = $userService->checkProfile([]);
+                $result['check_profile']=$check_profile_information;
+            }
+
+            return $result;
         } catch (Exception $exception) {
             throw $exception;
         }

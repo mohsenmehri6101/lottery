@@ -489,7 +489,6 @@ class UserService
         } else {
             $user = auth()->user();
         }
-
         /*  ---------------------  */
         $userModel = User::query()->find($user->id);
         $userDetailModel = UserDetail::query()->where('user_id', $user->id)->first();
@@ -497,11 +496,9 @@ class UserService
         $userColumns = $userModel->getFillable();
         $userDetailColumns = $userDetailModel->getFillable();
         /*  ---------------------  */
-
         $userArray = $userModel->toArray();
         $userDetailArray = $userDetailModel->toArray();
         /*  ------------------------------------------  */
-
         $columnWeights = [
             'email' => 1,
             'mobile' => 1,
@@ -515,7 +512,6 @@ class UserService
             'city_id' => 1,
             'address' => 1,
         ];
-
         $totalColumns = count($columnWeights);
         $nullColumns = [];
 
