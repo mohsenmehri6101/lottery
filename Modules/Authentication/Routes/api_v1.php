@@ -14,9 +14,9 @@ Route::prefix('users')->name('users_')->group(function () {
     Route::get('/{id}', [UserController::class, 'show'])->middleware('auth:api')->name('show');
     Route::post('/', [UserController::class, 'store'])->middleware('auth:api')->name('store');
     Route::post('/new-user', [UserController::class, 'newUser'])->middleware('check.apiKey')->name('new_user');
+    Route::post('update-avatar', [UserController::class, 'updateAvatar'])->middleware('auth:api')->name('update_avatar');
     Route::post('/{id}', [UserController::class, 'update'])->middleware('auth:api')->name('update');
     Route::put('update-profile', [UserController::class, 'updateProfile'])->middleware('auth:api')->name('update_profile');
-    Route::post('update-avatar', [UserController::class, 'updateAvatar'])->middleware('auth:api')->name('update_avatar');
     Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:api')->name('destroy');
     Route::delete('delete-avatar/{id}', [UserController::class, 'deleteAvatar'])->middleware('auth:api')->name('delete_avatar');
 });

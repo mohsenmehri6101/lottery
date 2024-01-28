@@ -626,7 +626,12 @@ class UserService
             /** @var User $user */
             $user = auth()->user();
 
+            # Delete old avatar
+            helperDeleteFiles($user->avatar);
+
+
             self::saveAvatar($avatar, $user);
+
 
             DB::commit();
             return true;
@@ -635,6 +640,7 @@ class UserService
             throw $exception;
         }
     }
+
     public function listStatusUser(): array|bool|int|string|null
     {
         return User::getStatusUserTitle();
