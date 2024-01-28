@@ -272,7 +272,6 @@ class ReserveTemplateService
             throw $exception;
         }
     }
-
     public function gender_acceptances(Request|array $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
