@@ -467,9 +467,19 @@ class UserService
             throw $exception;
         }
     }
-    public function checkProfile(CheckProfileRequest $request): array
+    public function checkProfile(CheckProfileRequest|array $request): array
     {
-        $fields = $request->validated();
+        if (is_array($request)) {
+            $userProfileRequest = new CheckProfileRequest();
+            $fields = Validator::make(
+                data: $request,
+                rules: $userProfileRequest->rules(),
+                attributes: $userProfileRequest->attributes()
+            )->validate();
+        } else {
+            $fields = $request->validated();
+        }
+
         $user_id = $fields['user_id'] ?? null;
         /*  ---------------------  */
         /** @var User $user */
@@ -540,6 +550,7 @@ class UserService
             'null_columns' => $nullColumns,
         ];
     }
+
     public function updateProfile(UpdateProfileRequest $request)
     {
         DB::beginTransaction();
@@ -612,6 +623,7 @@ class UserService
             $user->update();
         }
     }
+
     public function updateAvatar(UpdateAvatarRequest $request): bool
     {
         DB::beginTransaction();
