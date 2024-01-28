@@ -21,7 +21,7 @@ class ReserveTemplateUpdateRequest extends FormRequest
             'cod' => 'nullable|boolean',
             'is_ball' => 'nullable|boolean',
             'gender_acceptance' => "nullable|numeric|in:$statuses_gender_acceptance",
-            'discount' => 'nullable|numeric',
+            'discount' => 'nullable|numeric|min:1|max:100',
             'status' => 'nullable|numeric',// todo should be complete set $statuses
         ];
     }
