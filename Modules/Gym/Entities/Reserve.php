@@ -164,4 +164,10 @@ class Reserve extends Model
 
         return $query->get();
     }
+
+    public function attributePrices(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributePrice::class, 'attribute_gym_price_reserve');
+    }
+
 }

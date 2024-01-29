@@ -15,6 +15,7 @@ use Modules\Authorization\Services\RoleService;
 use Modules\Geographical\Entities\City;
 use Illuminate\Http\UploadedFile;
 use Modules\Gym\Entities\Attribute;
+use Modules\Gym\Entities\AttributePrice;
 use Modules\Gym\Entities\Category;
 use Modules\Gym\Entities\CommonComplaint;
 use Modules\Gym\Entities\Complaint;
@@ -466,6 +467,38 @@ class GymDatabaseSeeder extends Seeder
     {
         Artisan::call('gym:delete-images', ['--all' => true]);
     }
+
+    public static function helperFunctionFakeAttributeGymPrice($count = 80): void
+    {
+        $faker = \Faker\Factory::create();
+
+        for ($i = 0; $i < $count; $i++) {
+            $attributeId = Attribute::query()->inRandomOrder()->first()->id;
+            $gymId = Gym::query()->inRandomOrder()->first()->id;
+
+            AttributePrice::query()->firstOrCreate([
+                'attribute_id' => $attributeId,
+                'gym_id' => $gymId,
+                'price' => $faker->numberBetween(200000, 300000),
+            ]);
+        }
+    }
+
+    public static function helperFunctionFakeAttributeGymPriceReserve($count = 100): void
+    {
+        $faker = \Faker\Factory::create();
+
+        for ($i = 0; $i < $count; $i++) {
+            $attributePriceId = AttributePrice::query()->inRandomOrder()->first()->id;
+            /** @var Reserve $reserve */
+            $reserve = Reserve::query()->inRandomOrder()->first();
+
+            if (!$reserve->attributePrices()->where('attribute_gym_prices.id', $attributePriceId)->exists()) {
+                $reserve->attributePrices()->attach($attributePriceId);
+            }
+        }
+    }
+
     public function run(): void
     {
         self::deleteImages();
@@ -482,5 +515,8 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionFakePayment();
         self::helperFunctionCommonComplaintFake();
         self::helperFunctionComplaintFake();
+        self::helperFunctionFakeAttributeGymPrice();
+        self::helperFunctionFakeAttributeGymPriceReserve();
     }
+
 }

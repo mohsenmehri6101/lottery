@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->time('to');
             $table->unsignedBigInteger('gym_id');
             $table->tinyInteger('week_number')->comment('week_number');
-            $table->decimal('price',15,3)->default(0)->comment('price');
+            $table->decimal('price', 15, 3)->default(0)->comment('price');
             $table->boolean('cod')->default(false)->comment('اجازه پرداخت نقدی');
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
@@ -45,11 +45,20 @@ return new class extends Migration {
             $table->softDeletes();
             $table->unique(['dated_at', 'reserve_template_id']);
         });
+
+        Schema::create('attribute_gym_price_reserve', function (Blueprint $table) {
+            $table->comment('جدول ثبت قیمت هر امکانات برای هر نمونه وقت ذخیره شده');
+            $table->bigInteger('attribute_gym_price_id');
+            $table->bigInteger('reserve_id');
+            $table->unique(['attribute_gym_price_id', 'reserve_id'], 'unique_attribute_gym_price_reserve');
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('attribute_gym_price_reserve');
         Schema::dropIfExists('reserve_templates');
         Schema::dropIfExists('reserves');
     }
+
 };

@@ -17,8 +17,14 @@ return new class extends Migration {
         Schema::create('attribute_gym', function (Blueprint $table) {
             $table->bigInteger('attribute_id');
             $table->bigInteger('gym_id');
-            # $table->foreign('gym_id')->references('id')->on('gyms')->onDelete('cascade');
-            # $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
+            $table->unique(['attribute_id', 'gym_id']);
+        });
+
+        Schema::create('attribute_gym_prices', function (Blueprint $table) {
+            $table->comment('جدول ثبت قیمت هر امکان برای هر باشگاه');
+            $table->bigInteger('attribute_id');
+            $table->bigInteger('gym_id');
+            $table->decimal('price', 15, 3)->default(0)->comment('قیمت');
             $table->unique(['attribute_id', 'gym_id']);
         });
 
@@ -26,8 +32,8 @@ return new class extends Migration {
 
     public function down(): void
     {
+        Schema::dropIfExists('attribute_gym_prices');
         Schema::dropIfExists('attribute_gym');
         Schema::dropIfExists('gyms_attributes');
     }
-
 };
