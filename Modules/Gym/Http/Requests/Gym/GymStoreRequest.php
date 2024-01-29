@@ -8,6 +8,14 @@ use Modules\Gym\Entities\Gym;
 
 class GymStoreRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('is_ball')) {
+            $is_ball = $this->get('is_ball');
+            $this->merge(['is_ball' => $is_ball ? 1 : 0]);
+        }
+    }
+
     public function rules(): array
     {
         $list_status_allowable = trim(implode(',', Gym::getStatusGym()));
@@ -21,7 +29,7 @@ class GymStoreRequest extends FormRequest
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'user_id' => 'nullable|exists:users,id',
             'profit_share_percentage' => 'nullable|min:0|max:100',
-            'is_ball' => 'nullable|boolean',
+            'is_ball' => 'nullable|in:0,1',
             'ball_price' => 'nullable',
             'city_id' => 'required|numeric|exists:cities,id',
             'latitude' => 'nullable',

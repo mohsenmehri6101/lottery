@@ -7254,6 +7254,24 @@
                         }
                     },
                     {
+                        "name": "is_ball",
+                        "in": "query",
+                        "description": "is_ball",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "ball_price",
+                        "in": "query",
+                        "description": "ball_price",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "tag_id",
                         "in": "query",
                         "description": "Tag ID",
@@ -7803,6 +7821,24 @@
                         "name": "profit_share_percentage",
                         "in": "query",
                         "description": "profit_share_percentage",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_ball",
+                        "in": "query",
+                        "description": "is_ball",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "ball_price",
+                        "in": "query",
+                        "description": "ball_price",
                         "required": false,
                         "schema": {
                             "type": "string"

@@ -11,6 +11,14 @@ class GymUpdateRequest extends FormRequest
 {
     use CustomFormRequestTrait;
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('is_ball')) {
+            $is_ball = $this->get('is_ball');
+            $this->merge(['is_ball' => $is_ball ? 1 : 0]);
+        }
+    }
+
     public function authorize(): bool
     {
         $gym_id = request('id');
