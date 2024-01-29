@@ -169,6 +169,8 @@ class GymService
              * @var $images
              * @var $price
              * @var $profit_share_percentage
+             * @var $is_ball
+             * @var $ball_price
              * @var $gender_acceptance
              * @var $time_template
              */

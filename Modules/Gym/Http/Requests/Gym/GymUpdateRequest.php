@@ -44,7 +44,8 @@ class GymUpdateRequest extends FormRequest
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'user_id' => 'nullable|exists:users,id',
             'profit_share_percentage' => 'nullable|min:0|max:100',
-
+            'is_ball' => 'nullable|boolean',
+            'ball_price' => 'nullable',
             'city_id' => 'nullable|numeric|exists:cities,id',
             'latitude' => 'nullable',
             'longitude' => 'nullable',
