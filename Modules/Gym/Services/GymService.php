@@ -368,6 +368,8 @@ class GymService
              * @var $keyword_id
              * @var $keywords
              * @var $sport_id
+             * @var $is_ball
+             * @var $ball_price
              * @var $sports
              * @var $attribute_id
              * @var $attributes
@@ -392,7 +394,6 @@ class GymService
             $gym = $this->gymRepository->findOrFail($gym_id);
 
             $this->gymRepository->update($gym, $fields);
-
 
             $withs_result = [];
 
