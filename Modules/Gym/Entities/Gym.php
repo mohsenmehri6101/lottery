@@ -34,6 +34,7 @@ use Modules\Geographical\Entities\City;
  * @property integer $profit_share_percentage
  * @property integer $user_id
  * @property boolean $is_ball
+ * @property string $ball_price
  * @property integer $user_creator
  * @property integer $user_editor
  * @property $created_at
@@ -66,6 +67,7 @@ class Gym extends Model
         'dislike_count',
         'profit_share_percentage',
         'is_ball',
+        'ball_price',
         'user_id',
         'user_creator',
         'user_editor',
@@ -90,6 +92,7 @@ class Gym extends Model
         'dislike_count' => 'integer',
         'profit_share_percentage' => 'integer',
         'is_ball' => 'boolean',
+        'ball_price' => 'decimal:3',
         'user_id' => 'integer',
         'user_creator' => 'integer',
         'user_editor' => 'integer',

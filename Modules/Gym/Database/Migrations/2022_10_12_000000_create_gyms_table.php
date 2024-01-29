@@ -23,6 +23,7 @@ return new class extends Migration {
             // info locations
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
+            $table->decimal('ball_price', 15, 3)->default(0)->comment('قیمت توپ ورزشی');
             $table->integer('score')->nullable()->default(0)->comment('score');
             $table->tinyInteger('status')->nullable()->default(Gym::status_active)->comment('status');
             $table->bigInteger('like_count')->default(0)->comment('like count');
@@ -33,10 +34,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
             $table->timestamps();
             $table->softDeletes();
-
-            # $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            # $table->foreignId('user_id')->constrained();
         });
     }
 

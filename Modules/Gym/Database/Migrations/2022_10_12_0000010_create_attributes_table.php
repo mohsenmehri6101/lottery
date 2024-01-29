@@ -37,4 +37,5 @@ return new class extends Migration {
         Schema::dropIfExists('attribute_gym');
         Schema::dropIfExists('gyms_attributes');
     }
+
 };
