@@ -7,6 +7,7 @@ use App\Providers\Customize\PersianDataProvider;
 use App\Providers\Customize\PersianFakerFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Modules\Authentication\Entities\User;
 use Modules\Authentication\Entities\UserDetail;
@@ -33,6 +34,7 @@ use Modules\Payment\Entities\Payment;
 use Modules\Slider\Entities\Slider;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
+use Exception;
 
 class GymDatabaseSeeder extends Seeder
 {
@@ -468,7 +470,7 @@ class GymDatabaseSeeder extends Seeder
         Artisan::call('gym:delete-images', ['--all' => true]);
     }
 
-    public static function helperFunctionFakeAttributeGymPrice($count = 80): void
+    public static function helperFunctionFakeAttributeGymPrice($count = 40): void
     {
         $faker = \Faker\Factory::create();
 
@@ -487,15 +489,29 @@ class GymDatabaseSeeder extends Seeder
     public static function helperFunctionFakeAttributeGymPriceReserve($count = 100): void
     {
         $faker = \Faker\Factory::create();
+        $data = [];
 
         for ($i = 0; $i < $count; $i++) {
             $attributePriceId = AttributePrice::query()->inRandomOrder()->first()->id;
-            /** @var Reserve $reserve */
-            $reserve = Reserve::query()->inRandomOrder()->first();
+            $reserveId = Reserve::query()->inRandomOrder()->first()->id;
 
-            if (!$reserve->attributePrices()->where('attribute_gym_prices.id', $attributePriceId)->exists()) {
-                $reserve->attributePrices()->attach($attributePriceId);
+            // Check if the combination of attribute_gym_price_id and reserve_id already exists in $data
+            $uniqueCheck = collect($data)->where('attribute_gym_price_id', $attributePriceId)
+                ->where('reserve_id', $reserveId)
+                ->isEmpty();
+
+            if ($uniqueCheck) {
+                $data[] = [
+                    'attribute_gym_price_id' => $attributePriceId,
+                    'reserve_id' => $reserveId,
+                ];
             }
+        }
+
+        try {
+            DB::table('attribute_gym_price_reserve')->insertOrIgnore($data);
+        } catch (\Exception $exception) {
+            // Log or handle the exception if needed
         }
     }
 
@@ -518,5 +534,4 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionFakeAttributeGymPrice();
         self::helperFunctionFakeAttributeGymPriceReserve();
     }
-
 }

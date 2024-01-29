@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
+ * @property integer $id
  * @property integer $attribute_id
  * @property integer $gym_id
  * @property integer $price
@@ -18,12 +19,14 @@ class AttributePrice extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'attribute_id',
         'gym_id',
         'price',
     ];
 
     protected $casts = [
+        'id' => 'integer',
         'attribute_id' => 'integer',
         'gym_id' => 'integer',
         'price' => 'decimal:3',

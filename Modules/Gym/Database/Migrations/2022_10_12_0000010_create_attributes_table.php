@@ -22,6 +22,7 @@ return new class extends Migration {
 
         Schema::create('attribute_gym_prices', function (Blueprint $table) {
             $table->comment('جدول ثبت قیمت هر امکان برای هر باشگاه');
+            $table->id();
             $table->bigInteger('attribute_id');
             $table->bigInteger('gym_id');
             $table->decimal('price', 15, 3)->default(0)->comment('قیمت');
