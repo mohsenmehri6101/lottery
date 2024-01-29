@@ -205,10 +205,10 @@ class GymController extends Controller
      *     summary="ویرایش باشگاه ورزشی",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="string"),description="id"),
-     *     @OA\Parameter(name="name",in="query",required=true, @OA\Schema(type="string"),description="name"),
+     *     @OA\Parameter(name="name",in="query",required=false, @OA\Schema(type="string"),description="name"),
      *     @OA\Parameter(name="description",in="query",required=false, @OA\Schema(type="string"),description="description"),
      *     @OA\Parameter(name="price",in="query",required=false, @OA\Schema(type="string"),description="price"),
-     *     @OA\Parameter(name="city_id",in="query",required=true, @OA\Schema(type="string"),description="city_id"),
+     *     @OA\Parameter(name="city_id",in="query",required=false, @OA\Schema(type="string"),description="city_id"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="string"),description="status"),
      *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="string"),description="profit_share_percentage"),
      *     @OA\Parameter(name="is_ball",in="query",required=false, @OA\Schema(type="boolean"),description="is_ball"),
@@ -313,4 +313,5 @@ class GymController extends Controller
         $lists = $this->gymService->getInitializeRequestsSelectors($request);
         return ResponseHelper::responseSuccess(data: $lists);
     }
+
 }
