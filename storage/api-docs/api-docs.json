@@ -7194,7 +7194,7 @@
                         "name": "name",
                         "in": "query",
                         "description": "Gym name",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -7221,7 +7221,7 @@
                         "name": "city_id",
                         "in": "query",
                         "description": "City ID",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "integer"
                         }
@@ -7776,7 +7776,7 @@
                         "name": "name",
                         "in": "query",
                         "description": "name",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string"
                         }
@@ -7803,7 +7803,7 @@
                         "name": "city_id",
                         "in": "query",
                         "description": "city_id",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string"
                         }
