@@ -27,7 +27,6 @@ class ReserveService
     public function __construct(public ReserveRepository $reserveRepository)
     {
     }
-
     public function index(ReserveIndexRequest|array $request)
     {
         try {

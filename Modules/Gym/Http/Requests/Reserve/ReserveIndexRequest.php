@@ -22,7 +22,6 @@ class ReserveIndexRequest extends FormRequest
             'paginate' => 'nullable|boolean',
             'per_page' => 'nullable',
             'page' => 'nullable',
-
             'id' => 'nullable|exists:categories,id',
             'reserve_template_id' => 'nullable|exists:reserve_templates,id',
             'user_id' => 'nullable|exists:users,id',
@@ -30,10 +29,8 @@ class ReserveIndexRequest extends FormRequest
             'user_creator' => 'nullable|exists:users,id',
             'user_editor' => 'nullable|exists:users,id',
             'dated_at' => 'nullable',
-
             'withs' => 'nullable|array',
             'withs.*' => "nullable|string|in:$withs_allows",
-
             'created_at' => 'nullable',
             'updated_at' => 'nullable',
             'deleted_at' => 'nullable',

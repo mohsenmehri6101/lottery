@@ -4,11 +4,12 @@ namespace Modules\Gym\Http\Requests\Reserve;
 
 use App\Http\Requests\CustomFormRequestTrait;
 use Illuminate\Foundation\Http\FormRequest;
-use Modules\Gym\Entities\Reserve;
+use Modules\Payment\Entities\Payment;
 
 class ReserveUpdateRequest extends FormRequest
 {
     use CustomFormRequestTrait;
+
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
@@ -17,8 +18,7 @@ class ReserveUpdateRequest extends FormRequest
 
     public function rules(): array
     {
-        $statuses = implode(',', Reserve::getPaymentStatus());
-
+        $statuses = implode(',', Payment::getStatusPayment());
         return [
             'reserve_template_id' => 'nullable|exists:reserve_templates,id',
             'gym_id' => 'nullable|exists:gyms,id',
@@ -27,4 +27,5 @@ class ReserveUpdateRequest extends FormRequest
             'dated_at' => 'nullable|unique_deleted_at_null:reserves,dated_at',
         ];
     }
+
 }
