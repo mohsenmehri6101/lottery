@@ -23,6 +23,7 @@ use Carbon\Carbon;
  * @property integer $user_creator
  * @property integer $user_editor
  * @property $dated_at
+ * @property integer $want_ball
  * @property $created_at
  * @property $updated_at
  * @property $deleted_at
@@ -48,6 +49,7 @@ class Reserve extends Model
         'user_creator',
         'user_editor',
         'dated_at',
+        'want_ball',
         'reserved_at',
         'created_at',
         'updated_at',
@@ -63,6 +65,7 @@ class Reserve extends Model
         'user_creator' => 'integer',
         'user_editor' => 'integer',
         'dated_at' => 'datetime',
+        'want_ball' => 'boolean',
         'reserved_at' => 'timestamp',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',

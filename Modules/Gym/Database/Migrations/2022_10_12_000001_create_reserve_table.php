@@ -39,6 +39,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
             $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
             $table->date('dated_at')->nullable()->comment('تاریخ رزرو');
+            $table->boolean('want_ball')->default(false)->comment('توپ میخواهد؟');
             $table->timestamp('reserved_at')->nullable()->comment('تاریخ رزرو موقت');
             $table->unsignedBigInteger('reserved_user_id')->nullable()->comment('شناسه کاربر رزرو کننده');
             $table->timestamps();
