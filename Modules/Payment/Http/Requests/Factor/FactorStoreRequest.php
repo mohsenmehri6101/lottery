@@ -19,4 +19,5 @@ class FactorStoreRequest extends FormRequest
             'user_id' => 'nullable|exists:users,id',
         ];
     }
+
 }

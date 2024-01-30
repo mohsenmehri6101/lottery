@@ -5,6 +5,9 @@ namespace Modules\Payment\Services;
 use App\Permissions\RolesEnum;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Modules\Gym\Entities\Gym;
+use Modules\Gym\Entities\Reserve;
+use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Http\Repositories\FactorRepository;
 use Modules\Payment\Http\Requests\Factor\FactorIndexRequest;
@@ -20,7 +23,6 @@ class FactorService
     public function __construct(public FactorRepository $factorRepository)
     {
     }
-
     public function index(FactorIndexRequest|array $request)
     {
         try {
@@ -78,14 +80,12 @@ class FactorService
             throw $exception;
         }
     }
-
     public function myFactor(MyFactorRequest $request)
     {
         $fields = $request->validated();
         $fields['user_id']=get_user_id_login();
         return $this->index($fields);
     }
-
     public function show(FactorShowRequest $request, $factor_id)
     {
         try {
@@ -102,7 +102,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function store(FactorStoreRequest|array $request)
     {
         DB::beginTransaction();
@@ -147,6 +146,8 @@ class FactorService
             # sync reserve to factor
             $factor->reserves()->sync($reserve_ids, $detach);
 
+            self::calculatePriceForFactor($factor);
+
             DB::commit();
 
             $factor_id = $factor?->id;
@@ -157,12 +158,29 @@ class FactorService
             throw $exception;
         }
     }
-
+    private static function calculatePriceForFactor(Factor $factor): void
+    {
+        /** @var Reserve $reserve */
+        foreach ($factor->reserves as $reserve) {
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
+            /** @var Gym $gym */
+            $gym = $reserve->gym;
+            /*---------------------------------------------------------*/
+            $price = $reserveTemplate->price ?? $gym->price;
+            if ($reserve->want_ball && $reserveTemplate->is_ball) {
+                $price += $gym->ball_price;
+            }
+            $factor->reserves()->updateExistingPivot(
+                $reserve->id,
+                ['price' => $price]
+            );
+        }
+    }
     public function update(FactorUpdateRequest $request, $factor_id)
     {
         DB::beginTransaction();
         try {
-
             $fields = $request->validated();
 
             /**
@@ -188,11 +206,15 @@ class FactorService
             if (!user_have_role(RolesEnum::admin)) {
                 unset($fields['status']);
             }
+
             $this->factorRepository->update($factor, $fields);
 
             $detach = $detach ?? true;
             # sync reserve to factor
             $factor->reserves()->sync($reserve_ids, $detach);
+
+            // Calculate prices for each reserve in the factor.
+            self::calculatePriceForFactor($factor);
 
             DB::commit();
 
@@ -203,7 +225,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function destroy($factor_id): bool
     {
         DB::beginTransaction();
@@ -226,7 +247,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function listStatusFactor($status = null): array|bool|int|string|null
     {
         return Factor::getStatusTitle($status);
