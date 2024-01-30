@@ -23,7 +23,7 @@ return new class extends Migration {
             // info locations
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
-            $table->decimal('ball_price', 15, 3)->default(0)->comment('قیمت توپ ورزشی');
+            $table->decimal('ball_price', 15, 3)->default(0)->nullable()->comment('قیمت توپ ورزشی');
             $table->integer('score')->nullable()->default(0)->comment('score');
             $table->tinyInteger('status')->nullable()->default(Gym::status_active)->comment('status');
             $table->bigInteger('like_count')->default(0)->comment('like count');
