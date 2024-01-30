@@ -160,14 +160,15 @@ class FactorService
     }
     private static function calculatePriceForFactor(Factor $factor): void
     {
+        $totalPrice = 0;
         /** @var Reserve $reserve */
         foreach ($factor->reserves as $reserve) {
             /** @var ReserveTemplate $reserveTemplate */
             $reserveTemplate = $reserve->reserveTemplate;
             /** @var Gym $gym */
             $gym = $reserve->gym;
-            /*---------------------------------------------------------*/
             $price = $reserveTemplate->price ?? $gym->price;
+
             if ($reserve->want_ball && $reserveTemplate->is_ball) {
                 $price += $gym->ball_price;
             }
@@ -175,8 +176,11 @@ class FactorService
                 $reserve->id,
                 ['price' => $price]
             );
+            $totalPrice += $price;
         }
+        $factor->update(['total_price' => $totalPrice]);
     }
+
     public function update(FactorUpdateRequest $request, $factor_id)
     {
         DB::beginTransaction();
