@@ -83,7 +83,7 @@ class FactorService
     public function myFactor(MyFactorRequest $request)
     {
         $fields = $request->validated();
-        $fields['user_id']=get_user_id_login();
+        $fields['user_id'] = get_user_id_login();
         return $this->index($fields);
     }
     public function show(FactorShowRequest $request, $factor_id)
@@ -134,7 +134,7 @@ class FactorService
             unset($fields['reserve_id'], $fields['reserve_ids']);
 
             // todo check role from set column status.
-            if (!user_have_role(roles:RolesEnum::admin->name)) {
+            if (!user_have_role(roles: RolesEnum::admin->name)) {
                 unset($fields['status']);
             }
 
