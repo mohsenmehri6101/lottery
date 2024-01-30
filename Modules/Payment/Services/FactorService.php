@@ -210,10 +210,9 @@ class FactorService
             $this->factorRepository->update($factor, $fields);
 
             $detach = $detach ?? true;
-            # sync reserve to factor
+
             $factor->reserves()->sync($reserve_ids, $detach);
 
-            // Calculate prices for each reserve in the factor.
             self::calculatePriceForFactor($factor);
 
             DB::commit();
@@ -225,6 +224,7 @@ class FactorService
             throw $exception;
         }
     }
+
     public function destroy($factor_id): bool
     {
         DB::beginTransaction();
