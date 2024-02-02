@@ -9,6 +9,7 @@ class ReserveStoreAndDoStuffRequest extends FormRequest
     public function rules(): array
     {
         return [
+
             'reserves' => 'nullable|array',
             'reserves.*' => 'nullable|array',
             'reserves.*.reserve_template_id' => 'required|exists:reserve_templates,id',
