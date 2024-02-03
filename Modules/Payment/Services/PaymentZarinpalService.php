@@ -11,16 +11,11 @@ class PaymentZarinpalService
 {
     private string $token_code;
     private static string $PAYMENT_URL;
-
     public function __construct(string|null $token =null)
     {
         $this->token_code = $token ?? config('configs.payment.zarinpal.merchant_id');
         self::$PAYMENT_URL = config('configs.payment.zarinpal.payment_url');
     }
-
-    /**
-     * @throws CreateLinkPaymentException
-     */
     public function createLinkPayment($amount, $description, $callbackUrl, $mobile = null, $email = null, $factor_id = null): string
     {
         try {
@@ -55,4 +50,33 @@ class PaymentZarinpalService
         }
     }
 
+    public function confirmPayment($authority, $amount)
+    {
+        try {
+            $data = [
+                'merchant_id' => $this->token_code,
+                'amount' => $amount,
+                'authority' => $authority,
+            ];
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post(self::$PAYMENT_URL . 'verify.json', $data);
+
+            $statusCode = $response->status();
+            $responseData = $response->json();
+
+            if ($statusCode === 200 && isset($responseData['data']['code']) && $responseData['data']['code'] === 100) {
+                // Payment is verified successfully
+                return $responseData['data'];
+            }
+
+            // Handle other cases or throw an exception
+            throw new Exception('Payment verification failed');
+
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
 }

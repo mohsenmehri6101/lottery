@@ -13,15 +13,10 @@ class PaymentPaypingService
     private static string $PAYMENT_URL = 'https://api.payping.ir/v1/';
     private static string $PAYMENT_ENDPOINT = 'pay';
     private static string $VERIFY_ENDPOINT = 'pay/verify';
-
     public function __construct(string|null $token =null)
     {
         $this->TokenCode = $token ?? env('PAYMENT_PAYPING_TOKEN');
     }
-
-    /**
-     * @throws CreateLinkPaymentException
-     */
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
@@ -56,8 +51,37 @@ class PaymentPaypingService
             throw new $exception;
         }
     }
+    public function confirmPayment($authority, $amount, $factor_id): bool
+    {
+        try {
+            $data = [
+                'merchant_id' => $this->TokenCode,
+                'amount' => $amount,
+                'authority' => $authority,
+            ];
 
-    public function confirmPayment($refid, $amount): bool
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post(self::$PAYMENT_URL . 'verify.json', $data);
+
+            $statusCode = $response->status();
+            $responseData = $response->json();
+
+            if ($statusCode === 200 && isset($responseData['data']['code']) && $responseData['data']['code'] === 100) {
+                if ($factor_id == $responseData['data']['ref_id'] && $amount == $responseData['data']['amount']) {
+                    return true;
+                } else {
+                    throw new Exception('Factor_id or amount mismatch in payment verification');
+                }
+            }
+            throw new Exception('Payment verification failed');
+
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+    /*public function confirmPayment($refid, $amount): bool
     {
         $data = [
             'amount' => $amount,
@@ -75,9 +99,9 @@ class PaymentPaypingService
             $statusCode = $response->status();
             return $statusCode === Response::HTTP_OK;
 
-        } catch (Exception $exception) {
+        }
+     catch (Exception $exception) {
             throw new $exception;
         }
-    }
-
+    }*/
 }
