@@ -41,14 +41,14 @@ class PaymentZarinpalService
                 'Accept' => 'application/json',
             ])->post(self::$PAYMENT_URL . 'request.json', $data);
 
-            $statusCode = $response->status();
-            $responseData = $response->json();
+            $status_code = $response->status();
+            $response_data = $response->json();
 
-            if ($statusCode === Response::HTTP_OK && isset($responseData['data']['authority'])) {
-                return 'https://www.zarinpal.com/pg/StartPay/' . $responseData['data']['authority'];
+            if ($status_code === Response::HTTP_OK && isset($response_data['data']['authority'])) {
+                return 'https://www.zarinpal.com/pg/StartPay/' . $response_data['data']['authority'];
             }
 
-            throw new CreateLinkPaymentException(/*extra_data:[$responseData]*/);
+            throw new CreateLinkPaymentException(/*extra_data:[$response_data]*/);
 
         } catch (Exception $exception) {
             throw $exception;
