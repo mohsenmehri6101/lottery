@@ -513,7 +513,6 @@ class GymService
             throw $exception;
         }
     }
-
     public function deleteImage(DeleteImageGymRequest $request, $gym_id): bool
     {
         DB::beginTransaction();
@@ -557,18 +556,15 @@ class GymService
             throw $exception;
         }
     }
-
     public static function updateScore($gym_id): float|int
     {
         return Gym::updateScore($gym_id);
     }
-
     public function gymStatus(Request $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
         return Gym::getStatusGymTitle();
     }
-
     public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
@@ -645,7 +641,6 @@ class GymService
             throw $exception;
         }
     }
-
     private function getCachedList($serviceKey, $method, $cacheKey)
     {
         $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors', 30);
