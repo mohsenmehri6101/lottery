@@ -66,6 +66,10 @@ return [
             'min_random_code_factor' => 100000,
             'max_random_code_factor' => 990000,
         ],
+        'zarinpal' => [
+            'merchant_id' => env('PAYMENT_ZARINPAL_TOKEN','jfdlkajafjhio'),
+            'payment_url' => 'https://api.zarinpal.com/pg/v4/payment/',
+        ],
     ],
     'web_info' => [
         'mobile' => 'mobile',

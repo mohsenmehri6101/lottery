@@ -22,7 +22,7 @@ class PaymentPaypingService
     /**
      * @throws CreateLinkPaymentException
      */
-    public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName)
+    public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
             $data = [
