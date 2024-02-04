@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Schema;
 use Modules\Payment\Entities\Factor;
 
 return new class extends Migration {
-    
+
     public function up(): void {
         Schema::create('factors', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->comment('code');
+            $table->decimal('vat_rate', 3, 2)->default(0.00)->comment('نرخ مالیات بر ارزش افزوده (value added tax)'); // نرخ مالیات (بین 0 تا 1)
             $table->decimal('total_price', 15, 3)->default(0)->comment('مجموع قیمت بدون مالیات'); // مجموع قیمت بدون مالیات
             $table->decimal('total_price_vat', 15, 3)->default(0)->comment('مجموع قیمت شامل مالیات'); // مجموع قیمت با مالیات
             $table->tinyInteger('status')->nullable()->default(Factor::status_unknown/*0*/)->comment('وضعیت پرداخت');
