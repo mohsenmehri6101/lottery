@@ -20,7 +20,7 @@ class Transaction extends Model
     const SPECIFICATION_DEBIT = 1;
     const SPECIFICATION_CREDIT = 2;
     # ---------------------------------------------------------
-    const TRANSACTION_UNKNOWN = 0;
+    const TRANSACTION_TYPE_UNKNOWN = 0;
     const TRANSACTION_TYPE_WITHDRAWAL = 1;
     const TRANSACTION_TYPE_DEPOSIT = 2;
     # ---------------------------------------------------------
@@ -60,17 +60,14 @@ class Transaction extends Model
     public static function boot(): void
     {
         parent::boot();
-
         static::creating(function ($item) {
             if (is_null($item->user_creator)) {
                 $item->user_creator = set_user_creator();
             }
-
             if (is_null($item->user_editor)) {
                 $item->user_editor = set_user_creator();
             }
         });
-
         static::updating(function ($item) {
             if (is_null($item->user_editor)) {
                 $item->user_editor = set_user_creator();
