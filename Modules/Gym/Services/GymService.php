@@ -309,7 +309,7 @@ class GymService
 
     public static function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
-        foreach ($week_numbers as $week_number) {
+        foreach ($week_numbers as $week_number){
             $from = $start_time;
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00")) {
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
@@ -327,7 +327,6 @@ class GymService
                 ]);
                 $from = date('H:i', strtotime($from) + ($break_time * 3600));
             }
-
         }
     }
 
