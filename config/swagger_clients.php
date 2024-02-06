@@ -4,13 +4,13 @@ return [
     [
         'user' => 'mohsen mehri',
         'username' => 'mohsen6101',
-        /* mm123456789mm */
-        'password' => '$2y$10$6adnZa04u3t.6XbVC7Wc5efgMs4j9o3x2bS6xNENgkhhFBCX9WAl6'
+        /* tp123456789tp */
+        'password' => '$2y$10$Ec9o7q37du3YQDEmwDrda.MpTOxkt.4cAGpkz/TCZLyGU79G/nynm'
     ],
     [
         'user' => 'masud mehri',
         'username' => 'masud',
-        /* mm123456789mm */
-        'password' => '$2y$10$BZGsntsy5Pd5ZddxgmFNQuFqClJqRRKJedXasWtE5JpP8F5CrJ6le'
-    ],
+        /* tp123456789tp */
+        'password' => '$2y$10$Ec9o7q37du3YQDEmwDrda.MpTOxkt.4cAGpkz/TCZLyGU79G/nynm'
+    ]
 ];

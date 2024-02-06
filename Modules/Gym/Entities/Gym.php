@@ -154,7 +154,6 @@ class Gym extends Model
         }
         return $statuses;
     }
-
     public static function getStatusGym(): array
     {
         return [
@@ -164,7 +163,6 @@ class Gym extends Model
             self::status_disable,
         ];
     }
-
     public static function getStatusGymPersian(): array
     {
         return [
@@ -174,7 +172,6 @@ class Gym extends Model
             self::status_disable => 'غیرفعال شده',
         ];
     }
-
     public static function like($gym_id, $user_id = null, $type = 'like'): int
     {
         $user_id = $user_id ?? get_user_id_login();
@@ -201,12 +198,10 @@ class Gym extends Model
 
         return $gym->$type_count;
     }
-
     public static function dislike($gym_id, $type = 'dislike', $user_id = null): int
     {
         return self::like(gym_id: $gym_id, user_id: $user_id, type: $type);
     }
-
     public static function updateScore($gym_id): float|int
     {
         /** @var Gym $gym */
@@ -224,62 +219,50 @@ class Gym extends Model
     {
         return $this->hasMany(Score::class, 'gym_id');
     }
-
     public function keywords(): BelongsToMany
     {
         return $this->belongsToMany(Keyword::class, 'gym_keyword');
     }
-
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_gym');
     }
-
     public function images(): HasMany
     {
         return $this->hasMany(Image::class)->select('url', 'gym_id');
     }
-
     public function urlImages(): HasMany
     {
         return $this->hasMany(Image::class)->select('url', 'gym_id');
     }
-
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'gym_tag');
     }
-
     public function sports(): BelongsToMany
     {
         return $this->belongsToMany(Sport::class, 'sport_gym');
     }
-
     public function attributes(): BelongsToMany
     {
         return $this->belongsToMany(Attribute::class, 'attribute_gym');
     }
-
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
-
     public function reserves(): HasMany
     {
         return $this->hasMany(Reserve::class);
     }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uer_id', 'id');
     }
-
     public function reserveTemplates(): HasMany
     {
         return $this->hasMany(ReserveTemplate::class)->orderBy('week_number');
     }
-
     public function reserveTemplatesBetweenDates($startDate = null, $endDate = null): HasMany
     {
         if ($startDate === null) {
@@ -301,7 +284,6 @@ class Gym extends Model
             ->addSelect('reserves.user_id as reserve_user_id')
             ->addSelect('reserves.id as reserve_id');
     }
-
     public static function getReserveTemplateBetweenDate($gym_id, $from = null, $to = null): Collection
     {
         if ($from === null) {
@@ -331,5 +313,4 @@ class Gym extends Model
                     ->orWhereNull('reserves.dated_at');
             })->get();
     }
-
 }

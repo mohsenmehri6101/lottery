@@ -44,6 +44,7 @@ class Transaction extends Model
         'user_editor',
         'timed_at',
     ];
+
     protected $casts = [
         'user_destination' => 'integer',
         'user_resource' => 'integer',
@@ -56,6 +57,7 @@ class Transaction extends Model
         'user_editor' => 'integer',
         'timed_at' => 'timestamp',
     ];
+
     # ---------------------------------------------------------
     public static function boot(): void
     {

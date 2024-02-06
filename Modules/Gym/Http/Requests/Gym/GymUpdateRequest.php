@@ -87,7 +87,7 @@ class GymUpdateRequest extends FormRequest
 
             # images
             'images' => 'nullable|array',
-            'images.*' => 'required|mimes:png,jpg,jpeg',
+            'images.*' => 'required',
         ];
     }
 

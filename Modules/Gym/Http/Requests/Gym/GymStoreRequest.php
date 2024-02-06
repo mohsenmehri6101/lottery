@@ -64,12 +64,21 @@ class GymStoreRequest extends FormRequest
 
             # images
             'images' => 'nullable|array',
-            'images.*' => 'required|mimes:png,jpg,jpeg',
+            'images.*' => 'required',
 
             # reserve template data
             'time_template.*' => 'nullable|array',
             'time_template.from' => 'nullable|date_format:H:i',
-            'time_template.to' => 'nullable|date_format:H:i',
+            'time_template.to' => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    if ($value !== null && $value !== '24:00') {
+                        if (!\DateTime::createFromFormat('H:i', $value)) {
+                            $fail('The ' . $attribute . ' does not match the format H:i.');
+                        }
+                    }
+                },
+            ],
             'time_template.break_time' => 'nullable|numeric|min:1',
             'time_template.price' => 'nullable|numeric|min:0',
             'time_template.gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",

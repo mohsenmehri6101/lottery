@@ -7730,7 +7730,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "relations",
+                        "description": "relations: userCreator,userEditor,city,scores,keywords,categories,images,urlImages,tags,sports,attributes,reserveTemplates,reserves",
                         "required": false,
                         "schema": {
                             "type": "string"

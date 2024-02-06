@@ -108,7 +108,7 @@ class GymController extends Controller
      *     tags={"gyms"},
      *     summary="نمایش تکی باشگاه ورزشی",
      *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="number"),description="id"),
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations: userCreator,userEditor,city,scores,keywords,categories,images,urlImages,tags,sports,attributes,reserveTemplates,reserves"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )

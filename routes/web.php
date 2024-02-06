@@ -4,7 +4,7 @@ use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Route;
 
 # php artisan serve --host=192.168.125.8 --port=8000
-##########################################################
+# #########################################################
 # php artisan l5-swagger:generate
 Route::get("/api/documentation/auth", [\App\Http\Controllers\ApiDocumentationAuth::class, "show"])->name("api_documentation_auth");
 Route::post("/api/documentation/auth", [\App\Http\Controllers\ApiDocumentationAuth::class, "login"])->name("api_documentation_auth_login");
