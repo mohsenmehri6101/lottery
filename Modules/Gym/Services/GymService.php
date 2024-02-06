@@ -290,7 +290,7 @@ class GymService
             if (isset($time_template) && count($time_template)) {
                 $from = $time_template['from'] ?? '08:00';
                 $to = $time_template['to'] ?? '23:59';
-                $to = $to ==  '24:00' ? '23:59' : $to;
+                $to = $to == '24:00' ? '23:59' : $to;
                 $break_time = $time_template['break_time'] ?? 2;
                 $price = $time_template['price'] ?? 0;
                 $gender_acceptance = $time_template['gender_acceptance'] ?? ReserveTemplate::status_gender_acceptance_unknown;
@@ -309,16 +309,20 @@ class GymService
 
     public static function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
-        foreach ($week_numbers as $week_number){
+        foreach ($week_numbers as $week_number) {
             $from = $start_time;
             $switch = false;
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00") || $switch) {
                 $switch = false;
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
                 $to = $to == '00:00' ? '24:00' : $to;
-                if (strtotime($to) > strtotime("$max_hour:00") || ($max_hour == '23:59' && $to == '24:00')) {
-                    break;
+
+                if (!($to == '24:00' && $max_hour = '23:59')) {
+                    if ((strtotime($to) > strtotime("$max_hour:00"))) {
+                        break;
+                    }
                 }
+
                 $to = $to == '23:59' ? '24:00' : $to;
                 ReserveTemplate::query()->create([
                     'from' => $from,
@@ -328,13 +332,14 @@ class GymService
                     'price' => $price,
                     'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown,
                 ]);
-                $from = date('H:i', strtotime($from) + ($break_time * 3600));
 
-                // todo should be deleted.
-                if($from == '22:00' && $max_hour == '23:59'){
-                    Log::info("in theme");
+                $from = date('H:i', strtotime($from) + ($break_time * 3600));
+                $from = $from == '00:00' ? '24:00' : $from;
+
+                if ($from == '22:00' && $max_hour == '23:59') {
                     $switch = true;
                 }
+
             }
         }
     }
@@ -523,6 +528,7 @@ class GymService
             throw $exception;
         }
     }
+
     public function deleteImage(DeleteImageGymRequest $request, $gym_id): bool
     {
         DB::beginTransaction();
@@ -566,15 +572,18 @@ class GymService
             throw $exception;
         }
     }
+
     public static function updateScore($gym_id): float|int
     {
         return Gym::updateScore($gym_id);
     }
+
     public function gymStatus(Request $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
         return Gym::getStatusGymTitle();
     }
+
     public function getInitializeRequestsSelectors(GetInitializeRequestsSelectors|array $request): array
     {
         try {
@@ -651,6 +660,7 @@ class GymService
             throw $exception;
         }
     }
+
     private function getCachedList($serviceKey, $method, $cacheKey)
     {
         $minute_cache_time = config('configs.gyms.cache_time_initialize_requests_selectors', 30);
