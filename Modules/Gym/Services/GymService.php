@@ -313,9 +313,10 @@ class GymService
             $from = $start_time;
             $switch = false;
             while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00") || $switch) {
+                $switch = false;
                 $to = date('H:i', strtotime($from) + ($break_time * 3600));
                 $to = $to == '00:00' ? '24:00' : $to;
-                if (strtotime($to) > strtotime("$max_hour:00")) {
+                if (strtotime($to) > strtotime("$max_hour:00") || ($max_hour == '23:59' && $to == '24:00')) {
                     break;
                 }
                 $to = $to == '23:59' ? '24:00' : $to;
@@ -331,10 +332,8 @@ class GymService
 
                 // todo should be deleted.
                 if($from == '22:00' && $max_hour == '23:59'){
+                    Log::info("in theme");
                     $switch = true;
-                }
-                else{
-                    $switch = false;
                 }
             }
         }
