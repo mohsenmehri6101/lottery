@@ -229,7 +229,7 @@ class Gym extends Model
     }
     public function images(): HasMany
     {
-        return $this->hasMany(Image::class)->select('url', 'gym_id');
+        return $this->hasMany(Image::class)
     }
     public function urlImages(): HasMany
     {
