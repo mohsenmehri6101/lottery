@@ -277,7 +277,6 @@ class GymService
                         // todo convert image change image size and with and height
                         $path_image = $image->storeAs('gyms', $name_file);
                         if ($path_image) {
-                            # $images_links[] = ['url' => $path_image, 'image' => $name_file];
                             $imageModel = new Image(['url' => $path_image, 'image' => $name_file]);
                             $gym->images()->save($imageModel);
                         }
@@ -290,6 +289,7 @@ class GymService
             if (isset($time_template) && count($time_template)) {
                 $from = $time_template['from'] ?? '08:00';
                 $to = $time_template['to'] ?? '23:59';
+                $to = $to ==  '24:00' ? '23:59' : $to;
                 $break_time = $time_template['break_time'] ?? 2;
                 $price = $time_template['price'] ?? 0;
                 $gender_acceptance = $time_template['gender_acceptance'] ?? ReserveTemplate::status_gender_acceptance_unknown;
