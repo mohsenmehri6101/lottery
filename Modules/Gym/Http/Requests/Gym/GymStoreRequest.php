@@ -87,4 +87,24 @@ class GymStoreRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'name' => __('custom.gyms.gyms.name'),
+            // todo add others like this
+            'description' => 'description',
+            'price' => 'price',
+            'status' => 'status',
+            'gender_acceptance' => 'gender_acceptance',
+            'user_id' => 'user_id',
+            'profit_share_percentage' => 'profit_share_percentage',
+            'is_ball' => 'is_ball',
+            'ball_price' => 'ball_price',
+            'city_id' => 'city_id',
+            'latitude' => 'latitude',
+            'longitude' => 'longitude',
+            'short_address' => 'short_address',
+            'address' => 'address',
+        ];
+    }
 }

@@ -6,8 +6,8 @@
     <title>
         عنوان
     </title>
-    <script type="module" crossorigin src="{{ url('/assets/index-8db049a0.js') }}"></script>
-    <link rel="stylesheet" href='{{ url("assets/index-b0ef94be.css") }}'>
+    <script type="module" crossorigin src="{{ url('/assets/index-b00be29a.js') }}"></script>
+    <link rel="stylesheet" href='{{ url("assets/index-43109550.css") }}'>
 </head>
 <body>
 <div id="app"></div>
