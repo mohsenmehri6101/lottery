@@ -18,7 +18,6 @@ class GymUpdateRequest extends FormRequest
             $this->merge(['is_ball' => $is_ball ? 1 : 0]);
         }
     }
-
     public function authorize(): bool
     {
         $gym_id = request('id');
@@ -32,7 +31,6 @@ class GymUpdateRequest extends FormRequest
                     ->where('user_id', $logged_in_user_id)
                     ->exists());
     }
-
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         $this->set_validator_update_unique();
@@ -91,4 +89,52 @@ class GymUpdateRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'name' => __('custom.gyms.gyms.name'),
+            'description' => __('custom.gyms.gyms.description'),
+            'price' => __('custom.gyms.gyms.price'),
+            'status' => __('custom.gyms.gyms.status'),
+            'gender_acceptance' => __('custom.gyms.gyms.gender_acceptance'),
+            'user_id' => __('custom.gyms.gyms.user_id'),
+            'profit_share_percentage' => __('custom.gyms.gyms.profit_share_percentage'),
+            'is_ball' => __('custom.gyms.gyms.is_ball'),
+            'ball_price' => __('custom.gyms.gyms.ball_price'),
+            'city_id' => __('custom.gyms.gyms.city_id'),
+            'latitude' => __('custom.gyms.gyms.latitude'),
+            'longitude' => __('custom.gyms.gyms.longitude'),
+            'short_address' => __('custom.gyms.gyms.short_address'),
+            'address' => __('custom.gyms.gyms.address'),
+
+            # tags
+            'tag_id' => __('custom.gyms.tags.id'),
+            'tags' => __('custom.gyms.tags'),
+            'tags.*' => __('custom.gyms.tags.*'),
+
+            # categories
+            'category_id' => __('custom.gyms.categories.id'),
+            'categories' => __('custom.gyms.categories'),
+            'categories.*' => __('custom.gyms.categories.*'),
+
+            # keywords
+            'keyword_id' => __('custom.gyms.keywords.id'),
+            'keywords' => __('custom.gyms.keywords'),
+            'keywords.*' => __('custom.gyms.keywords.*'),
+
+            # sports
+            'sport_id' => __('custom.gyms.sports.id'),
+            'sports' => __('custom.gyms.sports'),
+            'sports.*' => __('custom.gyms.sports.*'),
+
+            # attributes
+            'attribute_id' => __('custom.gyms.attributes.id'),
+            'attributes' => __('custom.gyms.attributes'),
+            'attributes.*' => __('custom.gyms.attributes.*'),
+
+            # images
+            'images' => __('custom.gyms.images'),
+            'images.*' => __('custom.gyms.images.*'),
+        ];
+    }
 }
