@@ -4,9 +4,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>
-        عنوان
+        رزر آنلاین باشگاه ورزشی
     </title>
-    <script type="module" crossorigin src="{{ url('/assets/index-b00be29a.js') }}"></script>
+    <script type="module" crossorigin src="{{ url('/assets/index-98a5e617.js') }}"></script>
     <link rel="stylesheet" href='{{ url("assets/index-43109550.css") }}'>
 </head>
 <body>

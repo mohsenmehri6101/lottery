@@ -34,6 +34,8 @@ class GymController extends Controller
      *     @OA\Parameter(name="search",in="query",required=false, @OA\Schema(type="string"),description="search"),
      *     @OA\Parameter(name="name",in="query",required=false, @OA\Schema(type="string"),description="name"),
      *     @OA\Parameter(name="description",in="query",required=false, @OA\Schema(type="string"),description="description"),
+     *     @OA\Parameter(name="gender_acceptance",in="query",required=false, @OA\Schema(type="integer"),description="gender_acceptance"),
+     *     @OA\Parameter(name="priority_show",in="query",required=false, @OA\Schema(type="integer"),description="priority_show"),
      *     @OA\Parameter(name="price",in="query",required=false, @OA\Schema(type="string"),description="price"),
      *     @OA\Parameter(name="min_price",in="query",required=false, @OA\Schema(type="string"),description="min_price"),
      *     @OA\Parameter(name="max_price",in="query",required=false, @OA\Schema(type="string"),description="max_price"),
@@ -132,6 +134,7 @@ class GymController extends Controller
      *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="Gym user_id"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="Gym status"),
      *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="integer"),description="profit_share_percentage"),
+     *     @OA\Parameter(name="priority_show",in="query",required=false, @OA\Schema(type="integer"),description="priority_show"),
      *     @OA\Parameter(name="is_ball",in="query",required=false, @OA\Schema(type="boolean"),description="is_ball"),
      *     @OA\Parameter(name="ball_price",in="query",required=false, @OA\Schema(type="string"),description="ball_price"),
      *     @OA\Parameter(name="tag_id",in="query",required=false, @OA\Schema(type="integer"),description="Tag ID"),
@@ -211,6 +214,8 @@ class GymController extends Controller
      *     @OA\Parameter(name="city_id",in="query",required=false, @OA\Schema(type="string"),description="city_id"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="string"),description="status"),
      *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="string"),description="profit_share_percentage"),
+     *     @OA\Parameter(name="gender_acceptance",in="query",required=false, @OA\Schema(type="string"),description="gender_acceptance"),
+     *     @OA\Parameter(name="priority_show",in="query",required=false, @OA\Schema(type="integer"),description="priority_show"),
      *     @OA\Parameter(name="is_ball",in="query",required=false, @OA\Schema(type="boolean"),description="is_ball"),
      *     @OA\Parameter(name="ball_price",in="query",required=false, @OA\Schema(type="string"),description="ball_price"),
      *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="string"),description="user_id"),
@@ -313,5 +318,4 @@ class GymController extends Controller
         $lists = $this->gymService->getInitializeRequestsSelectors($request);
         return ResponseHelper::responseSuccess(data: $lists);
     }
-
 }

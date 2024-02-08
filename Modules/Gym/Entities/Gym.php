@@ -29,6 +29,7 @@ use Modules\Geographical\Entities\City;
  * @property integer $score
  * @property integer $status
  * @property integer $gender_acceptance
+ * @property integer $priority_show
  * @property integer $like_count
  * @property integer $dislike_count
  * @property integer $profit_share_percentage
@@ -63,6 +64,7 @@ class Gym extends Model
         'short_address',
         'status',
         'gender_acceptance',
+        'priority_show',
         'like_count',
         'dislike_count',
         'profit_share_percentage',
@@ -88,6 +90,7 @@ class Gym extends Model
         'short_address' => 'string',
         'status' => 'integer',
         'gender_acceptance' => 'integer',
+        'priority_show' => 'integer',
         'like_count' => 'integer',
         'dislike_count' => 'integer',
         'profit_share_percentage' => 'integer',

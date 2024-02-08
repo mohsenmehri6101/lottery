@@ -48,6 +48,7 @@ class GymUpdateRequest extends FormRequest
             'price' => 'nullable',
             'status' => "nullable|numeric|in:$list_status_allowable",
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
+            'priority_show' => "nullable|numeric",
             'user_id' => 'nullable|exists:users,id',
             'profit_share_percentage' => 'nullable|min:0|max:100',
             'is_ball' => 'nullable|in:0,1',

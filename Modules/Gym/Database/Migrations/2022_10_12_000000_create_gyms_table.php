@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->text('short_address')->nullable()->comment('آدرس کوتاه');
             // info locations
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
+            $table->integer('priority_show')->default(0)->nullable()->comment('اولویت در نمایش');
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
             $table->decimal('ball_price', 15, 3)->default(0)->nullable()->comment('قیمت توپ ورزشی');
             $table->integer('score')->nullable()->default(0)->comment('score');
