@@ -608,7 +608,7 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "ذخیره کاربر",
+                "summary": "ذخیره کاربر(توسط ادمین)",
                 "operationId": "49cf99f846af6538b613467a2e2c21b2",
                 "parameters": [
                     {
@@ -1022,7 +1022,7 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "ذخیره کاربر",
+                "summary": "ذخیره کاربر(با توکن موقتی)",
                 "operationId": "8abc2ce03077bf392ee4df3399360d4c",
                 "parameters": [
                     {

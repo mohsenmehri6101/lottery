@@ -57,7 +57,7 @@ class AuthenticationController extends Controller
      * @OA\Post(
      *     path="/api/v1/authentication/authenticate/otp-confirm-v2",
      *     tags={"authentication"},
-     *     summary="تایید کد(ثبت نام یا ورود)",
+     *     summary="تایید کد(ثبت نام)",
      *     @OA\Parameter(name="mobile",in="query",required=true, @OA\Schema(type="string"),description="mobile"),
      *     @OA\Parameter(name="code",in="query",required=true, @OA\Schema(type="integer"),description="code"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
@@ -66,8 +66,8 @@ class AuthenticationController extends Controller
      */
     public function otpConfirmV2(OtpConfirmRequest $request): JsonResponse
     {
-        $token_and_user = $this->authenticationService->otpConfirmV2($request);
-        return ResponseHelper::responseSuccess(data: $token_and_user);
+        $user = $this->authenticationService->otpConfirmV2($request);
+        return ResponseHelper::responseSuccess(data: $user);
     }
 
     /**

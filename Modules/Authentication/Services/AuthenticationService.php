@@ -156,7 +156,7 @@ class AuthenticationService
         }
         return $data;
     }
-    public function otpConfirm(OtpConfirmRequest $request)
+    public function otpConfirm(OtpConfirmRequest $request): array
     {
         try {
             $fields = $request->validated();
@@ -198,11 +198,13 @@ class AuthenticationService
             $user = $userService::getUser(mobile: $mobile, withs: ['userDetail']);
 
             if(!$user){
-                $userService->store(['mobile'=>$mobile]);
+                $user =$userService->store(['mobile'=>$mobile]);
             }
 
             cache()->forget($mobile);
-            return self::setTokenOrApiKey(user: $user, mobile: $mobile);
+
+            return $user;
+
         } catch (Exception $exception) {
             throw $exception;
         }
