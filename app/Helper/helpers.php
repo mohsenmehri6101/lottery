@@ -251,7 +251,6 @@ if (!function_exists('is_user')) {
     }
 }
 
-
 if (!function_exists('is_admin')) {
     function is_admin()
     {
