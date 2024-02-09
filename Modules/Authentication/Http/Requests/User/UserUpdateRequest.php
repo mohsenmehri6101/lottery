@@ -11,6 +11,15 @@ class UserUpdateRequest extends FormRequest
 {
     use CustomFormRequestTrait;
 
+    public function authorize(): bool
+    {
+        return
+            is_admin() ||
+            is_super_admin() ||
+            ($this->method() == 'POST' && $this->is('users/*') && $this->user()->id == $this->route('id'));
+    }
+
+
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         $this->set_validator_likes();

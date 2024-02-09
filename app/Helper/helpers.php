@@ -250,6 +250,13 @@ if (!function_exists('is_admin')) {
     }
 }
 
+if (!function_exists('is_super_admin')) {
+    function is_super_admin()
+    {
+        return get_user_login()?->is_super_admin() ?? false;
+    }
+}
+
 if (!function_exists('is_gym_manager')) {
     function is_gym_manager()
     {

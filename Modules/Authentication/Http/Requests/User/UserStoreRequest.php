@@ -11,6 +11,11 @@ class UserStoreRequest extends FormRequest
 {
     use CustomFormRequestTrait;
 
+    public function authorize(): bool
+    {
+        return is_admin() || is_super_admin();
+    }
+
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         $this->set_validator_likes();

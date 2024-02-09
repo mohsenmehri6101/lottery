@@ -6,7 +6,6 @@ use App\Exceptions\Contracts\ApiKeyDeniedException;
 use Closure;
 use Illuminate\Http\Request;
 use Modules\Authentication\Services\AuthenticationService;
-use Symfony\Component\HttpFoundation\Response;
 
 class checkApiKeyMiddleware
 {
@@ -20,7 +19,6 @@ class checkApiKeyMiddleware
     {
         # get api-key
         $apiKey = request()->header('api-key');
-
         // todo should be true delete in condition always return
         if ($request->user() && $request->user()->hasRole('admin') || true) {
             return $next($request);
@@ -31,4 +29,5 @@ class checkApiKeyMiddleware
         }
         return throw new ApiKeyDeniedException();
     }
+
 }

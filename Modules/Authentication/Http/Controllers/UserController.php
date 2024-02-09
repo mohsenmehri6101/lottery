@@ -78,7 +78,7 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/authentication/users",
      *     tags={"users"},
-     *     summary="ذخیره کاربر",
+     *     summary="ذخیره کاربر(توسط ادمین)",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="parent_code",in="query",required=false, @OA\Schema(type="string"),description="parent_code"),
      *     @OA\Parameter(name="username",in="query",required=false, @OA\Schema(type="string"),description="username"),
@@ -116,7 +116,7 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/authentication/users/new-user",
      *     tags={"users"},
-     *     summary="ذخیره کاربر",
+     *     summary="ذخیره کاربر(با توکن موقتی)",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="parent_code",in="query",required=false, @OA\Schema(type="string"),description="parent_code"),
      *     @OA\Parameter(name="username",in="query",required=false, @OA\Schema(type="string"),description="username"),

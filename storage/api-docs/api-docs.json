@@ -6993,6 +6993,24 @@
                         }
                     },
                     {
+                        "name": "gender_acceptance",
+                        "in": "query",
+                        "description": "gender_acceptance",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "priority_show",
+                        "in": "query",
+                        "description": "priority_show",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "price",
                         "in": "query",
                         "description": "price",
@@ -7248,6 +7266,15 @@
                         "name": "profit_share_percentage",
                         "in": "query",
                         "description": "profit_share_percentage",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "priority_show",
+                        "in": "query",
+                        "description": "priority_show",
                         "required": false,
                         "schema": {
                             "type": "integer"
@@ -7824,6 +7851,24 @@
                         "required": false,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender_acceptance",
+                        "in": "query",
+                        "description": "gender_acceptance",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "priority_show",
+                        "in": "query",
+                        "description": "priority_show",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {

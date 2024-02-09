@@ -233,6 +233,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->roles()->where('name', 'admin')->exists();
     }
 
+    public function is_super_admin(): bool
+    {
+        return $this->roles()->where('name', 'super_admin')->exists();
+    }
+
     public function is_gym_manager(): bool
     {
         return $this->roles()->where('name', 'gym_manager')->exists();
