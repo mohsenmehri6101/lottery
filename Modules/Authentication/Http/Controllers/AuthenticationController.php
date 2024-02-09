@@ -94,6 +94,7 @@ class AuthenticationController extends Controller
      *     tags={"authentication"},
      *     security={{"bearerAuth":{}}},
      *     summary="صفحه تغییر رمز ورود",
+     *     @OA\Parameter(name="old_password",in="query",required=true, @OA\Schema(type="string"),description="old_password"),
      *     @OA\Parameter(name="password",in="query",required=true, @OA\Schema(type="string"),description="password"),
      *     @OA\Parameter(name="confirm_password",in="query",required=true, @OA\Schema(type="string"),description="confirm_password"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
