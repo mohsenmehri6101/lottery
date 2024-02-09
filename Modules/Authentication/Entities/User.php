@@ -243,6 +243,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->roles()->where('name', 'gym_manager')->exists();
     }
 
+    public function is_user(): bool
+    {
+        return $this->roles()->where('name', 'user')->exists();
+    }
+
     public static function generate_unique_code(): string
     {
         $code = '';

@@ -92,6 +92,7 @@ if (!function_exists('user_have_permission')) {
 if (!function_exists('user_have_permission_block')) {
     function user_have_permission_block($permission, $user = null, $role = null): bool
     {
+        return false;
 //        return \Modules\Authorization\Services\PermissionBlockService::user_have_permission_block(permission: $permission, user: $user, role: $role);
     }
 }
@@ -242,6 +243,14 @@ if (!function_exists('convert_selects_from_string_to_array')) {
         return convert_withs_from_string_to_array(withs: $selects);
     }
 }
+
+if (!function_exists('is_user')) {
+    function is_user()
+    {
+        return get_user_login()?->is_user() ?? false;
+    }
+}
+
 
 if (!function_exists('is_admin')) {
     function is_admin()

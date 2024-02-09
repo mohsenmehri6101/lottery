@@ -16,7 +16,7 @@ class UserUpdateRequest extends FormRequest
         return
             is_admin() ||
             is_super_admin() ||
-            ($this->method() == 'POST' && $this->is('users/*') && $this->user()->id == $this->route('id'));
+            ($this->method() == 'POST' && $this->is('users/*') && get_user_id_login() == $this->route('id'));
     }
 
 
