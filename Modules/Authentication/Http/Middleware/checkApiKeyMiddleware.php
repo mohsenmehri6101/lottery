@@ -18,16 +18,14 @@ class checkApiKeyMiddleware
     public function handle(Request $request, Closure $next): mixed
     {
         # get api-key
-        $apiKey = request()->header('api-key');
-        // todo should be true delete in condition always return
-        if ($request->user() && $request->user()->hasRole('admin') || true) {
+        $api_key = request()->header('api-key');
+        if ($request->user() && ($request->user()->hasRole('admin') || $request->user()->hasRole('super_admin'))) {
             return $next($request);
         }
 
-        if (isset($apiKey) && filled($apiKey) && AuthenticationService::bool_check_api_key($apiKey)) {
+        if (isset($api_key) && filled($api_key) && AuthenticationService::bool_check_api_key($api_key)) {
             return $next($request);
         }
         return throw new ApiKeyDeniedException();
     }
-
 }
