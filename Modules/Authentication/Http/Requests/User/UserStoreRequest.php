@@ -45,6 +45,13 @@ class UserStoreRequest extends FormRequest
             'birthday' => 'nullable',
             'gender' => "nullable|numeric|in:$statuses_gender",
             'address' => 'nullable|string|filled',
+
+            # add account user
+            'accounts.*' => 'nullable|array',
+            'accounts.account_number' => 'nullable',
+            'accounts.card_number' => 'nullable',
+            'accounts.shaba_number' => 'nullable',
+            # add account user
         ];
 
         if (is_admin()) {
@@ -76,7 +83,10 @@ class UserStoreRequest extends FormRequest
             'birthday' => trans('custom.authentication.user_details.fields.birthday'),
             'gender' => trans('custom.authentication.user_details.fields.gender'),
             'address' => trans('custom.authentication.user_details.fields.address'),
+            # #### ####
+            'accounts.account_number' => trans('custom.authentication.accounts.account_number'),
+            'accounts.card_number' => trans('custom.authentication.accounts.card_number'),
+            'accounts.shaba_number' => trans('custom.authentication.accounts.shaba_number'),
         ];
     }
-
 }
