@@ -5,7 +5,6 @@ namespace Modules\Authentication\Services;
 use App\Exceptions\Contracts\UserNotActiveException;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -26,6 +25,7 @@ use function send_sms;
 class AuthenticationService
 {
     use AuthenticationApiTokenTrait;
+
     public function __construct(public UserRepository $userRepository)
     {
     }
@@ -46,13 +46,14 @@ class AuthenticationService
 
             $code = $this->generate_otp_random();
             $expired_time_config = config('configs.authentication.otp.expired_time');
-            $data = ['expired_time'=>$expired_time_config];;
-             $this->send_notification_otp($mobile, $code);
-             return $data;
+            $data = ['expired_time' => $expired_time_config];;
+            $this->send_notification_otp($mobile, $code);
+            return $data;
         } catch (Exception $exception) {
             throw $exception;
         }
     }
+
     public function login(LoginRequest|array $request)
     {
         try {
@@ -88,28 +89,29 @@ class AuthenticationService
             throw $exception;
         }
     }
+
     public function profile(ProfileRequest $request)
     {
         try {
-            $fields=$request->validated();
+            $fields = $request->validated();
             /**
              * @var $withs
              */
             extract($fields);
             $withs = $withs ?? [];
 
-            $check_profile= in_array('check_profile',$withs);
+            $check_profile = in_array('check_profile', $withs);
 
-            $result =[];
+            $result = [];
 
-            $user =User::query()->where('id',get_user_id_login())->with('UserDetail')->first();
-            $result['user']= $user;
+            $user = User::query()->where('id', get_user_id_login())->with('UserDetail')->first();
+            $result['user'] = $user;
 
-            if($check_profile){
+            if ($check_profile) {
                 /** @var UserService $userService */
                 $userService = resolve('UserService');
                 $check_profile_information = $userService->checkProfile([]);
-                $result['check_profile']=$check_profile_information;
+                $result['check_profile'] = $check_profile_information;
             }
 
             return $result;
@@ -117,6 +119,7 @@ class AuthenticationService
             throw $exception;
         }
     }
+
     public static function setApiKey($mobile = null): ?string
     {
         $length_api_key_string = config('configs.api_key.length');
@@ -127,6 +130,7 @@ class AuthenticationService
         cache()->set($api_key, ['mobile' => $mobile, 'expired_time' => $expired_time], $ttl_cache);
         return $api_key;
     }
+
     public static function checkApiKey($api_key, $mobile = null): bool
     {
         $information_in_cache = cache()->get($api_key);
@@ -139,10 +143,11 @@ class AuthenticationService
         }
         return $mobile_in_cache && $mobile_in_cache == $mobile;
     }
+
     public static function setTokenOrApiKey(User $user = null, $mobile = null): array
     {
         // todo check user exist and shoud be active , if not ? throw exception need
-        if($user && $user->status !=User::status_active){
+        if ($user && $user->status != User::status_active) {
             throw new UserNotActiveException();
         }
         // $user && $user->status !=User::status_active || throw new UserNotActiveException();
@@ -156,6 +161,7 @@ class AuthenticationService
         }
         return $data;
     }
+
     public function otpConfirm(OtpConfirmRequest $request): array
     {
         try {
@@ -197,8 +203,8 @@ class AuthenticationService
             /** @var User $user */
             $user = $userService::getUser(mobile: $mobile, withs: ['userDetail']);
 
-            if(!$user){
-                $user =$userService->store(['mobile'=>$mobile]);
+            if (!$user) {
+                $user = $userService->store(['mobile' => $mobile]);
             }
 
             cache()->forget($mobile);
@@ -216,6 +222,7 @@ class AuthenticationService
         $max_number_random = config('configs.authentication.otp.max_number_random');
         return rand($min_number_random, $max_number_random);
     }
+
     public function send_notification_otp($mobile, $otp_random_number)
     {
         try {
@@ -226,7 +233,7 @@ class AuthenticationService
                 cache()->set($mobile, ['code' => $otp_random_number, 'expired_time' => $expired_time], $ttl_cache);
 
                 $message_notife = trans('notifications_template.send_otp_code', [
-                    'web_site_name' => env('APP_NAME','سلام سالن'),
+                    'web_site_name' => env('APP_NAME', 'سلام سالن'),
                     'code' => $otp_random_number,
                 ]);
                 send_sms($mobile, $message_notife);
@@ -253,21 +260,26 @@ class AuthenticationService
         return true;
     }
 
-    public function changePassword(ChangePasswordRequest $request)
+    public function changePassword(ChangePasswordRequest $request): bool
     {
         DB::beginTransaction();
         try {
             $fields = $request->validated();
 
             /**
+             * @var $old_password
              * @var $password
              * @var $confirm_password
              */
             extract($fields);
 
+            if (!Hash::check($old_password, $user->password)) {
+                throw new Exception("رمز عبور قدیمی اشتباه است.");
+            }
+
             /** @var User $user */
             $user = auth()->user();
-            $user->update(['password'=>$password]);
+            $user->update(['password' => $password]);
 
             DB::commit();
             return true;

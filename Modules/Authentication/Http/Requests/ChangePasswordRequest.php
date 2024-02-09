@@ -18,6 +18,7 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'old_password' => 'required|filled|password',
             'password' => 'required|filled|password',
             'confirm_password' => 'required|filled',/* todo check later and |confirmed */
         ];
