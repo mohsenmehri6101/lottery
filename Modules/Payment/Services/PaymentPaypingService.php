@@ -18,6 +18,11 @@ class PaymentPaypingService
         $this->TokenCode = $token ?? env('PAYMENT_PAYPING_TOKEN');
     }
 
+    private function getErrorMessage($errorCode): string
+    {
+        return self::ERROR_CODES[$errorCode] ?? 'Unknown error occurred';
+    }
+
 private const ERROR_CODES = [
     1 => 'تراكنش توسط شما لغو شد',
     2 => 'رمز کارت اشتباه است.',
