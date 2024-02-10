@@ -84,7 +84,9 @@ class PaymentService
             $user = $factor->user;
             $returnUrl = route('api_v1_payment_payments_confirm_payment_get') ?? null;
             $payerName = $factor?->user?->full_name ?? null;
+            # todo better set description of factor and total price and dated at and reserve template id and gym_id
             $description = isset($description) && filled($description) ? $description : $mobile;
+            # Updated description to include more relevant information
 
             /** @var Payment $payment */
             $payment = $factor->payments()->create([

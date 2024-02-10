@@ -161,6 +161,7 @@ class FactorService
     private static function calculatePriceForFactor(Factor $factor): void
     {
         $totalPrice = 0;
+
         /** @var Reserve $reserve */
         foreach ($factor->reserves as $reserve) {
             /** @var ReserveTemplate $reserveTemplate */
@@ -178,6 +179,7 @@ class FactorService
             );
             $totalPrice += $price;
         }
+
         $factor->update(['total_price' => $totalPrice]);
     }
 
