@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
-use Modules\Gym\Http\Requests\Reserve\ReserveStoreAndDoStuffRequest;
+use Modules\Gym\Http\Requests\Reserve\ReservestoreAndPrintFactorAndCreateLinkPaymentRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveUpdateRequest;
@@ -120,7 +120,7 @@ class ReserveController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/reserves/store-and-do-stuff",
+     *     path="/api/v1/reserves/store-and-print-factor-and-create-link-payment",
      *     tags={"reserves"},
      *     summary="Store and do stuff for reserves",
      *     security={{"bearerAuth":{}}},
@@ -141,9 +141,9 @@ class ReserveController extends Controller
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      * )
      */
-    public function storeAndDoStuff(ReserveStoreAndDoStuffRequest $request): JsonResponse
+    public function storeAndPrintFactorAndCreateLinkPayment(ReservestoreAndPrintFactorAndCreateLinkPaymentRequest $request): JsonResponse
     {
-        $reserve = $this->reserveService->storeAndDoStuff($request);
+        $reserve = $this->reserveService->storeAndPrintFactorAndCreateLinkPayment($request);
         return $reserve ? ResponseHelper::responseSuccessStore(data: ['url'=>$reserve]) : ResponseHelper::responseFailedStore();
     }
 

@@ -72,7 +72,7 @@ Route::prefix('reserves')->name('reserves_')->group(function () {
     Route::get('/my-reserves', [ReserveController::class, 'myReserve'])->name('my-reserves');
     Route::get('/{id}', [ReserveController::class, 'show'])->middleware('auth:api')->name('show');
     Route::post('/', [ReserveController::class, 'store'])->middleware('auth:api')->name('store');
-    Route::post('/store-and-do-stuff', [ReserveController::class, 'storeAndDoStuff'])->middleware('auth:api')->name('store_and_do_stuff');
+    Route::post('/store-and-print-factor-and-create-link-payment', [ReserveController::class, 'storeAndPrintFactorAndCreateLinkPayment'])->middleware('auth:api')->name('store_and_do_stuff');
     Route::post('/blocks', [ReserveController::class, 'storeBlocks'])->middleware('auth:api')->name('store_blocks');
     Route::put('/{id}', [ReserveController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [ReserveController::class, 'destroy'])->middleware('auth:api')->name('destroy');

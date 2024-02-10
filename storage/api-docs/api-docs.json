@@ -9273,7 +9273,7 @@
                 ]
             }
         },
-        "/api/v1/reserves/store-and-do-stuff": {
+        "/api/v1/reserves/store-and-print-factor-and-create-link-payment": {
             "post": {
                 "tags": [
                     "reserves"

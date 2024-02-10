@@ -12,7 +12,7 @@ use Modules\Gym\Http\Repositories\ReserveRepository;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
-use Modules\Gym\Http\Requests\Reserve\ReserveStoreAndDoStuffRequest;
+use Modules\Gym\Http\Requests\Reserve\ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveUpdateRequest;
@@ -97,7 +97,7 @@ class ReserveService
         }
     }
 
-    public function storeAndDoStuff(ReserveStoreAndDoStuffRequest $request): ?string
+    public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest $request): ?string
     {
         DB::beginTransaction();
         try {
@@ -140,7 +140,6 @@ class ReserveService
             DB::commit();
 
             return ['url' => $url, 'factor' => $factor->toArray()];
-
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;
