@@ -94,14 +94,14 @@ class PaymentService
                 'user_id'=>$user->id,
             ]);
 
-            $url = $PaymentPaypingService->createLinkPayment(
+            $url = Str::random();/*$PaymentPaypingService->createLinkPayment(
                 clientRefId: $payment->resnumber,
                 mobile: $mobile,
                 amount: $amount,
                 returnUrl: $returnUrl,
                 description: $description,
                 payerName: $payerName,
-            );
+            );*/
 
             if(filled($url)){
                 /** @var Factor $factor */
@@ -110,7 +110,6 @@ class PaymentService
 
             return $url;
         } catch (Exception $exception) {
-            dd($exception->getMessage());
             throw new $exception;
         }
     }

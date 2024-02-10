@@ -119,7 +119,6 @@ class ReserveService
                     $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
                     $reserve['gym_id'] = $reserveTemplate->gym_id;
                 }
-
                 /** @var Reserve $reserveModel */
                 $reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;
