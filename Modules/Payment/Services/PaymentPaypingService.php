@@ -85,7 +85,8 @@ private const ERROR_CODES = [
             throw new CreateLinkPaymentException(/*extra_data:[$response->json()]*/);
 
         } catch (Exception $exception) {
-            throw new $exception;
+            // Handle exceptions
+            throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
         }
     }
     public function confirmPayment($authority, $amount, $factor_id): bool
@@ -115,7 +116,8 @@ private const ERROR_CODES = [
             throw new Exception('Payment verification failed');
 
         } catch (Exception $exception) {
-            throw $exception;
+            // Handle exceptions
+            throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
         }
     }
     /*public function confirmPayment($refid, $amount): bool
