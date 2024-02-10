@@ -97,7 +97,7 @@ class ReserveService
         }
     }
 
-    public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest $request): ?string
+    public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest $request): ?array
     {
         DB::beginTransaction();
         try {
@@ -135,10 +135,10 @@ class ReserveService
             /** @var PaymentService $paymentService */
             $paymentService = resolve('PaymentService');
             $url = $paymentService->createLinkPayment(['factor_id' => $factor->id]);
-
+            
             DB::commit();
 
-            return ['url' => $url, 'factor' => $factor->toArray()];
+            return ['url' => $url, 'factor' => $factor->with('reserves')->toArray()];
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;

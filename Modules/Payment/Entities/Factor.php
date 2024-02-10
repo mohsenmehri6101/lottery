@@ -79,7 +79,6 @@ class Factor extends Model
         'user',
         'reserves',
     ];
-
     protected static function boot(): void
     {
         parent::boot();
@@ -102,7 +101,6 @@ class Factor extends Model
             }
         });
     }
-
     public static function generate_factor_random_code($code = null)
     {
         if (is_null($code) || !filled($code)) {
@@ -114,7 +112,6 @@ class Factor extends Model
         $code_is_repeat = self::query()->where('code', $code)->exists();
         return $code_is_repeat ? self::generate_factor_random_code() : $code;
     }
-
     public static function getStatusTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusPersian();
@@ -129,7 +126,6 @@ class Factor extends Model
         }
         return $statuses;
     }
-
     public static function getStatus(): array
     {
         return [
@@ -139,7 +135,6 @@ class Factor extends Model
             self::status_cancel,# 3
         ];
     }
-
     public static function getStatusPersian(): array
     {
         return [
@@ -149,22 +144,18 @@ class Factor extends Model
             self::status_cancel => 'لغوشده',# 3
         ];
     }
-
     public function reserves(): BelongsToMany
     {
         return $this->belongsToMany(Reserve::class)->withPivot('price');
     }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
-
     public function paymentPaid(): HasOne
     {
         return $this->hasOne(Payment::class, 'id','payment_id_paid');
