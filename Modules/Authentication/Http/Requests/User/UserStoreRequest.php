@@ -11,10 +11,10 @@ class UserStoreRequest extends FormRequest
 {
     use CustomFormRequestTrait;
 
-    public function authorize(): bool
-    {
-        return is_admin() || is_super_admin();
-    }
+    //    public function authorize(): bool
+    //    {
+    //        return is_admin() || is_super_admin();
+    //    }
 
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
@@ -45,18 +45,17 @@ class UserStoreRequest extends FormRequest
             'birthday' => 'nullable',
             'gender' => "nullable|numeric|in:$statuses_gender",
             'address' => 'nullable|string|filled',
-
-            # add account user
-            'accounts.*' => 'nullable|array',
-            'accounts.account_number' => 'nullable',
-            'accounts.card_number' => 'nullable',
-            'accounts.shaba_number' => 'nullable',
-            # add account user
         ];
 
-        if (is_admin()) {
+        if (is_admin() || is_super_admin()) {
             $rules = [
                 ...$rules,
+                # add account user
+                'accounts.*' => 'nullable|array',
+                'accounts.account_number' => 'nullable',
+                'accounts.card_number' => 'nullable',
+                'accounts.shaba_number' => 'nullable',
+                # add account user
                 'status' => "nullable|numeric|in:$statuses_user",
                 'role_ids' => 'nullable|array',
                 'role_ids.*' => 'required|filled|exists:roles,id'
@@ -84,9 +83,10 @@ class UserStoreRequest extends FormRequest
             'gender' => trans('custom.authentication.user_details.fields.gender'),
             'address' => trans('custom.authentication.user_details.fields.address'),
             # #### ####
-            'accounts.account_number' => trans('custom.authentication.accounts.account_number'),
-            'accounts.card_number' => trans('custom.authentication.accounts.card_number'),
-            'accounts.shaba_number' => trans('custom.authentication.accounts.shaba_number'),
+            'accounts.account_number' => trans('custom.payment.accounts.account_number'),
+            'accounts.card_number' => trans('custom.payment.accounts.card_number'),
+            'accounts.shaba_number' => trans('custom.payment.accounts.shaba_number'),
         ];
     }
+
 }

@@ -26,6 +26,7 @@ class Account extends Model
 {
     use SoftDeletes, UserEditor, UserCreator;
     protected $table = 'accounts';
+
     protected $fillable = [
         'id',
         'account_number',
@@ -39,6 +40,7 @@ class Account extends Model
         'updated_at',
         'deleted_at',
     ];
+
     protected $casts = [
         'id' => 'integer',
         'account_number' => 'string',

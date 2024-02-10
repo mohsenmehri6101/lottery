@@ -96,7 +96,7 @@
                 "tags": [
                     "authentication"
                 ],
-                "summary": "تایید کد(ثبت نام یا ورود)",
+                "summary": "تایید کد(ثبت نام)",
                 "operationId": "bc653059160fbc40e77f827d85b1dd4b",
                 "parameters": [
                     {
@@ -193,6 +193,15 @@
                 "summary": "صفحه تغییر رمز ورود",
                 "operationId": "d3e259ab5c9b82cd19634e1e9f985970",
                 "parameters": [
+                    {
+                        "name": "old_password",
+                        "in": "query",
+                        "description": "old_password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "password",
                         "in": "query",

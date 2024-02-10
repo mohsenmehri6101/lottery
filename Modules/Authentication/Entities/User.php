@@ -15,6 +15,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Score;
+use Modules\Payment\Entities\Account;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -115,6 +116,7 @@ class User extends Authenticatable implements JWTSubject
         'unreadNotifications',
         'roles',
         'permissions',
+        'accounts',
     ];
 
     protected static function boot(): void
@@ -269,6 +271,11 @@ class User extends Authenticatable implements JWTSubject
         $name = $this?->userDetail?->name;
         $family = $this?->userDetail?->family;
         return filled($name) || filled($family) ? "$name $family" : ' ';
+    }
+
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(Account::class);
     }
 
 }

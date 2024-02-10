@@ -35,7 +35,7 @@ class UserUpdateRequest extends FormRequest
         $statuses_gender = implode(',', UserDetail::getStatusGender());
         $statuses_user = implode(',', User::getStatusUser());
 
-        return [
+        $rules = [
             'username' => 'nullable|string|filled|username|unique:users,username',
             'status' => "nullable|numeric|in:$statuses_user",
             'avatar' => 'nullable',
@@ -47,6 +47,18 @@ class UserUpdateRequest extends FormRequest
             'gender' => "nullable|numeric|in:$statuses_gender",
             'address' => 'nullable|string|filled',
         ];
+
+        if (is_admin() || is_super_admin()) {
+            $rules = [
+                ...$rules,
+                'accounts.*' => 'nullable|array',
+                'accounts.account_number' => 'nullable',
+                'accounts.card_number' => 'nullable',
+                'accounts.shaba_number' => 'nullable',
+            ];
+        }
+
+        return $rules;
     }
 
     public function attributes(): array
@@ -66,7 +78,10 @@ class UserUpdateRequest extends FormRequest
             'birthday' => trans('custom.authentication.user_details.fields.birthday'),
             'gender' => trans('custom.authentication.user_details.fields.gender'),
             'address' => trans('custom.authentication.user_details.fields.address'),
+            # #### ####
+            'accounts.account_number' => trans('custom.payment.accounts.account_number'),
+            'accounts.card_number' => trans('custom.payment.accounts.card_number'),
+            'accounts.shaba_number' => trans('custom.payment.accounts.shaba_number'),
         ];
     }
-
 }

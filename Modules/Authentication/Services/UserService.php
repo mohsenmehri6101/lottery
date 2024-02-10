@@ -197,6 +197,7 @@ class UserService
              * @var $gender
              * @var $address
              * @var $role_ids
+             * @var $accounts
              */
             extract($fields);
 
@@ -214,6 +215,7 @@ class UserService
                 'status' => $status ?? null,
                 // 'avatar' => $avatar ?? null,
             ];
+
             $user_fields = array_filter($user_fields);
 
             $user_details_fields = [
@@ -247,10 +249,17 @@ class UserService
             /** @var UserDetail $user */
             $user->userDetail()->create($user_details_fields);
 
+            # save roles user
             $role_default = Role::query()->where('name', RolesEnum::user->name)->first()->id;
             $role_ids = $role_ids ?? [$role_default];
-
             $user->roles()->sync($role_ids);
+
+            # save data accounts
+            $accounts = $accounts ?? [];
+            if(count($accounts)){
+                $user->accounts()->create($accounts);
+            }
+            # save data accounts
 
             DB::commit();
             return $this->userRepository->withRelations(relations: ['userDetail'])->findOrFail($user?->id);
@@ -546,7 +555,6 @@ class UserService
             'null_columns' => $nullColumns,
         ];
     }
-
     public function updateProfile(UpdateProfileRequest $request)
     {
         DB::beginTransaction();
@@ -619,7 +627,6 @@ class UserService
             $user->update();
         }
     }
-
     public function updateAvatar(UpdateAvatarRequest $request): bool
     {
         DB::beginTransaction();
@@ -648,7 +655,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function listStatusUser(): array|bool|int|string|null
     {
         return User::getStatusUserTitle();
@@ -735,4 +741,5 @@ class UserService
         $users = $users->unique();
         return $users;
     }
+
 }
