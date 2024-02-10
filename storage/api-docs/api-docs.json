@@ -9279,7 +9279,7 @@
                     "reserves"
                 ],
                 "summary": "Store and do stuff for reserves",
-                "operationId": "ecb275db02e93071adae08330e299df1",
+                "operationId": "b92c387397ae49006ddc5d4fad2fd3f3",
                 "requestBody": {
                     "required": true,
                     "content": {
