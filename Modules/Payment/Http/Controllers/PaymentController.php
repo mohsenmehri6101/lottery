@@ -74,7 +74,7 @@ class PaymentController extends Controller
     public function createLinkPayment(PaymentCreateLinkRequest $request): JsonResponse
     {
         $link = $this->paymentService->createLinkPayment($request);
-        return ResponseHelper::responseSuccessShow(data:['link'=>$link]);
+        return ResponseHelper::responseSuccessShow(data:['link'=>$link],message: 'لینک پرداخت با موفقیت ایجاد شد');
     }
     public function confirmPayment(Request $request): JsonResponse
     {

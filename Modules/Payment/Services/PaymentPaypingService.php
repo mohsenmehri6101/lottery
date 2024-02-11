@@ -13,14 +13,17 @@ class PaymentPaypingService
     private static string $PAYMENT_URL = 'https://api.payping.ir/v1/';
     private static string $PAYMENT_ENDPOINT = 'pay';
     private static string $VERIFY_ENDPOINT = 'pay/verify';
+
     public function __construct(string|null $token = null)
     {
         $this->TokenCode = $token ?? env('PAYMENT_PAYPING_TOKEN');
     }
+
     private function getErrorMessage($errorCode): string
     {
         return self::ERROR_CODES[$errorCode] ?? 'Unknown error occurred';
     }
+
     private const ERROR_CODES = [
         1 => 'تراكنش توسط شما لغو شد',
         2 => 'رمز کارت اشتباه است.',
@@ -51,6 +54,7 @@ class PaymentPaypingService
         48 => 'پرداخت از سمت شاپرک تایید نهایی نشده است',
         49 => 'ترمینال فعال یافت نشد، لطفا مجددا تلاش کنید'
     ];
+
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
@@ -86,9 +90,11 @@ class PaymentPaypingService
             throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
         }
     }
+
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
+
             $data = [
                 'merchant_id' => $this->TokenCode,
                 'amount' => $amount,
@@ -117,4 +123,5 @@ class PaymentPaypingService
             throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
         }
     }
+
 }

@@ -153,5 +153,4 @@ class Payment extends Model
         }
         return $resnumber;
     }
-
 }
