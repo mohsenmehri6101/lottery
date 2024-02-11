@@ -3,6 +3,7 @@
 namespace Modules\Payment\Services;
 
 use App\Exceptions\Contracts\CreateLinkPaymentException;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
 use Exception;
@@ -11,6 +12,7 @@ class PaymentPaypingService
 {
     private string $TokenCode;
     private static string $PAYMENT_URL = 'https://api.payping.ir/v1/';
+    # https://api.payping.ir/v2/pay/verify
     private static string $PAYMENT_ENDPOINT = 'pay';
     private static string $VERIFY_ENDPOINT = 'pay/verify';
 
@@ -104,10 +106,12 @@ class PaymentPaypingService
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-            ])->post(self::$PAYMENT_URL . 'verify.json', $data);
+            ])->post(self::$PAYMENT_URL . self::$VERIFY_ENDPOINT, $data);
 
             $statusCode = $response->status();
             $responseData = $response->json();
+
+            Log::info(['statusCode'=>$statusCode,'responseData'=>$responseData]);
 
             if ($statusCode === 200 && isset($responseData['data']['code']) && $responseData['data']['code'] === 100) {
                 if ($factor_id == $responseData['data']['ref_id'] && $amount == $responseData['data']['amount']) {

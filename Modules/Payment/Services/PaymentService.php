@@ -121,20 +121,18 @@ class PaymentService
         $fields = $request->all();
         $ref_id = $fields['refid'] ?? null;
         $resnumber = $client_ref_id = $fields['clientrefid'] ?? null;
-
+        ####################################################################
         /** @var PaymentPaypingService $PaymentPaypingService */
         $PaymentPaypingService = resolve('PaymentPaypingService');
-
         ####################################################################
         /** @var Payment $payment */
         $payment = Payment::query()->where('resnumber',$resnumber)->firstOrFail();
-
         ####################################################################
         /** @var Factor $factor */
         $factor = $payment->factor;
-
         ####################################################################
-        if($PaymentPaypingService->confirmPayment(authority: $ref_id,amount: $factor->total_price,factor_id: $factor->id)){
+        $factor_id=$factor->payments()->latest()->first()->id;
+        if($PaymentPaypingService->confirmPayment(authority: $ref_id,amount: $factor->total_price,factor_id: $factor_id)){
             $factor->status = Factor::status_paid;
             $payment->status = Payment::status_paid;
             $payment->save();
@@ -142,6 +140,7 @@ class PaymentService
             $factor->save();
             return true;
         }
+        ####################################################################
         return false;
     }
 
