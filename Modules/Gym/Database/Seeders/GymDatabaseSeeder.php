@@ -31,11 +31,9 @@ use Faker\Factory as FakerFactory;
 use Modules\Gym\Services\ImageService;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Payment;
-use Modules\Payment\Services\FactorService;
 use Modules\Slider\Entities\Slider;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
-use Exception;
 
 class GymDatabaseSeeder extends Seeder
 {
@@ -556,4 +554,5 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionFakeAttributeGymPrice();
         self::helperFunctionFakeAttributeGymPriceReserve();
     }
+
 }
