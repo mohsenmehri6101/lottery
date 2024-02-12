@@ -56,6 +56,7 @@ class UserStoreRequest extends FormRequest
                 'accounts.card_number' => 'nullable',
                 'accounts.shaba_number' => 'nullable',
                 # add account user
+                # add account user
                 'status' => "nullable|numeric|in:$statuses_user",
                 'role_ids' => 'nullable|array',
                 'role_ids.*' => 'required|filled|exists:roles,id'

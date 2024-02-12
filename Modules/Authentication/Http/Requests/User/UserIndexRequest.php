@@ -57,7 +57,7 @@ class UserIndexRequest extends FormRequest
             'updated_at' => 'nullable',
             'deleted_at' => 'nullable',
 
-            'user_id' => 'nullable',
+            'user_gym_manager_id' => 'nullable',
             'name' => 'nullable',
             'family' => 'nullable',
             'father' => 'nullable',
@@ -104,7 +104,7 @@ class UserIndexRequest extends FormRequest
             'updated_at' => trans('custom.authentication.users.fields.updated_at'),
             'deleted_at' => trans('custom.authentication.users.fields.deleted_at'),
 
-            'user_id' => trans('custom.authentication.user_details.fields.user_id'),
+            'user_gym_manager_id' => trans('custom.authentication.user_details.fields.user_id'),
             'name' => trans('custom.authentication.user_details.fields.name'),
             'family' => trans('custom.authentication.user_details.fields.family'),
             'father' => trans('custom.authentication.user_details.fields.father'),

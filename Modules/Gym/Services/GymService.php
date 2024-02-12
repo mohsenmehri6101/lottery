@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -104,11 +103,11 @@ class GymService
 
             $user_id = get_user_id_login();
 
-            $fields = [...$fields, 'user_id' => $user_id];
+            $fields = [...$fields, 'user_gym_manager_id' => $user_id];
 
             $query = $this->gymRepository->queryFull(inputs: $fields);
 
-            $query = $query->whereNotNull('user_id');
+            $query = $query->whereNotNull('user_gym_manager_id');
 
             $query = $query
                 ->when($max_price, function ($query_) use ($max_price) {
@@ -159,6 +158,7 @@ class GymService
              * @var $status
              * @var $tag_id
              * @var $tags
+             * @var $user_gym_manager_id
              * @var $category_id
              * @var $categories
              * @var $keyword_id
@@ -380,6 +380,7 @@ class GymService
              * @var $status
              * @var $tag_id
              * @var $tags
+             * @var $user_gym_manager_id
              * @var $category_id
              * @var $categories
              * @var $keyword_id

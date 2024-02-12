@@ -18,6 +18,7 @@ class GymUpdateRequest extends FormRequest
             $this->merge(['is_ball' => $is_ball ? 1 : 0]);
         }
     }
+
     public function authorize(): bool
     {
         $gym_id = request('id');
@@ -31,6 +32,7 @@ class GymUpdateRequest extends FormRequest
                     ->where('user_id', $logged_in_user_id)
                     ->exists());
     }
+
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         $this->set_validator_update_unique();
@@ -42,14 +44,13 @@ class GymUpdateRequest extends FormRequest
         $list_status_allowable = trim(implode(',', Gym::getStatusGym()));
         $status_gender_acceptances = implode(',', ReserveTemplate::getStatusGenderAcceptance());
 
-        return [
+        $rules = [
             'name' => 'nullable|filled',
             'description' => 'nullable',
             'price' => 'nullable',
             'status' => "nullable|numeric|in:$list_status_allowable",
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'priority_show' => "nullable|numeric",
-            'user_id' => 'nullable|exists:users,id',
             'profit_share_percentage' => 'nullable|min:0|max:100',
             'is_ball' => 'nullable|in:0,1',
             'ball_price' => 'nullable',
@@ -88,6 +89,15 @@ class GymUpdateRequest extends FormRequest
             'images' => 'nullable|array',
             'images.*' => 'required',
         ];
+
+        if (is_admin() || is_super_admin()) {
+            $rules = [
+                ...$rules,
+                'user_gym_manager_id' => 'nullable|exists:users,id',
+            ];
+        }
+
+        return $rules;
     }
 
     public function attributes(): array

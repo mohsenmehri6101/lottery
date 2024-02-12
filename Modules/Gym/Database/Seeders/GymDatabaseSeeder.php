@@ -183,7 +183,7 @@ class GymDatabaseSeeder extends Seeder
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
                     'like_count' => $faker->numberBetween(15, 85),
                     'dislike_count' => $faker->numberBetween(10, 90),
-                    'user_id' => $faker->randomElement([null, User::query()->inRandomOrder()->first()->id]),
+                    'user_gym_manager_id' => $faker->randomElement([null, User::query()->inRandomOrder()->first()->id]),
                 ]);
 
                 // Attach random categories to the gym

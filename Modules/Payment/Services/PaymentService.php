@@ -8,21 +8,21 @@ use Illuminate\Support\Facades\DB;
 use Modules\Authentication\Entities\User;
 use Modules\Gym\Entities\Reserve;
 use Modules\Payment\Entities\Factor;
+use Modules\Payment\Entities\Transaction;
 use Modules\Payment\Http\Repositories\FactorRepository;
 use Modules\Payment\Http\Repositories\PaymentRepository;
 use Modules\Payment\Http\Requests\Payment\PaymentCreateLinkRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
 use Modules\Payment\Entities\Payment;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentService
 {
+    const USER_ID_SYSTEM = 1;
     public function __construct(public PaymentRepository $paymentRepository)
     {
     }
-
     public function index(PaymentIndexRequest $request)
     {
         try {
@@ -32,7 +32,6 @@ class PaymentService
             throw $exception;
         }
     }
-
     public function show(PaymentShowRequest $request, $payment_id)
     {
         try {
@@ -49,7 +48,6 @@ class PaymentService
             throw $exception;
         }
     }
-
     public function createLinkPayment(PaymentCreateLinkRequest|array $request): ?string
     {
         try {
@@ -115,7 +113,6 @@ class PaymentService
             throw new $exception;
         }
     }
-
     public function confirmPayment(Request $request): bool
     {
         $fields = $request->all();
@@ -138,10 +135,53 @@ class PaymentService
             $payment->save();
             $factor->payment_id_paid =$payment->id;
             $factor->save();
+
+            self::save_transactions($factor);
+
             return true;
         }
         ####################################################################
         return false;
+    }
+
+    public static function save_transactions(Factor $factor): void
+    {
+        // محاسبه مقدار سود مسئول سالن
+        $profit_share_percentage = $factor->gym->profit_share_percentage;
+        $gym_profit = $factor->total_price * ($profit_share_percentage / 100);
+
+        // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
+        $gym_transaction = new Transaction();
+        $gym_transaction->user_id = $factor->gym->user_id;
+        $gym_transaction->amount = $gym_profit;
+        $gym_transaction->save();
+
+        // محاسبه مقدار درآمد مسئول سایت
+        $site_income = $factor->total_price - $gym_profit;
+
+        // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
+        $site_transaction = new Transaction();
+
+        $site_transaction->user_id = self::USER_ID_SYSTEM; // مسئول سایت با id 1
+        $site_transaction->amount = $site_income;
+        $site_transaction->save(); // محاسبه مقدار سود مسئول سالن
+        $profit_share_percentage = $factor->gym->profit_share_percentage;
+        $gym_profit = $factor->total_price * $profit_share_percentage / 100;
+
+        // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
+        $gym_transaction = new Transaction();
+        $gym_transaction->user_id = $factor->gym->user_id;
+        $gym_transaction->amount = $gym_profit;
+        $gym_transaction->save();
+
+        // محاسبه مقدار درآمد مسئول سایت
+        $site_income = $factor->total_price - $gym_profit;
+
+        // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
+        $site_transaction = new Transaction();
+        $site_transaction->user_id = 1; // مسئول سایت با id 1
+        $site_transaction->amount = $site_income;
+        $site_transaction->save();
     }
 
     public function destroy($payment_id): bool
@@ -162,7 +202,6 @@ class PaymentService
             throw $exception;
         }
     }
-
     public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): ?string
     {
         try {

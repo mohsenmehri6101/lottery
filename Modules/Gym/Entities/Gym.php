@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +32,7 @@ use Modules\Geographical\Entities\City;
  * @property integer $like_count
  * @property integer $dislike_count
  * @property integer $profit_share_percentage
- * @property integer $user_id
+ * @property integer $user_gym_manager_id
  * @property boolean $is_ball
  * @property string $ball_price
  * @property integer $user_creator
@@ -70,7 +69,7 @@ class Gym extends Model
         'profit_share_percentage',
         'is_ball',
         'ball_price',
-        'user_id',
+        'user_gym_manager_id',
         'user_creator',
         'user_editor',
         'created_at',
@@ -96,7 +95,7 @@ class Gym extends Model
         'profit_share_percentage' => 'integer',
         'is_ball' => 'boolean',
         'ball_price' => 'decimal:3',
-        'user_id' => 'integer',
+        'user_gym_manager_id' => 'integer',
         'user_creator' => 'integer',
         'user_editor' => 'integer',
         'created_at' => 'timestamp',
@@ -120,7 +119,14 @@ class Gym extends Model
         'attributes',
         'reserveTemplates',
         'reserves',
+        'userGymManager'
     ];
+
+
+    public function userGymManager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_gym_manager_id', 'id');
+    }
 
     protected static function boot(): void
     {
