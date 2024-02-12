@@ -13,6 +13,7 @@ Route::get('/api/documentation/swap-dark-mode/{darkMode}', [\App\Http\Controller
 // catch-all route
 // Define specific routes
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/qrcode/{qrcode}', [\App\Http\Controllers\HomeController::class, 'qrcodeConverter']);
 Route::get('/about', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/notification', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/transaction', [\App\Http\Controllers\HomeController::class, 'index']);

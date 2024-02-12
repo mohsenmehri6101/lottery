@@ -100,6 +100,16 @@ Route::prefix('attributes')->name('attributes_')->group(function () {
     Route::post('/delete-attribute-to-gym', [AttributeController::class, 'deleteAttributeToGym'])->middleware('auth:api')->name('delete_attribute_to_gym');
 });
 
+# qr_codes
+Route::prefix('qr-codes')->name('qr_codes_')->group(function () {
+    Route::get('/', [QrCodeController::class, 'index'])->name('index');
+    Route::get('/{id}', [QrCodeController::class, 'show'])->middleware('auth:api')->name('show');
+    Route::post('/', [QrCodeController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::put('/{id}', [QrCodeController::class, 'update'])->middleware('auth:api')->name('update');
+    Route::delete('/{id}', [QrCodeController::class, 'destroy'])->middleware('auth:api')->name('destroy');
+});
+
+
 # categories
 Route::prefix('categories')->name('categories_')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('index');

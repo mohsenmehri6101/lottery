@@ -152,9 +152,12 @@ class PaymentService
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
         $gym_transaction = new Transaction();
-        $gym_transaction->user_id = $factor->gym->user_id;
-        $gym_transaction->amount = $gym_profit;
-        $gym_transaction->save();
+        Transaction::query()->create(
+            [
+                'user_id'=>$factor->gym->user_gym_manager_id,
+                'amount'=>$gym_profit,
+            ]
+        );
 
         // محاسبه مقدار درآمد مسئول سایت
         $site_income = $factor->total_price - $gym_profit;
@@ -162,6 +165,12 @@ class PaymentService
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
         $site_transaction = new Transaction();
 
+        Transaction::query()->create(
+            [
+                'user_id'=>self::USER_ID_SYSTEM,
+                'amount'=>$site_income,
+            ]
+        );
         $site_transaction->user_id = self::USER_ID_SYSTEM; // مسئول سایت با id 1
         $site_transaction->amount = $site_income;
         $site_transaction->save(); // محاسبه مقدار سود مسئول سالن
@@ -170,7 +179,7 @@ class PaymentService
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
         $gym_transaction = new Transaction();
-        $gym_transaction->user_id = $factor->gym->user_id;
+        $gym_transaction->user_id = $factor->gym->user_gym_manager_id;
         $gym_transaction->amount = $gym_profit;
         $gym_transaction->save();
 
