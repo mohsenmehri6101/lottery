@@ -11,8 +11,8 @@ use Exception;
 class PaymentPaypingService
 {
     private string $TokenCode;
-    private static string $PAYMENT_URL = 'https://api.payping.ir/v1/';
-    # https://api.payping.ir/v2/pay/verify
+    private static string $PAYMENT_URL_V1 = 'https://api.payping.ir/v1/';
+    private static string $PAYMENT_URL_V2 = 'https://api.payping.ir/v2/';
     private static string $PAYMENT_ENDPOINT = 'pay';
     private static string $VERIFY_ENDPOINT = 'pay/verify';
 
@@ -75,14 +75,14 @@ class PaymentPaypingService
                 'cache-control' => 'no-cache',
                 'content-type' => 'application/json',
                 'curl' => [CURLOPT_SSL_VERIFYPEER => false],
-            ])->post(self::$PAYMENT_URL . self::$PAYMENT_ENDPOINT, $data);
+            ])->post(self::$PAYMENT_URL_V1 . self::$PAYMENT_ENDPOINT, $data);
 
             $statusCode = $response->status();
             $responseData = $response->json();
             $code = $responseData['code'] ?? null;
 
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
-                return self::$PAYMENT_URL . 'pay/gotoipg/' . $code;
+                return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;
             }
 
             throw new CreateLinkPaymentException(/*extra_data:[$response->json()]*/);
@@ -96,17 +96,16 @@ class PaymentPaypingService
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
-
             $data = [
-                'merchant_id' => $this->TokenCode,
                 'amount' => $amount,
-                'authority' => $authority,
+                'refId' => $authority,
             ];
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-            ])->post(self::$PAYMENT_URL . self::$VERIFY_ENDPOINT, $data);
+                'Authorizations'=>"Bearer $this->TokenCode"
+            ])->post(self::$PAYMENT_URL_V2 . self::$VERIFY_ENDPOINT, $data);
 
             $statusCode = $response->status();
             $responseData = $response->json();
@@ -117,7 +116,7 @@ class PaymentPaypingService
                 if ($factor_id == $responseData['data']['ref_id'] && $amount == $responseData['data']['amount']) {
                     return true;
                 } else {
-                    throw new Exception('Factor_id or amount mismatch in payment verification');
+                    throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');
                 }
             }
             throw new Exception('Payment verification failed');
