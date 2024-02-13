@@ -37,9 +37,7 @@ class Reserve extends Model
     const status_inactive = 2;
     const status_blocked = 3;
     const status_reserving = 4;
-
     protected $table = 'reserves';
-
     protected $fillable = [
         'id',
         'reserve_template_id',
@@ -55,7 +53,6 @@ class Reserve extends Model
         'updated_at',
         'deleted_at',
     ];
-
     protected $casts = [
         'id' => 'integer',
         'reserve_template_id' => 'integer',
@@ -71,9 +68,7 @@ class Reserve extends Model
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
-
     protected $hidden = [];
-
     public static array $relations_ = [
         'userCreator',
         'userEditor',
@@ -151,7 +146,7 @@ class Reserve extends Model
         return $this->belongsToMany(Factor::class)->withPivot('price');
     }
 
-    public static  function reserveBetweenDates($gym_id, $startDate = null, $endDate = null): Collection|array
+    public static function reserveBetweenDates($gym_id, $startDate = null, $endDate = null): Collection|array
     {
         $query = self::query()->where('gym_id', $gym_id);
 
@@ -172,5 +167,4 @@ class Reserve extends Model
     {
         return $this->belongsToMany(AttributePrice::class, 'attribute_gym_price_reserve');
     }
-
 }
