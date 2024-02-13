@@ -102,6 +102,31 @@ class FactorService
             throw $exception;
         }
     }
+    public static function calculateDescription(Factor $factor): string
+    {
+        $description = "فاکتور مربوط به ";
+
+        // بارگیری رزروهای مرتبط با فاکتور
+        $reserves = $factor->reserves()->with('reserveTemplate.gym')->get();
+
+        // ساخت توضیحات
+        foreach ($reserves as $reserve) {
+            $gymName = $reserve->reserveTemplate->gym->name;
+            $reserveId = $reserve->id;
+            $reserveDate = $reserve->dated_at->format('Y-m-d');
+            $discount = $reserve->reserveTemplate->discount;
+            $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
+            $ballPrice = $reserve->reserveTemplate->gym->ball_price;
+
+            $description .= "{$gymName} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
+        }
+
+        // اضافه کردن قیمت کل به توضیحات
+        $description .= "با مجموع قیمت: {$factor->total_price}";
+
+        return $description;
+    }
+
     public function store(FactorStoreRequest|array $request)
     {
         DB::beginTransaction();
@@ -151,6 +176,9 @@ class FactorService
             DB::commit();
 
             $factor_id = $factor?->id;
+
+            // todo after return factor, set description fields
+            $factor->description =self::calculateDescription($factor);
 
             return $this->factorRepository->findOrFail($factor_id);
         } catch (Exception $exception) {

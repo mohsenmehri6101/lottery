@@ -31,6 +31,7 @@ use Faker\Factory as FakerFactory;
 use Modules\Gym\Services\ImageService;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Payment;
+use Modules\Payment\Services\FactorService;
 use Modules\Slider\Entities\Slider;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
@@ -452,17 +453,23 @@ class GymDatabaseSeeder extends Seeder
         $faker = FakerFactory::create();
         for ($i = 0; $i < $number_record; $i++) {
             $user_id_random = User::query()->inRandomOrder()->first()->id;
+
             /** @var Factor $factor */
             $factor = Factor::query()->create([
                 'total_price' => 0,
                 'status' => $faker->randomElement([Factor::status_paid, Factor::status_unpaid, Factor::status_unknown]),
                 'user_id' => $user_id_random,
             ]);
+
             /** @var Reserve $reserve */
             $reserve = Reserve::query()->inRandomOrder()->first();
+
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
-            // todo from test payment panel.
-            $factor->update(['total_price' => /*$factor->reserves()->sum('price')*/ 1000]);
+
+            $factor->update([
+                'total_price' => /*$factor->reserves()->sum('price')*/ 1000,
+                'description'=>FactorService::calculateDescription($factor),
+                ]);
         }
     }
 
