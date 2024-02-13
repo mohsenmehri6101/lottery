@@ -81,6 +81,12 @@ return new class extends Migration {
                 'order' => 9,
                 'status' => Faq::status_active,
             ],
+            [
+                'question' => 'سلام سالن چگونه کار می کند؟',
+                'answer' => 'دسترسی آسان، مطمئن و سریع به اماکن ورزشی اعم از سالن های چند منظوره ، باشگاه های ورزشی جهت اجاره سانس به صورت حقیقی یا حقوقی از طریق سایت',
+                'order' => 10,
+                'status' => Faq::status_active,
+            ],
         ];
         Faq::query()->insert($faqs);
     }
