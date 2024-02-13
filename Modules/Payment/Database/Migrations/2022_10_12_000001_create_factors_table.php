@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->decimal('vat_rate', 3, 2)->default(0.00)->comment('نرخ مالیات بر ارزش افزوده (value added tax)'); // نرخ مالیات بر ارزش افزوده
             $table->decimal('total_price', 15, 3)->default(0)->comment('مجموع قیمت بدون مالیات'); // مجموع قیمت بدون مالیات
             $table->decimal('total_price_vat', 15, 3)->default(0)->comment('مجموع قیمت شامل مالیات'); // مجموع قیمت با مالیات
+            $table->text('description')->nullable()->comment('توضیحات');
             $table->tinyInteger('status')->nullable()->default(Factor::status_unknown/*0*/)->comment('وضعیت پرداخت');
             $table->unsignedBigInteger('user_id')->nullable()->comment('کاربری که فاکتور براش ایجاد شده');
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');

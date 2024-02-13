@@ -31,6 +31,7 @@ class FactorIndexRequest extends FormRequest
             'reserve_ids.*' => 'nullable|filled|exists:reserves,id',
             'code' => 'nullable',
             'total_price' => 'nullable',
+            'description' => "nullable|string",
             'status' => "nullable|numeric|in:$statuses",
             'user_id' => 'nullable|exists:users,id',
             'user_creator' => 'nullable|exists:users,id',

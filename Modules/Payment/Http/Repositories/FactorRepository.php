@@ -16,4 +16,11 @@ class FactorRepository extends BaseRepository
         return Factor::$relations_;
     }
 
+    public function fillable_search(): array
+    {
+        return [
+            'description',
+        ];
+    }
+
 }

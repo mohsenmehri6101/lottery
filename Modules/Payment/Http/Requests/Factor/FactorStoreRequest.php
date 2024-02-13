@@ -15,6 +15,7 @@ class FactorStoreRequest extends FormRequest
             'reserve_id' => 'nullable|filled|exists:reserves,id',
             'reserve_ids' => 'nullable|array',
             'reserve_ids.*' => 'nullable|filled|exists:reserves,id',
+            'description' => "nullable|string",
             'status' => "nullable|numeric|in:$statuses",
             'user_id' => 'nullable|exists:users,id',
         ];

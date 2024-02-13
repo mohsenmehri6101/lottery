@@ -170,9 +170,16 @@ class FactorService
             $gym = $reserve->gym;
             $price = $reserveTemplate->price ?? $gym->price;
 
+            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
+                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
+                $price = $discountedPrice;
+            }
+
             if ($reserve->want_ball && $reserveTemplate->is_ball) {
                 $price += $gym->ball_price;
             }
+
+            // Update the price for the reserve
             $factor->reserves()->updateExistingPivot(
                 $reserve->id,
                 ['price' => $price]
@@ -180,9 +187,9 @@ class FactorService
             $totalPrice += $price;
         }
 
+        // Update the total price for the factor
         $factor->update(['total_price' => $totalPrice]);
     }
-
     public function update(FactorUpdateRequest $request, $factor_id)
     {
         DB::beginTransaction();
@@ -230,7 +237,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function destroy($factor_id): bool
     {
         DB::beginTransaction();
@@ -257,4 +263,5 @@ class FactorService
     {
         return Factor::getStatusTitle($status);
     }
+
 }

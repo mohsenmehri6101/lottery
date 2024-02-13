@@ -18,9 +18,10 @@ use Modules\Gym\Entities\Reserve;
  * @property string $code
  * @property integer $reserve_id
  * @property string $total_price
+ * @property string $total_price_vat
+ * @property string $description
  * @property integer $status
  * @property integer $user_id
- * @property integer $payment_id
  * @property integer $payment_id_paid
  * @property integer $user_creator
  * @property integer $user_editor
@@ -43,9 +44,9 @@ class Factor extends Model
         'id',
         'code',
         'total_price',
+        'description',
         'status',
         'user_id',
-        'payment_id',
         'payment_id_paid',
         'user_creator',
         'user_editor',
@@ -58,9 +59,9 @@ class Factor extends Model
         'id' => 'integer',
         'code' => 'string',
         'total_price' => 'decimal:3',
+        'description' => 'string',
         'status' => 'integer',
         'user_id' => 'integer',
-        'payment_id' => 'integer',
         'payment_id_paid' => 'integer',
         'user_creator' => 'integer',
         'user_editor' => 'integer',

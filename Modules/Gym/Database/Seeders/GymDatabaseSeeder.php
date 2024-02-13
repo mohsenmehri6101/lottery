@@ -551,8 +551,8 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionFakePayment();
         self::helperFunctionCommonComplaintFake();
         self::helperFunctionComplaintFake();
-        self::helperFunctionFakeAttributeGymPrice();
-        self::helperFunctionFakeAttributeGymPriceReserve();
+        // self::helperFunctionFakeAttributeGymPrice();
+        // self::helperFunctionFakeAttributeGymPriceReserve();
     }
 
 }
