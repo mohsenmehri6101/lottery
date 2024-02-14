@@ -12,7 +12,7 @@ return new class extends Migration {
         Schema::create('factors', function (Blueprint $table) {
             $table->comment('جدول فاکتورها');
             $table->id();
-            $table->string('code')->unique()->comment('code');
+            $table->string('code')->unique()->comment('کد پیگیری خرید');
             $table->decimal('vat_rate', 3, 2)->default(0.00)->comment('نرخ مالیات بر ارزش افزوده (value added tax)'); // نرخ مالیات بر ارزش افزوده
             $table->decimal('total_price', 15, 3)->default(0)->comment('مجموع قیمت بدون مالیات'); // مجموع قیمت بدون مالیات
             $table->decimal('total_price_vat', 15, 3)->default(0)->comment('مجموع قیمت شامل مالیات'); // مجموع قیمت با مالیات
@@ -25,7 +25,6 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
-
         Schema::create('factor_reserve', function (Blueprint $table) {
             $table->comment('جدول واسط بین فاکتور و دوره ها');
             # ### ### ### ###

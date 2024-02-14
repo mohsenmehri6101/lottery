@@ -80,6 +80,7 @@ class Factor extends Model
         'user',
         'reserves',
     ];
+
     protected static function boot(): void
     {
         parent::boot();
@@ -102,17 +103,25 @@ class Factor extends Model
             }
         });
     }
+
     public static function generate_factor_random_code($code = null)
     {
         if (is_null($code) || !filled($code)) {
             $min_random_code_factor = config('configs.payment.factor.min_random_code_factor');
             $max_random_code_factor = config('configs.payment.factor.max_random_code_factor');
-            $code = rand($min_random_code_factor, $max_random_code_factor);
-            $code = $code . now()->timestamp;
+            // ایجاد عدد رندوم
+            $random_number = rand($min_random_code_factor, $max_random_code_factor);
+            // ایجاد تاریخ با فرمت مورد نظر
+            $date_prefix = now()->format('Ymd');
+            // ترکیب تاریخ و عدد رندوم
+            $code = $date_prefix . $random_number;
         }
+        // بررسی تکراری بودن کد
         $code_is_repeat = self::query()->where('code', $code)->exists();
+        // در صورت تکرار، متد را دوباره فراخوانی کرده تا کد جدید تولید شود
         return $code_is_repeat ? self::generate_factor_random_code() : $code;
     }
+
     public static function getStatusTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusPersian();
@@ -127,6 +136,7 @@ class Factor extends Model
         }
         return $statuses;
     }
+
     public static function getStatus(): array
     {
         return [
@@ -145,18 +155,22 @@ class Factor extends Model
             self::status_cancel => 'لغوشده',# 3
         ];
     }
+
     public function reserves(): BelongsToMany
     {
         return $this->belongsToMany(Reserve::class)->withPivot('price');
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
+
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
+
     public function paymentPaid(): HasOne
     {
         return $this->hasOne(Payment::class, 'id','payment_id_paid');
