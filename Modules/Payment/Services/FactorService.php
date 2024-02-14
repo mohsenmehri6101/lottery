@@ -102,14 +102,13 @@ class FactorService
             throw $exception;
         }
     }
+    
     public static function calculateDescription(Factor $factor): string
     {
         $description = "فاکتور مربوط به ";
-
-        // بارگیری رزروهای مرتبط با فاکتور
-        $reserves = $factor->reserves()->with('reserveTemplate.gym')->get();
-
-        // ساخت توضیحات
+        // Load associated reserves with their templates and gyms
+        $reserves = $factor->reserves()->with('reserveTemplate.gym', 'user')->get();
+        // Build description
         foreach ($reserves as $reserve) {
             $gymName = $reserve->reserveTemplate->gym->name;
             $reserveId = $reserve->id;
@@ -117,13 +116,23 @@ class FactorService
             $discount = $reserve->reserveTemplate->discount;
             $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
             $ballPrice = $reserve->reserveTemplate->gym->ball_price;
-
-            $description .= "{$gymName} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
+    
+            // Check if user information is available
+            if ($reserve->user) {
+                // Check if name and family are set
+                if ($reserve->user->name && $reserve->user->family) {
+                    $userInfo = "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})";
+                } else {
+                    $userInfo = "({$reserve->user->mobile})";
+                }
+            } else {
+                $userInfo = '';
+            }
+    
+            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
         }
-
-        // اضافه کردن قیمت کل به توضیحات
+        // Add total price to the description
         $description .= "با مجموع قیمت: {$factor->total_price}";
-
         return $description;
     }
 
