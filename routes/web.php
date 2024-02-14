@@ -28,6 +28,8 @@ Route::get('/setting', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/profile', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/contact-us', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/faqs', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/rules', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/purchase-process', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/gyms', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/gyms/{id}', [\App\Http\Controllers\HomeController::class, 'index']);
 
