@@ -31,8 +31,13 @@ Route::get('/faqs', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/rules', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/purchase-process', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/gyms', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/checkout', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/privacy-page', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/my-courses', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/my-purchases', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/rules', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/gyms/{id}', [\App\Http\Controllers\HomeController::class, 'index']);
-
+/*   -------------------------------------------------------------------------------------  */
 Route::prefix('admin')->group(function () {
     Route::get('/sports', [\App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/attributes', [\App\Http\Controllers\HomeController::class, 'index']);
@@ -96,9 +101,4 @@ Route::get('test-test-test', function () {
 	- تحقیق و توسعه در مورد نحوه پیاده سازی روش اطلاع رسانی.
 	- پیاده سازی سیستم ارسال پیامک با اعتصاب interface و event برای توانایی عوض کردن سامانه پیامکی.
 	- پیاده سازی سیستم اطلاع رسانی در محل های مورد نیاز برای خبر رسانی.
-*/
-
-/*
- * todo lists :
- * should be apiKey delete after user save.
 */
