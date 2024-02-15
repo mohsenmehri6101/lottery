@@ -9,6 +9,21 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 if (!function_exists('insertFakeUser')) {
     function insertFakeUser(): void
     {
+        // user system
+        $userSystem = Modules\Authentication\Entities\User::query()->find(1);
+        if (!$userSystem) {
+            $userSystem = Modules\Authentication\Entities\User::query()->create([
+                'password' => \Illuminate\Support\Str::random(10),
+                'username' => 'system',
+                'email' => 'system@example.com',
+                'mobile' => '99999999999',
+                'status' => Modules\Authentication\Entities\User::status_active,
+                'mobile_verified_at' => now(),
+                'email_verified_at' => now(),
+            ]);
+        }
+        // user system
+
         $image_directory = public_path('faker_avatars/');
         $image_files = glob($image_directory . '*.{jpg,jpeg}', GLOB_BRACE);
 

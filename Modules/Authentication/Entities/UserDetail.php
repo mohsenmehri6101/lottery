@@ -84,7 +84,7 @@ class UserDetail extends ParentModel
         'city',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         // todo creating or updating is bad
@@ -106,7 +106,6 @@ class UserDetail extends ParentModel
             }
         });
     }
-
     public static function getStatusGender(): array
     {
         return [
@@ -115,7 +114,6 @@ class UserDetail extends ParentModel
             self::gender_female,
         ];
     }
-
     public static function getStatusGenderPersian(): array
     {
         return [
@@ -124,7 +122,6 @@ class UserDetail extends ParentModel
             self::gender_female => 'زن',
         ];
     }
-
     public static function getStatusGenderTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusGenderPersian();
@@ -145,11 +142,9 @@ class UserDetail extends ParentModel
     {
         return $this->belongsTo(User::class);
     }
-
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
     }
-
     # relations
 }

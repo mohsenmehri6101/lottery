@@ -60,5 +60,4 @@ return new class extends Migration {
         Schema::dropIfExists('users');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
-
 };
