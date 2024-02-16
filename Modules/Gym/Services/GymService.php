@@ -15,6 +15,7 @@ use Modules\Gym\Http\Requests\Gym\DeleteImageGymRequest;
 use Modules\Gym\Http\Requests\Gym\GymIndexRequest;
 use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
 use Modules\Gym\Http\Requests\Gym\GymShowRequest;
+use Modules\Gym\Http\Requests\Gym\GymStoreFreeRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
@@ -301,6 +302,24 @@ class GymService
 
             DB::commit();
             return $this->gymRepository->withRelations(relations: $withs_result)->findOrFail($gym->id);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+    }
+
+    public function storeFree(GymStoreFreeRequest $request): bool
+    {
+        DB::beginTransaction();
+        try {
+            $fields = $request->validated();
+
+            $fields = [...$fields,'status'=>Gym::status_not_confirm];
+
+            $this->gymRepository->create($fields);
+
+            DB::commit();
+            return true;
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;

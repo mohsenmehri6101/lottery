@@ -23,6 +23,7 @@ Route::prefix('gyms')->name('gyms_')->group(function () {
     Route::get('/my-gyms', [GymController::class, 'myGyms'])->name('index');
     Route::get('gym-status', [GymController::class, 'gymsStatus'])->name('gym_status');
     Route::get('/{id}', [GymController::class, 'show'])->name('show');
+    Route::post('/gym-free', [GymController::class, 'storeFree'])->name('gym_free');
     Route::post('/', [GymController::class, 'store'])->middleware('auth:api')->name('store');
     Route::post('/{id}', [GymController::class, 'update'])->middleware('auth:api')->name('post_update');
     Route::post('/like', [GymController::class, 'like'])->middleware('auth:api')->name('like');

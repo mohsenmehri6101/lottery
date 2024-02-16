@@ -45,9 +45,11 @@ class Gym extends Model
 {
     use SoftDeletes, UserCreator, UserEditor;
     const status_unknown = 0;
+
     const status_active = 1;
     const status_block = 2;
     const status_disable = 3;
+    const status_not_confirm = 4;
 
     protected $table = 'gyms';
 
@@ -170,6 +172,7 @@ class Gym extends Model
             self::status_active,
             self::status_block,
             self::status_disable,
+            self::status_not_confirm,
         ];
     }
     public static function getStatusGymPersian(): array
@@ -179,6 +182,7 @@ class Gym extends Model
             self::status_active => 'فعال',
             self::status_block => 'بلاک شده',
             self::status_disable => 'غیرفعال شده',
+            self::status_not_confirm => 'تایید نشده',
         ];
     }
     public static function like($gym_id, $user_id = null, $type = 'like'): int

@@ -10,6 +10,7 @@ use Modules\Gym\Http\Requests\Gym\GetInitializeRequestsSelectors;
 use Modules\Gym\Http\Requests\Gym\GymIndexRequest;
 use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
 use Modules\Gym\Http\Requests\Gym\GymShowRequest;
+use Modules\Gym\Http\Requests\Gym\GymStoreFreeRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
@@ -181,6 +182,41 @@ class GymController extends Controller
     {
         $gym = $this->gymService->store($request);
         return $gym ? ResponseHelper::responseSuccessStore(data: $gym) : ResponseHelper::responseFailedStore();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/gyms/gym-free",
+     *     tags={"gyms"},
+     *     summary="ذخیره باشگاه ورزشی آزاد",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="name",in="query",required=true, @OA\Schema(type="string"),description="Gym name"),
+     *     @OA\Parameter(name="description",in="query",required=false, @OA\Schema(type="string"),description="Gym description"),
+     *     @OA\Parameter(name="price",in="query",required=false, @OA\Schema(type="string"),description="Gym price"),
+     *     @OA\Parameter(name="city_id",in="query",required=true, @OA\Schema(type="integer"),description="City ID"),
+     *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="Gym user_id"),
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="Gym status"),
+     *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="integer"),description="profit_share_percentage"),
+     *     @OA\Parameter(name="priority_show",in="query",required=false, @OA\Schema(type="integer"),description="priority_show"),
+     *     @OA\Parameter(name="is_ball",in="query",required=false, @OA\Schema(type="boolean"),description="is_ball"),
+     *     @OA\Parameter(name="ball_price",in="query",required=false, @OA\Schema(type="string"),description="ball_price"),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={""},
+     *                 @OA\Property(property="images", type="array", @OA\Items(type="file", format="binary"), description="Array of image files")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     * )
+     */
+    public function storeFree(GymStoreFreeRequest $request): JsonResponse
+    {
+        $this->gymService->storeFree($request);
+        return ResponseHelper::responseSuccessStore();
     }
 
     /**
