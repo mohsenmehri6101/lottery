@@ -194,10 +194,6 @@ class GymController extends Controller
      *     @OA\Parameter(name="description",in="query",required=false, @OA\Schema(type="string"),description="Gym description"),
      *     @OA\Parameter(name="price",in="query",required=false, @OA\Schema(type="string"),description="Gym price"),
      *     @OA\Parameter(name="city_id",in="query",required=true, @OA\Schema(type="integer"),description="City ID"),
-     *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="Gym user_id"),
-     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="Gym status"),
-     *     @OA\Parameter(name="profit_share_percentage",in="query",required=false, @OA\Schema(type="integer"),description="profit_share_percentage"),
-     *     @OA\Parameter(name="priority_show",in="query",required=false, @OA\Schema(type="integer"),description="priority_show"),
      *     @OA\Parameter(name="is_ball",in="query",required=false, @OA\Schema(type="boolean"),description="is_ball"),
      *     @OA\Parameter(name="ball_price",in="query",required=false, @OA\Schema(type="string"),description="ball_price"),
      *     @OA\RequestBody(

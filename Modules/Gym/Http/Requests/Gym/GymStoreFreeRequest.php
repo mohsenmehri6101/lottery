@@ -7,6 +7,14 @@ use Modules\Gym\Entities\ReserveTemplate;
 
 class GymStoreFreeRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('is_ball')) {
+            $is_ball = $this->get('is_ball');
+            $this->merge(['is_ball' => $is_ball ? 1 : 0]);
+        }
+    }
+
     public function rules(): array
     {
         $status_gender_acceptances = implode(',', ReserveTemplate::getStatusGenderAcceptance());
