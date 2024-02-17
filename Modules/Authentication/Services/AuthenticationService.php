@@ -228,6 +228,7 @@ class AuthenticationService
         $max_number_random = config('configs.authentication.otp.max_number_random');
         return rand($min_number_random, $max_number_random);
     }
+
     public function send_notification_otp($mobile, $otp_random_number)
     {
         try {
