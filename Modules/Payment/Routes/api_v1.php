@@ -16,7 +16,6 @@ Route::prefix('factors')->name('factors_')->group(function () {
     Route::put('/{id}', [FactorController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [FactorController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
-
 # accounts
 Route::prefix('accounts')->name('accounts_')->group(function () {
     Route::get('/', [AccountController::class, 'index'])->middleware('auth:api')->name('index');
@@ -26,7 +25,6 @@ Route::prefix('accounts')->name('accounts_')->group(function () {
     Route::put('/{id}', [AccountController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [AccountController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
-
 # banks
 Route::prefix('banks')->name('banks_')->group(function () {
     Route::get('/', [BankController::class, 'index'])->middleware('auth:api')->name('index');
@@ -35,7 +33,6 @@ Route::prefix('banks')->name('banks_')->group(function () {
     Route::put('/{id}', [BankController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [BankController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
-
 # payments
 Route::prefix('payments')->name('payments_')->group(function () {
     Route::get('/', [PaymentController::class, 'index'])->middleware('auth:api')->name('index');

@@ -117,7 +117,6 @@ class ReserveController extends Controller
         return $reserve ? ResponseHelper::responseSuccessStore(data: $reserve) : ResponseHelper::responseFailedStore();
     }
 
-
     /**
      * @OA\Post(
      *     path="/api/v1/reserves/store-and-print-factor-and-create-link-payment",

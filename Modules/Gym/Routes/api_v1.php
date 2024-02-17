@@ -6,6 +6,7 @@ use Modules\Gym\Http\Controllers\CategoryController;
 use Modules\Gym\Http\Controllers\CommentController;
 use Modules\Gym\Http\Controllers\CommonComplaintController;
 use Modules\Gym\Http\Controllers\ComplaintController;
+use Modules\Gym\Http\Controllers\QrCodeController;
 use Modules\Gym\Http\Controllers\ReserveController;
 use Modules\Gym\Http\Controllers\ReserveTemplateController;
 use Modules\Gym\Http\Controllers\KeywordController;
@@ -73,7 +74,7 @@ Route::prefix('reserves')->name('reserves_')->group(function () {
     Route::get('/my-reserves', [ReserveController::class, 'myReserve'])->name('my-reserves');
     Route::get('/{id}', [ReserveController::class, 'show'])->middleware('auth:api')->name('show');
     Route::post('/', [ReserveController::class, 'store'])->middleware('auth:api')->name('store');
-    Route::post('/store-and-print-factor-and-create-link-payment', [ReserveController::class, 'storeAndPrintFactorAndCreateLinkPayment'])->middleware('auth:api')->name('store_and_do_stuff');
+    Route::post('/store-and-print-factor-and-create-link-payment', [ReserveController::class, 'storeAndPrintFactorAndCreateLinkPayment'])->middleware('auth:api')->name('store_and_print_factor_and_create_link_payment');
     Route::post('/blocks', [ReserveController::class, 'storeBlocks'])->middleware('auth:api')->name('store_blocks');
     Route::put('/{id}', [ReserveController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [ReserveController::class, 'destroy'])->middleware('auth:api')->name('destroy');
