@@ -25,11 +25,9 @@ use function send_sms;
 class AuthenticationService
 {
     use AuthenticationApiTokenTrait;
-
     public function __construct(public UserRepository $userRepository)
     {
     }
-
     public function otp(OtpRequest|RegisterResendCodeRequest $request): array
     {
         try {
@@ -53,7 +51,6 @@ class AuthenticationService
             throw $exception;
         }
     }
-
     public function login(LoginRequest|array $request)
     {
         try {
@@ -89,7 +86,6 @@ class AuthenticationService
             throw $exception;
         }
     }
-
     public function profile(ProfileRequest $request): array
     {
         try {
@@ -119,7 +115,6 @@ class AuthenticationService
             throw $exception;
         }
     }
-
     public static function setApiKey($mobile = null): ?string
     {
         $length_api_key_string = config('configs.api_key.length');
@@ -130,7 +125,6 @@ class AuthenticationService
         cache()->set($api_key, ['mobile' => $mobile, 'expired_time' => $expired_time], $ttl_cache);
         return $api_key;
     }
-
     public static function checkApiKey($api_key, $mobile = null): bool
     {
         $information_in_cache = cache()->get($api_key);
@@ -143,10 +137,6 @@ class AuthenticationService
         }
         return $mobile_in_cache && $mobile_in_cache == $mobile;
     }
-
-    /**
-     * @throws UserNotActiveException
-     */
     public static function setTokenOrApiKey(User $user = null, $mobile = null): array
     {
         // Check if the user exists and is active
@@ -161,19 +151,16 @@ class AuthenticationService
 
         return ['token' => $token, 'user' => $user ? $user->toArray() : [], 'apiKey' => $apiKey];
     }
-
     private static function checkUserIsActive(User $user = null): void
     {
         if ($user && $user->status != User::status_active) {
             throw new UserNotActiveException();
         }
     }
-
     private static function generateToken(User $user = null): ?string
     {
         return $user ? JWTAuth::fromuser($user) : null;
     }
-
     private static function generateApiKey(User $user = null, $mobile = null): ?string
     {
         if (is_null(self::generateToken($user)) && is_null($user)) {
@@ -181,8 +168,6 @@ class AuthenticationService
         }
         return null;
     }
-
-
     public function otpConfirm(OtpConfirmRequest $request): array
     {
         try {
@@ -204,7 +189,6 @@ class AuthenticationService
             throw $exception;
         }
     }
-
     public function otpConfirmV2(OtpConfirmRequest $request): array
     {
         try {
@@ -225,7 +209,7 @@ class AuthenticationService
             $user = $userService::getUser(mobile: $mobile, withs: ['userDetail']);
 
             if (!$user) {
-                $user = $userService->store(['mobile' => $mobile]);
+                $user = $userService->store(['mobile' => $mobile,'status'=>User::status_inactive]);
             }
 
             cache()->forget($mobile);
@@ -238,14 +222,12 @@ class AuthenticationService
             throw $exception;
         }
     }
-
     public function generate_otp_random(): int
     {
         $min_number_random = config('configs.authentication.otp.min_number_random');
         $max_number_random = config('configs.authentication.otp.max_number_random');
         return rand($min_number_random, $max_number_random);
     }
-
     public function send_notification_otp($mobile, $otp_random_number)
     {
         try {
@@ -267,7 +249,6 @@ class AuthenticationService
             throw $exception;
         }
     }
-
     public static function bool_check_api_key($api_key, $mobile = null): bool
     {
         $information_in_cache = cache()->get($api_key);
@@ -276,13 +257,11 @@ class AuthenticationService
         # $firebase_token = $information_in_cache['firebase_token'] ?? null;
         return (bool)Carbon::make($expired_time) >= now();
     }
-
     public function logout(): bool
     {
         auth()->logout();
         return true;
     }
-
     public function changePassword(ChangePasswordRequest $request): bool
     {
         DB::beginTransaction();
@@ -311,5 +290,4 @@ class AuthenticationService
             throw $exception;
         }
     }
-
 }

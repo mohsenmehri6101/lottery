@@ -45,6 +45,7 @@ class UserStoreRequest extends FormRequest
             'birthday' => 'nullable',
             'gender' => "nullable|numeric|in:$statuses_gender",
             'address' => 'nullable|string|filled',
+            'status' => "nullable|numeric|in:$statuses_user",
         ];
 
         if (is_admin() || is_super_admin()) {
@@ -57,7 +58,6 @@ class UserStoreRequest extends FormRequest
                 'accounts.shaba_number' => 'nullable',
                 # add account user
                 # add account user
-                'status' => "nullable|numeric|in:$statuses_user",
                 'role_ids' => 'nullable|array',
                 'role_ids.*' => 'required|filled|exists:roles,id'
             ];
