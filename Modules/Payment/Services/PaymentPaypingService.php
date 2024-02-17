@@ -104,13 +104,13 @@ class PaymentPaypingService
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Authorizations'=>"Bearer $this->TokenCode"
+                'Authorizations' => "Bearer $this->TokenCode"
             ])->post(self::$PAYMENT_URL_V2 . self::$VERIFY_ENDPOINT, $data);
 
             $statusCode = $response->status();
             $responseData = $response->json();
 
-            Log::info(['statusCode'=>$statusCode,'responseData'=>$responseData]);
+            # Log::info(['statusCode' => $statusCode, 'responseData' => $responseData]);
 
             if ($statusCode === 200 && isset($responseData['data']['code']) && $responseData['data']['code'] === 100) {
                 if ($factor_id == $responseData['data']['ref_id'] && $amount == $responseData['data']['amount']) {
@@ -120,6 +120,55 @@ class PaymentPaypingService
                 }
             }
             throw new Exception('Payment verification failed');
+
+        } catch (Exception $exception) {
+            // Handle exceptions
+            throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
+        }
+    }
+
+
+    /**
+     * Create a link for a multi-payment transaction.
+     * ساخت لینک برای تراکنش چندگانه پرداخت
+     * @param string $payerName The name of the payer initiating the payment. نام پرداخت کننده که تراکنش را آغاز کرده است.
+     * @param array $pairs An array of payment pairs, each containing 'payerIdentity', 'amount', and 'description'.
+     *                      آرایه ای از جفت های پرداخت، هر کدام شامل 'payerIdentity'، 'amount' و 'description' هستند.
+     * @param string $returnUrl The URL to which the user should be redirected after completing the payment process.
+     *                          آدرس URL که کاربر باید پس از تکمیل فرایند پرداخت به آن هدایت شود.
+     * @param string $clientRefId The client reference ID, representing a unique identifier for the transaction.
+     *                            شناسه مرجع مشتری، که یک شناسه منحصر به فرد برای تراکنش را نشان می دهد.
+     * @return string The generated payment link. لینک پرداخت تولید شده.
+     * @throws CreateLinkPaymentException
+     */
+    public function create_multi_payment(string $payerName, array $pairs, string $returnUrl, string $clientRefId): string
+    {
+        try {
+            $data = [
+                'payerName' => $payerName,
+                'pairs' => $pairs,
+                'returnUrl' => $returnUrl,
+                'clientRefId' => $clientRefId,
+            ];
+
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'authorization' => 'Bearer ' . $this->TokenCode,
+                'cache-control' => 'no-cache',
+                'content-type' => 'application/json',
+                'curl' => [CURLOPT_SSL_VERIFYPEER => false],
+            ])->post(self::$PAYMENT_URL_V2 . self::$PAYMENT_ENDPOINT, $data);
+
+            $statusCode = $response->status();
+            $responseData = $response->json();
+
+            $code = $responseData['code'] ?? null;
+
+            if ($statusCode === Response::HTTP_OK && $responseData['code']) {
+                return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;
+            }
+
+            throw new CreateLinkPaymentException(/*extra_data:[$response->json()]*/);
 
         } catch (Exception $exception) {
             // Handle exceptions

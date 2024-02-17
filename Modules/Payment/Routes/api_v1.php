@@ -6,6 +6,7 @@ use Modules\Payment\Http\Controllers\BankController;
 use Modules\Payment\Http\Controllers\FactorController;
 use Modules\Payment\Http\Controllers\PaymentController;
 
+
 # factors
 Route::prefix('factors')->name('factors_')->group(function () {
     Route::get('/', [FactorController::class, 'index'])->middleware('auth:api')->name('index');

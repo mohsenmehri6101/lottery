@@ -20,4 +20,5 @@ class ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest extends FormRequest
              'reserves.*.want_ball' => 'nullable|numeric|in:0,1',
         ];
     }
+
 }
