@@ -19,7 +19,5 @@ class ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest extends FormRequest
              'reserves.*.dated_at' => 'required',/* |unique:reserves,dated_at */
              'reserves.*.want_ball' => 'nullable|numeric|in:0,1',
         ];
-
     }
-
 }
