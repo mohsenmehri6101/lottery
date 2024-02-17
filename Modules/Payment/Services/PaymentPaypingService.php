@@ -127,7 +127,6 @@ class PaymentPaypingService
         }
     }
 
-
     /**
      * Create a link for a multi-payment transaction.
      * ساخت لینک برای تراکنش چندگانه پرداخت
