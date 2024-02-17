@@ -27,6 +27,7 @@ class UserService
     public function __construct(public UserRepository $userRepository, public UserDetailRepository $userDetailRepository)
     {
     }
+
     public function index(UserIndexRequest $request)
     {
         try {

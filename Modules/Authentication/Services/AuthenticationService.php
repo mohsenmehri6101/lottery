@@ -30,7 +30,7 @@ class AuthenticationService
     {
     }
 
-    public function otp(OtpRequest|RegisterResendCodeRequest $request)
+    public function otp(OtpRequest|RegisterResendCodeRequest $request): array
     {
         try {
             $fields = $request->validated();
@@ -90,7 +90,7 @@ class AuthenticationService
         }
     }
 
-    public function profile(ProfileRequest $request)
+    public function profile(ProfileRequest $request): array
     {
         try {
             $fields = $request->validated();
@@ -144,23 +144,44 @@ class AuthenticationService
         return $mobile_in_cache && $mobile_in_cache == $mobile;
     }
 
+    /**
+     * @throws UserNotActiveException
+     */
     public static function setTokenOrApiKey(User $user = null, $mobile = null): array
     {
-        // todo check user exist and shoud be active , if not ? throw exception need
+        // Check if the user exists and is active
+        self::checkUserIsActive($user);
+
+        // Generate token or API key based on user or mobile
+        $token = self::generateToken($user);
+        $apiKey = self::generateApiKey($user, $mobile);
+
+        // Retrieve user data if available
+        $user = $user ? UserService::getUser($user) : null;
+
+        return ['token' => $token, 'user' => $user ? $user->toArray() : [], 'apiKey' => $apiKey];
+    }
+
+    private static function checkUserIsActive(User $user = null): void
+    {
         if ($user && $user->status != User::status_active) {
             throw new UserNotActiveException();
         }
-        // $user && $user->status !=User::status_active || throw new UserNotActiveException();
-
-        $token = $user ? JWTAuth::fromuser($user) : null;
-        if (is_null($token) && is_null($user)) {
-            $data['apiKey'] = self::setApiKey(mobile: $mobile) ?? null;
-        } else {
-            $user = UserService::getUser($user);
-            $data = ['token' => $token, 'user' => $user?->toArray() ?? [], 'apiKey' => null];
-        }
-        return $data;
     }
+
+    private static function generateToken(User $user = null): ?string
+    {
+        return $user ? JWTAuth::fromuser($user) : null;
+    }
+
+    private static function generateApiKey(User $user = null, $mobile = null): ?string
+    {
+        if (is_null(self::generateToken($user)) && is_null($user)) {
+            return self::setApiKey(mobile: $mobile);
+        }
+        return null;
+    }
+
 
     public function otpConfirm(OtpConfirmRequest $request): array
     {
@@ -184,7 +205,7 @@ class AuthenticationService
         }
     }
 
-    public function otpConfirmV2(OtpConfirmRequest $request)
+    public function otpConfirmV2(OtpConfirmRequest $request): array
     {
         try {
             $fields = $request->validated();
@@ -208,9 +229,11 @@ class AuthenticationService
             }
 
             cache()->forget($mobile);
+            $token = self::generateToken($user);
 
-            return $user;
+            $data = ['token' => $token, 'user' => $user ? $user->toArray() : []];
 
+            return $data;
         } catch (Exception $exception) {
             throw $exception;
         }
