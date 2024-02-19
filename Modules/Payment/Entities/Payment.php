@@ -38,16 +38,13 @@ class Payment extends Model
 
     protected $fillable = [
         'id',
-
         'status',
         'resnumber',
         'amount',
-
         'factor_id',
         'user_id',
         'user_creator',
         'user_editor',
-
         'created_at',
         'updated_at',
         'deleted_at',
@@ -55,16 +52,13 @@ class Payment extends Model
 
     protected $casts = [
         'id' => 'integer',
-
         'status' => 'integer',
         'resnumber' => 'string',
         'amount' => 'decimal:3',
-
         'factor_id' => 'integer',
         'user_id' => 'integer',
         'user_creator' => 'integer',
         'user_editor' => 'integer',
-
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
@@ -81,6 +75,7 @@ class Payment extends Model
     {
         parent::boot();
         static::creating(function ($item) {
+
             # user_creator
             if (is_null($item?->user_creator)) {
                 $item->user_creator = set_user_creator();
@@ -90,7 +85,6 @@ class Payment extends Model
             if (is_null($item->user_editor)) {
                 $item->user_editor = set_user_creator();
             }
-
         });
         static::updating(function ($item) {
             # user_editor
@@ -153,4 +147,5 @@ class Payment extends Model
         }
         return $resnumber;
     }
+
 }

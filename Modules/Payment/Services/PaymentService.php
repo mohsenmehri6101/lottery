@@ -5,6 +5,7 @@ namespace Modules\Payment\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Modules\Authentication\Entities\User;
 use Modules\Gym\Entities\Reserve;
 use Modules\Payment\Entities\Factor;
@@ -16,6 +17,7 @@ use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
 use Modules\Payment\Entities\Payment;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 class PaymentService
 {
@@ -94,19 +96,26 @@ class PaymentService
                 'user_id'=>$user->id,
             ]);
 
-            $url = $PaymentPaypingService->createLinkPayment(
-                clientRefId: $payment->resnumber,
-                mobile: $mobile,
-                amount: $amount,
-                returnUrl: $returnUrl,
-                description: $description,
-                payerName: $payerName,
-            );
+            $url = null;/*
+                 $PaymentPaypingService->createLinkPayment(
+                    clientRefId: $payment->resnumber,
+                    mobile: $mobile,
+                    amount: $amount,
+                    returnUrl: $returnUrl,
+                    description: $description,
+                    payerName: $payerName,
+                );
+            */
 
-            if(filled($url)){
-                /** @var Factor $factor */
-                $factor->reserves()->update(['status' => Reserve::status_reserving]);
-            }
+            $url = Str::random();
+
+            // todo it is fake.
+            self::fake_payment($factor);
+
+            // if(filled($url)){
+            //     /** @var Factor $factor */
+            //     $factor->reserves()->update(['status' => Reserve::status_reserving]);
+            // }
 
             return $url;
         } catch (Exception $exception) {
@@ -247,19 +256,31 @@ class PaymentService
                 'amount'=>$amount,
                 'user_id'=>$user->id,
             ]);
+                $url = $PaymentPaypingService->createLinkPayment(
+                    clientRefId: $payment->resnumber,
+                    mobile: $mobile,
+                    amount: $amount,
+                    returnUrl: $returnUrl,
+                    description: $description,
+                    payerName: $payerName,
+                );
 
-            $url = $PaymentPaypingService->createLinkPayment(
-                clientRefId: $payment->resnumber,
-                mobile: $mobile,
-                amount: $amount,
-                returnUrl: $returnUrl,
-                description: $description,
-                payerName: $payerName,
-            );
-
-            return $url;
+            return '';
         } catch (Exception $exception) {
             throw new $exception;
         }
     }
+
+    public static function fake_payment(Factor $factor): void
+    {
+        Payment::query()->create([
+                'status'=>Payment::status_paid,
+                'resnumber'=>Str::random(5),
+                'amount'=>$factor->total_price,
+                'factor_id'=>$factor->id,
+                'user_id'=>$factor->user_id,
+            ]);
+        $factor->update(['status' => Factor::status_paid]);
+    }
+
 }
