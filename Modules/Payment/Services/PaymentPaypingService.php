@@ -3,7 +3,6 @@
 namespace Modules\Payment\Services;
 
 use App\Exceptions\Contracts\CreateLinkPaymentException;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
 use Exception;
@@ -20,6 +19,7 @@ class PaymentPaypingService
     {
         $this->TokenCode = $token ?? env('PAYMENT_PAYPING_TOKEN');
     }
+
 
     private function getErrorMessage($errorCode): string
     {
@@ -110,8 +110,6 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
 
-            # Log::info(['statusCode' => $statusCode, 'responseData' => $responseData]);
-
             if ($statusCode === 200 && isset($responseData['data']['code']) && $responseData['data']['code'] === 100) {
                 if ($factor_id == $responseData['data']['ref_id'] && $amount == $responseData['data']['amount']) {
                     return true;
@@ -143,6 +141,7 @@ class PaymentPaypingService
     public function create_multi_payment(string $payerName, array $pairs, string $returnUrl, string $clientRefId): string
     {
         try {
+
             $data = [
                 'payerName' => $payerName,
                 'pairs' => $pairs,
@@ -155,7 +154,7 @@ class PaymentPaypingService
                 'authorization' => 'Bearer ' . $this->TokenCode,
                 'cache-control' => 'no-cache',
                 'content-type' => 'application/json',
-                'curl' => [CURLOPT_SSL_VERIFYPEER => false],
+                'curl' => [CURLOPT_SSL_VERIFYPEER => false]
             ])->post(self::$PAYMENT_URL_V2 . self::$PAYMENT_ENDPOINT, $data);
 
             $statusCode = $response->status();
