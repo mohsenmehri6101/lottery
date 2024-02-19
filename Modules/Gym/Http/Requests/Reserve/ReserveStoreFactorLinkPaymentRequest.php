@@ -4,7 +4,7 @@ namespace Modules\Gym\Http\Requests\Reserve;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReserveStoreAndPrintFactorAndCreateLinkPaymentRequest extends FormRequest
+class ReserveStoreFactorLinkPaymentRequest extends FormRequest
 {
     public function rules(): array
     {

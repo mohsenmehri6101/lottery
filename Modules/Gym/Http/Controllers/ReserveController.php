@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
-use Modules\Gym\Http\Requests\Reserve\ReservestoreAndPrintFactorAndCreateLinkPaymentRequest;
+use Modules\Gym\Http\Requests\Reserve\ReserveStoreFactorLinkPaymentRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreBlockRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveStoreRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveUpdateRequest;
@@ -140,7 +140,7 @@ class ReserveController extends Controller
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      * )
      */
-    public function storeAndPrintFactorAndCreateLinkPayment(ReservestoreAndPrintFactorAndCreateLinkPaymentRequest $request): JsonResponse
+    public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): JsonResponse
     {
         $reserve = $this->reserveService->storeAndPrintFactorAndCreateLinkPayment($request);
         return $reserve ? ResponseHelper::responseSuccessStore(data: ['url'=>$reserve]) : ResponseHelper::responseFailedStore();
