@@ -79,8 +79,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'user_destination', 'id');
     }
+
     public function userResource(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_resource', 'id');
     }
+
 }

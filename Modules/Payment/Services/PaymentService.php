@@ -158,49 +158,32 @@ class PaymentService
     {
         // محاسبه مقدار سود مسئول سالن
         $profit_share_percentage = $factor->gym->profit_share_percentage;
+        // سود مسئول سالن
         $gym_profit = $factor->total_price * ($profit_share_percentage / 100);
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
-        $gym_transaction = new Transaction();
-        Transaction::query()->create(
-            [
-                'user_id'=>$factor->gym->user_gym_manager_id,
-                'amount'=>$gym_profit,
-            ]
-        );
+        Transaction::query()->create([
+            'user_id' => $factor->gym->user_gym_manager_id,
+            'amount' => $gym_profit,
+            'description' => 'تراکنش برای مسئول سالن',
+            'specification' => Transaction::SPECIFICATION_CREDIT, // بستانکار
+            'transaction_type' => Transaction::TRANSACTION_TYPE_DEPOSIT, // واریز
+            'operation_type' => Transaction::OPERATION_TYPE_PAYMENT_TO_GYM_MANAGER, // پرداخت به مدیر سالن
+        ]);
 
         // محاسبه مقدار درآمد مسئول سایت
         $site_income = $factor->total_price - $gym_profit;
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
-        $site_transaction = new Transaction();
+        Transaction::query()->create([
+            'user_id' => self::USER_ID_SYSTEM,
+            'amount' => $site_income,
+            'description' => 'تراکنش برای مسئول سایت',
+            'specification' => Transaction::SPECIFICATION_DEBIT, // بدهکار
+            'transaction_type' => Transaction::TRANSACTION_TYPE_DEPOSIT, // واریز
+            'operation_type' => Transaction::OPERATION_TYPE_RETURN_TO_USER, // بازگشت مبلغ به کاربر
+        ]);
 
-        Transaction::query()->create(
-            [
-                'user_id'=>self::USER_ID_SYSTEM,
-                'amount'=>$site_income,
-            ]
-        );
-        $site_transaction->user_id = self::USER_ID_SYSTEM; // مسئول سایت با id 1
-        $site_transaction->amount = $site_income;
-        $site_transaction->save(); // محاسبه مقدار سود مسئول سالن
-        $profit_share_percentage = $factor->gym->profit_share_percentage;
-        $gym_profit = $factor->total_price * $profit_share_percentage / 100;
-
-        // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
-        $gym_transaction = new Transaction();
-        $gym_transaction->user_id = $factor->gym->user_gym_manager_id;
-        $gym_transaction->amount = $gym_profit;
-        $gym_transaction->save();
-
-        // محاسبه مقدار درآمد مسئول سایت
-        $site_income = $factor->total_price - $gym_profit;
-
-        // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
-        $site_transaction = new Transaction();
-        $site_transaction->user_id = 1; // مسئول سایت با id 1
-        $site_transaction->amount = $site_income;
-        $site_transaction->save();
     }
 
     public function destroy($payment_id): bool
@@ -221,6 +204,7 @@ class PaymentService
             throw $exception;
         }
     }
+
     public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): ?string
     {
         try {
