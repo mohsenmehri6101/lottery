@@ -109,7 +109,7 @@ class PaymentService
 
             $url = Str::random();
 
-            // todo it is fake.
+            # todo this is fake.
             self::fake_payment($factor);
             self::save_transactions($factor);
 
