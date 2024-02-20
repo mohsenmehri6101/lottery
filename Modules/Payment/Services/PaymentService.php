@@ -111,6 +111,7 @@ class PaymentService
 
             // todo it is fake.
             self::fake_payment($factor);
+            self::save_transactions($factor);
 
             // if(filled($url)){
             //     /** @var Factor $factor */
