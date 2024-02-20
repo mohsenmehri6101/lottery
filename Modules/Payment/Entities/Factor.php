@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Authentication\Entities\User;
 use Modules\Gym\Entities\Reserve;
-use Morilog\Jalali\Jalalian;
 
 /**
  * @property integer $id
@@ -178,33 +177,13 @@ class Factor extends Model
         return $this->hasMany(Payment::class);
     }
 
-    //    public function getDescriptionShortAttribute(): array|string|null
-    //    {
-    //        // اینجا می‌توانید از regex استفاده کرده و بخش "شناسه رزرو:..." را حذف کنید
-    //        $description = $this->attributes['description'];
-    //        // اینجا از regex استفاده می‌کنیم تا بخش "شناسه رزرو:..." را از متن حذف کنیم
-    //        $descriptionShort = preg_replace('/شناسه رزرو:\s*\d+\s*,\s*/', '', $description);
-    //        return $descriptionShort;
-    //    }
-
-    public function getDescriptionShortAttribute(): string
+    public function getDescriptionShortAttribute(): array|string|null
     {
-        // Assuming you have a 'date' attribute in your model that holds the Gregorian date
-        $gregorianDate = $this->date; // Change 'date' to the actual attribute name in your model
-        // Convert Gregorian date to Jalali (Shamsi)
-        $jalaliDate = Jalalian::fromFormat('Y-m-d', $gregorianDate)->format('Y-m-d');
-        // Assuming you have a 'description' attribute in your model that holds the description
-        $description = $this->description; // Change 'description' to the actual attribute name in your model
-        // Define a regex pattern to match the reservation ID
-        $pattern = '/شناسه رزرو:\s*(\d+)/u'; // Adjust the regex pattern as per your requirement
-        // Use regex to extract the reservation ID from the description and remove it
-        $cleanDescription = preg_replace($pattern, '', $description);
-        // Trim any extra whitespace from the cleaned description
-        $cleanDescription = trim($cleanDescription);
-        // Concatenate the Jalali date and cleaned description
-        $shortDescription = "($jalaliDate) - $cleanDescription";
-        // Return the short description with Jalali date
-        return $shortDescription;
+        // اینجا می‌توانید از regex استفاده کرده و بخش "شناسه رزرو:..." را حذف کنید
+        $description = $this->attributes['description'];
+        // اینجا از regex استفاده می‌کنیم تا بخش "شناسه رزرو:..." را از متن حذف کنیم
+        $descriptionShort = preg_replace('/شناسه رزرو:\s*\d+\s*,\s*/', '', $description);
+        return $descriptionShort;
     }
 
     public function paymentPaid(): HasOne
