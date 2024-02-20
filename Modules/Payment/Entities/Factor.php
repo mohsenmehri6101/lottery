@@ -60,7 +60,6 @@ class Factor extends Model
         'code' => 'string',
         'total_price' => 'decimal:3',
         'description' => 'string',
-        'description_short' => 'string',
         'status' => 'integer',
         'user_id' => 'integer',
         'payment_id_paid' => 'integer',
@@ -69,6 +68,10 @@ class Factor extends Model
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
+    ];
+
+    protected $appends=[
+        'description_short',
     ];
 
     protected $hidden = [];
