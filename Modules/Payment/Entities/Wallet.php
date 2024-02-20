@@ -61,8 +61,7 @@ class Wallet extends Model
         'user',
     ];
 
-    protected static function boot(): void
-    {
+    protected static function boot(): void{
         parent::boot();
         static::creating(function ($item) {
             # user_creator
@@ -78,6 +77,7 @@ class Wallet extends Model
                 $item->user_id = get_user_id_login();
             }
         });
+
         static::updating(function ($item) {
             # user_editor
             if (is_null($item->user_editor)) {
@@ -90,4 +90,5 @@ class Wallet extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 }

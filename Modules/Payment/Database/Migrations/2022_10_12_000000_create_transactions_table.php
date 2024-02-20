@@ -9,6 +9,8 @@ return new class extends Migration {
     {
         // every transaction two.
                 Schema::create('transactions', function (Blueprint $table) {
+                    $table->comment('جدول برای ذخیره رکوردهای تراکنش.'); // کامنت جدول
+                    // کلید اصلی
                     $table->id();
                     // date.
                     $table->unsignedBigInteger('user_destination')->nullable()->comment('user_destination');
@@ -25,19 +27,22 @@ return new class extends Migration {
                     $table->softDeletes();
                 });
 
-                Schema::create('transaction_details', function (Blueprint $table) {
-                    $table->id();
-                    $table->text('description')->nullable()->comment('شرح عملیات');
-                    $table->string('amount')->nullable()->comment('amount');
-                    $table->unsignedBigInteger('transaction_id')->nullable()->comment('transaction_id');
-                    $table->unsignedBigInteger('user_id')->nullable()->comment('user_id');
-                    $table->tinyInteger('status')->nullable()->default(0/*0*/)->comment('');
-                });
+//                Schema::create('transaction_details', function (Blueprint $table) {
+//                    // todo this table is necessary ? why?
+//                    $table->comment('جدول برای ذخیره جزئیات هر تراکنش.'); // کامنت جدول
+//                    $table->comment('');
+//                    $table->id();
+//                    $table->text('description')->nullable()->comment('شرح عملیات');
+//                    $table->string('amount')->nullable()->comment('amount');
+//                    $table->unsignedBigInteger('transaction_id')->nullable()->comment('transaction_id');
+//                    $table->unsignedBigInteger('user_id')->nullable()->comment('user_id');
+//                    $table->tinyInteger('status')->nullable()->default(0/*0*/)->comment('');
+//                });
     }
 
     public function down(): void
     {
-         Schema::dropIfExists('transaction_details');
+//         Schema::dropIfExists('transaction_details');
          Schema::dropIfExists('transactions');
     }
 };

@@ -102,7 +102,7 @@ class FactorService
             throw $exception;
         }
     }
-    
+
     public static function calculateDescription(Factor $factor): string
     {
         $description = "فاکتور مربوط به ";
@@ -116,7 +116,7 @@ class FactorService
             $discount = $reserve->reserveTemplate->discount;
             $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
             $ballPrice = $reserve->reserveTemplate->gym->ball_price;
-    
+
             // Check if user information is available
             if ($reserve->user) {
                 // Check if name and family are set
@@ -128,7 +128,7 @@ class FactorService
             } else {
                 $userInfo = '';
             }
-    
+
             $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
         }
         // Add total price to the description
@@ -227,6 +227,7 @@ class FactorService
         // Update the total price for the factor
         $factor->update(['total_price' => $totalPrice]);
     }
+
     public function update(FactorUpdateRequest $request, $factor_id)
     {
         DB::beginTransaction();
@@ -287,7 +288,6 @@ class FactorService
 
             # delete
             $this->factorRepository->forceDelete($factor);
-
 
             DB::commit();
             return true;

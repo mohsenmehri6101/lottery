@@ -13,7 +13,7 @@ use Modules\Authentication\Entities\User;
 class Transaction extends Model
 {
     use HasFactory, SoftDeletes, UserCreator, UserEditor;
-
+    # ---------------------------------------------------------
     protected $table = 'transactions';
     # ---------------------------------------------------------
     const SPECIFICATION_UNKNOWN = 0;
@@ -44,7 +44,7 @@ class Transaction extends Model
         'user_editor',
         'timed_at',
     ];
-
+    # ---------------------------------------------------------
     protected $casts = [
         'user_destination' => 'integer',
         'user_resource' => 'integer',
@@ -57,7 +57,6 @@ class Transaction extends Model
         'user_editor' => 'integer',
         'timed_at' => 'timestamp',
     ];
-
     # ---------------------------------------------------------
     public static function boot(): void
     {
