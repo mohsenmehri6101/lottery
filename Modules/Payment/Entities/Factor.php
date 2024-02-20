@@ -60,6 +60,7 @@ class Factor extends Model
         'code' => 'string',
         'total_price' => 'decimal:3',
         'description' => 'string',
+        'description_short' => 'string',
         'status' => 'integer',
         'user_id' => 'integer',
         'payment_id_paid' => 'integer',
@@ -146,6 +147,7 @@ class Factor extends Model
             self::status_cancel,# 3
         ];
     }
+
     public static function getStatusPersian(): array
     {
         return [
@@ -171,9 +173,18 @@ class Factor extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function getDescriptionShortAttribute(): array|string|null
+    {
+        // اینجا می‌توانید از regex استفاده کرده و بخش "شناسه رزرو:..." را حذف کنید
+        $description = $this->attributes['description'];
+        // اینجا از regex استفاده می‌کنیم تا بخش "شناسه رزرو:..." را از متن حذف کنیم
+        $descriptionShort = preg_replace('/شناسه رزرو:\s*\d+\s*,\s*/', '', $description);
+        return $descriptionShort;
+    }
+
     public function paymentPaid(): HasOne
     {
-        return $this->hasOne(Payment::class, 'id','payment_id_paid');
+        return $this->hasOne(Payment::class, 'id', 'payment_id_paid');
     }
 
 }
