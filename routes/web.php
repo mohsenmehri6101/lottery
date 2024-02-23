@@ -51,6 +51,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/reserves', [\App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/users', [\App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/errors', [\App\Http\Controllers\HomeController::class, 'index']);
+    Route::get('/factors', [\App\Http\Controllers\HomeController::class, 'index']);
+    Route::get('/payments', [\App\Http\Controllers\HomeController::class, 'index']);
 });
 
 Route::get('test-test-test', function () {
