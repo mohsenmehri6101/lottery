@@ -6,7 +6,6 @@ use App\Helper\Response\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Payment\Http\Requests\Payment\PaymentCallBackRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentCreateLinkRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;

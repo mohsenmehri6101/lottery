@@ -49,7 +49,7 @@ class Transaction extends Model
         'user_destination' => 'integer',
         'user_resource' => 'integer',
         'price' => 'decimal:15',
-        'description' => 'text',
+        'description' => 'string',
         'specification' => 'integer',
         'transaction_type' => 'integer',
         'operation_type' => 'integer',

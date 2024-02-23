@@ -180,7 +180,8 @@ class Factor extends Model
     public function getDescriptionShortAttribute(): array|string|null
     {
         // اینجا می‌توانید از regex استفاده کرده و بخش "شناسه رزرو:..." را حذف کنید
-        $description = $this->attributes['description'];
+        $description = $this->attributes['description'] || '';
+        $description = filled($description) ? $description : '';
         // اینجا از regex استفاده می‌کنیم تا بخش "شناسه رزرو:..." را از متن حذف کنیم
         $descriptionShort = preg_replace('/شناسه رزرو:\s*\d+\s*,\s*/', '', $description);
         return $descriptionShort;

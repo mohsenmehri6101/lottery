@@ -5,6 +5,7 @@ namespace Modules\Payment\Services;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\Authentication\Entities\User;
 use Modules\Gym\Entities\Reserve;
@@ -120,6 +121,7 @@ class PaymentService
 
             return $url;
         } catch (Exception $exception) {
+            Log::info('',[$exception->getMessage(),$exception->getLine(),$exception->getTrace()]);
             throw new $exception;
         }
     }
@@ -157,13 +159,16 @@ class PaymentService
     public static function save_transactions(Factor $factor): void
     {
         // محاسبه مقدار سود مسئول سالن
-        $profit_share_percentage = $factor->gym->profit_share_percentage;
+        $profit_share_percentage = $factor->reserves()->first()->gym->profit_share_percentage;
+        $user_gym_manager_id = $factor->reserves()->first()->gym->user_gym_manager_id;
+        # #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### ####
+
         // سود مسئول سالن
         $gym_profit = $factor->total_price * ($profit_share_percentage / 100);
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
         Transaction::query()->create([
-            'user_id' => $factor->gym->user_gym_manager_id,
+            'user_id' => $user_gym_manager_id,
             'amount' => $gym_profit,
             'description' => 'تراکنش برای مسئول سالن',
             'specification' => Transaction::SPECIFICATION_CREDIT, // بستانکار
