@@ -13768,13 +13768,13 @@
                 "tags": [
                     "payments"
                 ],
-                "summary": "list payments",
+                "summary": "List payments",
                 "operationId": "e26c1e8e51b1fd17678736bec25d541c",
                 "parameters": [
                     {
                         "name": "paginate",
                         "in": "query",
-                        "description": "paginate",
+                        "description": "Paginate",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -13783,7 +13783,7 @@
                     {
                         "name": "per_page",
                         "in": "query",
-                        "description": "per_page",
+                        "description": "Per page",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -13792,7 +13792,7 @@
                     {
                         "name": "page",
                         "in": "query",
-                        "description": "page",
+                        "description": "Page",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -13801,55 +13801,86 @@
                     {
                         "name": "id",
                         "in": "query",
-                        "description": "id",
+                        "description": "ID",
                         "required": false,
                         "schema": {
                             "type": "integer"
                         }
                     },
                     {
-                        "name": "name",
+                        "name": "status",
                         "in": "query",
-                        "description": "name",
+                        "description": "Status",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "resnumber",
+                        "in": "query",
+                        "description": "Resnumber",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "persian_name",
+                        "name": "amount",
                         "in": "query",
-                        "description": "persian_name",
+                        "description": "Amount",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    {
+                        "name": "factor_id",
+                        "in": "query",
+                        "description": "Factor ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "User ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
                         "name": "created_at",
                         "in": "query",
-                        "description": "created_at",
+                        "description": "Created at",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "date-time"
                         }
                     },
                     {
                         "name": "updated_at",
                         "in": "query",
-                        "description": "updated_at",
+                        "description": "Updated at",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "date-time"
                         }
                     },
                     {
                         "name": "deleted_at",
                         "in": "query",
-                        "description": "deleted_at",
+                        "description": "Deleted at",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "date-time"
                         }
                     }
                 ],

@@ -21,20 +21,95 @@ class PaymentController extends Controller
      * @OA\Get(
      *     path="/api/v1/payments",
      *     tags={"payments"},
-     *     summary="list payments",
+     *     summary="List payments",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="paginate",in="query",required=false, @OA\Schema(type="string"),description="paginate"),
-     *     @OA\Parameter(name="per_page",in="query",required=false, @OA\Schema(type="string"),description="per_page"),
-     *     @OA\Parameter(name="page",in="query",required=false, @OA\Schema(type="string"),description="page"),
-     *     @OA\Parameter(name="id",in="query",required=false, @OA\Schema(type="integer"),description="id"),
-     *     @OA\Parameter(name="name",in="query",required=false, @OA\Schema(type="string"),description="name"),
-     *     @OA\Parameter(name="persian_name",in="query",required=false, @OA\Schema(type="string"),description="persian_name"),
-     *     @OA\Parameter(name="created_at",in="query",required=false, @OA\Schema(type="string"),description="created_at"),
-     *     @OA\Parameter(name="updated_at",in="query",required=false, @OA\Schema(type="string"),description="updated_at"),
-     *     @OA\Parameter(name="deleted_at",in="query",required=false, @OA\Schema(type="string"),description="deleted_at"),
+     *     @OA\Parameter(
+     *         name="paginate",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Paginate"
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Per page"
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Page"
+     *     ),
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="ID"
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="Status"
+     *     ),
+     *     @OA\Parameter(
+     *         name="resnumber",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Resnumber"
+     *     ),
+     *     @OA\Parameter(
+     *         name="amount",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="number", format="float"),
+     *         description="Amount"
+     *     ),
+     *     @OA\Parameter(
+     *         name="factor_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="Factor ID"
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="User ID"
+     *     ),
+     *     @OA\Parameter(
+     *         name="created_at",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time"),
+     *         description="Created at"
+     *     ),
+     *     @OA\Parameter(
+     *         name="updated_at",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time"),
+     *         description="Updated at"
+     *     ),
+     *     @OA\Parameter(
+     *         name="deleted_at",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time"),
+     *         description="Deleted at"
+     *     ),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
-     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
-     *  )
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent())
+     * )
      */
     public function index(PaymentIndexRequest $request): JsonResponse
     {
