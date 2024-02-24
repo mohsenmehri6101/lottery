@@ -126,7 +126,6 @@ class ReserveService
                 if (!isset($reserve['user_id']) || !filled($reserve['user_id'])) {
                     $reserve['user_id'] = get_user_id_login();
                 }
-
                 /** @var Reserve $reserveModel */
                 $reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;
