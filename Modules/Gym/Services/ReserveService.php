@@ -115,11 +115,18 @@ class ReserveService
             # save reserves
             $reserves->each(function ($reserve) use (&$reserveIds) {
                 $reserve_template_id = $reserve['reserve_template_id'];
+
                 if (!isset($reserve['gym_id']) || !filled($reserve['gym_id'])) {
                     /** @var ReserveTemplate $reserveTemplate */
                     $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
                     $reserve['gym_id'] = $reserveTemplate->gym_id;
                 }
+
+                # user_id
+                if (!isset($reserve['user_id']) || !filled($reserve['user_id'])) {
+                    $reserve['user_id'] = get_user_id_login();
+                }
+
                 /** @var Reserve $reserveModel */
                 $reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;

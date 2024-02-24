@@ -129,8 +129,8 @@ class ReserveController extends Controller
      *             @OA\Property(property="reserves", type="array",
      *                 @OA\Items(
      *                     @OA\Property(property="reserve_template_id", type="integer", description="ID of the reserve template", example=1),
-     *                     @OA\Property(property="gym_id", type="integer", description="ID of the gym", example=1),
-     *                     @OA\Property(property="user_id", type="integer", description="ID of the user", example=1),
+     *                     @OA\Property(property="gym_id", type="integer", description="ID of the gyms", example=1),
+     *                     @OA\Property(property="user_id", type="integer", description="ID of the users", example=1),
      *                     @OA\Property(property="dated_at", type="string", format="date", description="Date of the reserve", example="2024-01-12"),
      *                 )
      *             ),
