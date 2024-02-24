@@ -110,7 +110,7 @@ class PaymentService
 
             # todo this is fake.
 //            self::fake_payment($factor);
-            self::save_transactions($factor);
+//            self::save_transactions($factor);
 
             // if(filled($url)){
             //     /** @var Factor $factor */
@@ -176,7 +176,7 @@ class PaymentService
 
         // محاسبه مقدار درآمد مسئول سایت
         $site_income = $factor->total_price - $gym_profit;
-        
+
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
         Transaction::query()->create([
             'user_id' => self::USER_ID_SYSTEM,

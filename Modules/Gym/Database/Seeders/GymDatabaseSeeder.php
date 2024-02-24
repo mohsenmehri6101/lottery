@@ -168,7 +168,7 @@ class GymDatabaseSeeder extends Seeder
                 $gym = Gym::query()->create([
                     'name' => $gym_name,
                     'description' => $persianFaker->persianDescription(),
-                    'price' => $faker->randomElement(range(700000, 1500000, 50000)),
+                    'price' => $faker->randomElement(range(700000, 1500000, 100000)),
                     'latitude' => $persianFaker->persianLatitude(),
                     'longitude' => $persianFaker->persianLongitude(),
                     'city_id' => City::query()->inRandomOrder()->first()->id,
@@ -225,7 +225,7 @@ class GymDatabaseSeeder extends Seeder
 
         // Loop through week_number from 1 to 7
         for ($week_number = 1; $week_number <= $days; $week_number++) {
-            $price = $faker->numberBetween(700000, 1500000);
+            $price = $faker->randomElement(range(700000, 1500000, 100000));
             $user_random_id = User::query()->inRandomOrder()->first()->id;
             $from = $faker->randomElement(['06:00', '08:00', '10:00']); // Generate a new random start time for each day
             $current_hour = (int)substr($from, 0, 2); // Extract the hour part as an integer
@@ -249,7 +249,7 @@ class GymDatabaseSeeder extends Seeder
                     'cod' => $faker->boolean,
                     'is_ball' => $faker->boolean,
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
-                    'discount' => $faker->boolean,
+                    'discount' => $faker->randomElement([null,null,null,null,5,10,15,20]),
                     'status' => $faker->randomElement([
                         ReserveTemplate::status_active,
                         ReserveTemplate::status_active,
