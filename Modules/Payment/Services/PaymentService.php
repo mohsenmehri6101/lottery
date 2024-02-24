@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\Authentication\Entities\User;
-use Modules\Gym\Entities\Reserve;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Transaction;
 use Modules\Payment\Http\Repositories\FactorRepository;
@@ -18,7 +17,6 @@ use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
 use Modules\Payment\Entities\Payment;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Redirect;
 
 class PaymentService
 {
@@ -111,7 +109,7 @@ class PaymentService
             $url = Str::random();
 
             # todo this is fake.
-            self::fake_payment($factor);
+//            self::fake_payment($factor);
             self::save_transactions($factor);
 
             // if(filled($url)){
@@ -155,7 +153,6 @@ class PaymentService
         ####################################################################
         return false;
     }
-
     public static function save_transactions(Factor $factor): void
     {
         // محاسبه مقدار سود مسئول سالن
@@ -166,10 +163,11 @@ class PaymentService
         // سود مسئول سالن
         $gym_profit = $factor->total_price * ($profit_share_percentage / 100);
 
+
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
         Transaction::query()->create([
             'user_id' => $user_gym_manager_id,
-            'amount' => $gym_profit,
+            'price' => $gym_profit,
             'description' => 'تراکنش برای مسئول سالن',
             'specification' => Transaction::SPECIFICATION_CREDIT, // بستانکار
             'transaction_type' => Transaction::TRANSACTION_TYPE_DEPOSIT, // واریز
@@ -178,11 +176,11 @@ class PaymentService
 
         // محاسبه مقدار درآمد مسئول سایت
         $site_income = $factor->total_price - $gym_profit;
-
+        
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
         Transaction::query()->create([
             'user_id' => self::USER_ID_SYSTEM,
-            'amount' => $site_income,
+            'price' => $site_income,
             'description' => 'تراکنش برای مسئول سایت',
             'specification' => Transaction::SPECIFICATION_DEBIT, // بدهکار
             'transaction_type' => Transaction::TRANSACTION_TYPE_DEPOSIT, // واریز
@@ -190,7 +188,6 @@ class PaymentService
         ]);
 
     }
-
     public function destroy($payment_id): bool
     {
         DB::beginTransaction();
@@ -209,7 +206,6 @@ class PaymentService
             throw $exception;
         }
     }
-
     public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): ?string
     {
         try {
@@ -260,7 +256,6 @@ class PaymentService
             throw new $exception;
         }
     }
-
     public static function fake_payment(Factor $factor): void
     {
         Payment::query()->create([

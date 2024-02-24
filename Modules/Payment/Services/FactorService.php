@@ -187,6 +187,7 @@ class FactorService
             $factor_id = $factor?->id;
 
             // todo after return factor, set description fields
+
             $factor->description =self::calculateDescription($factor);
 
             return $this->factorRepository->findOrFail($factor_id);
