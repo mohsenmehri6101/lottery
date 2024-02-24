@@ -87,13 +87,13 @@ class PaymentService
             $description = isset($description) && filled($description) ? $description : $mobile;
             # Updated description to include more relevant information
 
-            /** @var Payment $payment */
-            $payment = $factor->payments()->create([
+            /** @var Payment $payment */ // todo should be active.
+            /*$payment = $factor->payments()->create([
                 'status'=>Payment::status_unpaid,
                 'resnumber'=>Payment::resnumberUnique(),
                 'amount'=>$amount,
                 'user_id'=>$user->id,
-            ]);
+            ]);*/
 
             $url = null;/*
                  $PaymentPaypingService->createLinkPayment(
@@ -109,8 +109,8 @@ class PaymentService
             $url = Str::random();
 
             # todo this is fake.
-//            self::fake_payment($factor);
-//            self::save_transactions($factor);
+            self::fake_payment($factor);
+            self::save_transactions($factor);
 
             // if(filled($url)){
             //     /** @var Factor $factor */

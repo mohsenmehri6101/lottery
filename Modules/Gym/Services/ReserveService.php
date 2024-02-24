@@ -97,6 +97,7 @@ class ReserveService
         }
     }
 
+    # payment Payment
     public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): ?array
     {
         DB::beginTransaction();
@@ -136,7 +137,7 @@ class ReserveService
             $factorService = resolve('FactorService');
 
             /** @var Factor $factor */
-            $factor = $factorService->store(['reserve_ids' => $reserveIds, 'user_id' => get_user_id_login()]);
+            $factor = $factorService->store(['reserve_ids' => $reserveIds, 'user_id' => get_user_id_login(),'description'=>$factorService::calculateDescription($factor)]);
 
             # create link payment
             /** @var PaymentService $paymentService */
@@ -151,6 +152,8 @@ class ReserveService
             throw $exception;
         }
     }
+
+    # payment Payment
 
     /**
      * @param ReserveStoreBlockRequest $request
