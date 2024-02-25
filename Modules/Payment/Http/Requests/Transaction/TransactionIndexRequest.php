@@ -17,7 +17,7 @@ class TransactionIndexRequest extends FormRequest
     {
         $withs_allows = implode(',', Transaction::$relations_);
         $specifications = implode(',', Transaction::getStatusSpecifications());
-        $transaction_types = implode(',', Transaction::getStatusTransactionTypes());
+        $transactionTypes = implode(',', Transaction::getStatusTransactionTypes());
         $operations = implode(',', Transaction::getStatusOperationTypes());
 
         return [
@@ -32,7 +32,7 @@ class TransactionIndexRequest extends FormRequest
             'description' => 'nullable|string',
 
             'specification' => "nullable|in:$specifications",
-            'transaction_type' => "nullable|in:$transaction_types",
+            'transaction_type' => "nullable|in:$transactionTypes",
             'operation_type' => "nullable|in:$operations",
 
             'user_creator' => 'nullable|exists:users,id',

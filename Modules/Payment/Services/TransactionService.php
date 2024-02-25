@@ -28,7 +28,7 @@ class TransactionService
     {
         try {
             $fields = $request->validated();
-            $fields['user_id']=get_user_id_login();
+            $fields['user_destination']=get_user_id_login();
             return $this->transactionRepository->resolve_paginate(inputs: $fields,my_auth: true);
         } catch (Exception $exception) {
             throw $exception;
