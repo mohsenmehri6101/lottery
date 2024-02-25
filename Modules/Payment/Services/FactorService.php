@@ -222,6 +222,7 @@ class FactorService
                 $reserve->id,
                 ['price' => $price]
             );
+
             $totalPrice += $price;
         }
 

@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Modules\Authentication\Entities\User;
+use Modules\Authentication\Services\UserService;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
@@ -313,6 +315,24 @@ class GymService
         DB::beginTransaction();
         try {
             $fields = $request->validated();
+
+            $mobile = $fields['mobile'] ?? null;
+
+            # save user
+            unset($fields['mobile']);
+
+            /** @var UserService $userService */
+            $userService = resolve('UserService');
+
+            $user = $userService::getUser(mobile: $mobile, withs: ['userDetail']);
+            if (!$user) {
+                $user = $userService->store(['mobile' => $mobile,'status'=>User::status_inactive]);
+                // todo send message sms send message
+                $message = "کاربر گرامی، اطلاعات سالن ورزشی شما با موفقیت ذخیره شده است. در اسرع وقت با شما تماس گرفته خواهد شد.";
+                send_sms($mobile,$message);
+            }
+            # save user
+
 
             $fields = [...$fields,'status'=>Gym::status_not_confirm];
 

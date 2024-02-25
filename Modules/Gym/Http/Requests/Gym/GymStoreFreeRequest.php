@@ -12,6 +12,7 @@ class GymStoreFreeRequest extends FormRequest
         $status_gender_acceptances = implode(',', ReserveTemplate::getStatusGenderAcceptance());
 
         return [
+            'mobile' => 'required|filled',
             'name' => 'required|filled',
             'description' => 'nullable',
             'price' => 'nullable',

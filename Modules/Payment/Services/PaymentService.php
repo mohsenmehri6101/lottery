@@ -256,6 +256,7 @@ class PaymentService
             throw new $exception;
         }
     }
+
     public static function fake_payment(Factor $factor): void
     {
         Payment::query()->create([
@@ -265,6 +266,7 @@ class PaymentService
                 'factor_id'=>$factor->id,
                 'user_id'=>$factor->user_id,
             ]);
+
         $factor->update(['status' => Factor::status_paid]);
     }
 

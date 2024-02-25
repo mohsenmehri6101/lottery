@@ -6,6 +6,20 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ReserveStoreFactorLinkPaymentRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('reserves')) {
+            $reserves = $this->get('reserves');
+            foreach ($reserves as &$reserve) {
+                if (isset($reserve['want_ball'])) {
+                    $reserve['want_ball'] = $reserve['want_ball'] ? 1 : 0;
+                }
+            }
+            $this->merge(['reserves' => $reserves]);
+        }
+    }
+
+
     public function rules(): array
     {
         return [
