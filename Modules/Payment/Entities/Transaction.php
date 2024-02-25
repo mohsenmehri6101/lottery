@@ -13,6 +13,7 @@ use Modules\Authentication\Entities\User;
 class Transaction extends Model
 {
     use HasFactory, SoftDeletes, UserCreator, UserEditor;
+
     # ---------------------------------------------------------
     protected $table = 'transactions';
     # ---------------------------------------------------------
@@ -58,6 +59,14 @@ class Transaction extends Model
         'timed_at' => 'timestamp',
     ];
     # ---------------------------------------------------------
+    public static array $relations_ = [
+        'userDestination',
+        'userResource',
+        'userCreator',
+        'userEditor',
+    ];
+
+    # ---------------------------------------------------------
     public static function boot(): void
     {
         parent::boot();
@@ -75,6 +84,7 @@ class Transaction extends Model
             }
         });
     }
+
     public function userDestination(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_destination', 'id');
@@ -84,5 +94,110 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'user_resource', 'id');
     }
+
+    /* specification const methods */
+    public static function getStatusSpecificationTitle($status = null): array|bool|int|string|null
+    {
+        $statuses = self::getStatusSpecificationPersian();
+        if (!is_null($status)) {
+            if (is_string_persian($status)) {
+                return array_search($status, $statuses) ?? null;
+            }
+            if (is_int($status) && in_array($status, array_keys($statuses))) {
+                return $statuses[$status] ?? null;
+            }
+            return null;
+        }
+        return $statuses;
+    }
+    public static function getStatusSpecifications(): array
+    {
+        return [
+            self::SPECIFICATION_UNKNOWN,
+            self::SPECIFICATION_DEBIT,
+            self::SPECIFICATION_CREDIT,
+        ];
+    }
+    public static function getStatusSpecificationPersian(): array
+    {
+        return [
+            self::SPECIFICATION_UNKNOWN => 'نامشخص',
+            self::SPECIFICATION_DEBIT => 'debit',
+            self::SPECIFICATION_CREDIT => 'credit',
+        ];
+    }
+    /* specification const methods */
+    /* transaction type const methods */
+    public static function getStatusTransactionTypeTitle($status = null): array|bool|int|string|null
+    {
+        $statuses = self::getStatusTransactionTypePersian();
+        if (!is_null($status)) {
+            if (is_string_persian($status)) {
+                return array_search($status, $statuses) ?? null;
+            }
+            if (is_int($status) && in_array($status, array_keys($statuses))) {
+                return $statuses[$status] ?? null;
+            }
+            return null;
+        }
+        return $statuses;
+    }
+    public static function getStatusTransactionTypes(): array
+    {
+        return [
+            self::TRANSACTION_TYPE_UNKNOWN,
+            self::TRANSACTION_TYPE_WITHDRAWAL,
+            self::TRANSACTION_TYPE_DEPOSIT,
+        ];
+    }
+    public static function getStatusTransactionTypePersian(): array
+    {
+        return [
+            self::TRANSACTION_TYPE_UNKNOWN => 'نامشخص',
+            self::TRANSACTION_TYPE_WITHDRAWAL => 'برداشت',
+            self::TRANSACTION_TYPE_DEPOSIT => 'واریز',
+        ];
+    }
+    /* transaction type const methods */
+    /* operation type const methods */
+    public static function getStatusOperationTypeTitle($status = null): array|bool|int|string|null
+    {
+        $statuses = self::getStatusOperationTypePersian();
+        if (!is_null($status)) {
+            if (is_string_persian($status)) {
+                return array_search($status, $statuses) ?? null;
+            }
+            if (is_int($status) && in_array($status, array_keys($statuses))) {
+                return $statuses[$status] ?? null;
+            }
+            return null;
+        }
+        return $statuses;
+    }
+    public static function getStatusOperationTypes(): array
+    {
+        return [
+            self::OPERATION_TYPE_UNKNOWN,
+            self::OPERATION_TYPE_ASSIGN_TO_GYM_MANAGER,
+            self::OPERATION_TYPE_PAYMENT_TO_GYM_MANAGER,
+            self::OPERATION_TYPE_RESERVED_AMOUNT,
+            self::OPERATION_TYPE_RETURN_TO_USER,
+            self::OPERATION_TYPE_DEPOSIT_TO_WALLET,
+            self::OPERATION_TYPE_WITHDRAWAL_FROM_WALLET,
+        ];
+    }
+    public static function getStatusOperationTypePersian(): array
+    {
+        return [
+            self::OPERATION_TYPE_UNKNOWN => 'نامشخص',
+            self::OPERATION_TYPE_ASSIGN_TO_GYM_MANAGER => 'تخصیص به مدیر سالن',
+            self::OPERATION_TYPE_PAYMENT_TO_GYM_MANAGER => 'پرداخت به مدیر سالن',
+            self::OPERATION_TYPE_RESERVED_AMOUNT => 'مبلغ رزرو شده',
+            self::OPERATION_TYPE_RETURN_TO_USER => 'بازگشت مبلغ به کاربر',
+            self::OPERATION_TYPE_DEPOSIT_TO_WALLET => 'واریز به کیف پول',
+            self::OPERATION_TYPE_WITHDRAWAL_FROM_WALLET => 'برداشت از کیف پول',
+        ];
+    }
+    /* operation type const methods */
 
 }

@@ -157,6 +157,18 @@ class PaymentServiceProvider extends ServiceProvider
             return new \Modules\Payment\Services\FactorService($factorRepository);
         });
 
+        # transaction
+        $transactionRepository = new \Modules\Payment\Http\Repositories\TransactionRepository();
+        $this->app->singleton('TransactionRepository', function ($app) use ($transactionRepository) {
+            return $transactionRepository;
+        });
+
+        # TransactionService
+        $this->app->singleton('TransactionService', function ($app) use ($transactionRepository) {
+            return new \Modules\Payment\Services\TransactionService($transactionRepository);
+        });
+        # transaction
+
     }
 
 }

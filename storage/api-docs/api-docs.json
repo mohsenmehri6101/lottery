@@ -9630,12 +9630,12 @@
                                                     "example": 1
                                                 },
                                                 "gym_id": {
-                                                    "description": "ID of the gym",
+                                                    "description": "ID of the gyms",
                                                     "type": "integer",
                                                     "example": 1
                                                 },
                                                 "user_id": {
-                                                    "description": "ID of the user",
+                                                    "description": "ID of the users",
                                                     "type": "integer",
                                                     "example": 1
                                                 },

@@ -5,7 +5,7 @@ use Modules\Payment\Http\Controllers\AccountController;
 use Modules\Payment\Http\Controllers\BankController;
 use Modules\Payment\Http\Controllers\FactorController;
 use Modules\Payment\Http\Controllers\PaymentController;
-
+use Modules\Payment\Http\Controllers\TransactionController;
 
 # factors
 Route::prefix('factors')->name('factors_')->group(function () {
@@ -46,4 +46,11 @@ Route::prefix('payments')->name('payments_')->group(function () {
     Route::get('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_get');
     Route::post('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_post');
     Route::get('/{id}', [PaymentController::class, 'show'])->middleware('auth:api')->name('show');
+});
+
+# transactions
+Route::prefix('transactions')->name('transactions_')->group(function () {
+    Route::get('/', [TransactionController::class, 'index'])->middleware('auth:api')->name('index');
+    Route::get('/my-transactions', [TransactionController::class, 'myTransaction'])->middleware('auth:api')->name('my_transaction');
+    Route::get('/{id}', [TransactionController::class, 'show'])->middleware('auth:api')->name('show');
 });
