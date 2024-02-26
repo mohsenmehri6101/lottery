@@ -134,6 +134,7 @@ class FactorService
         $description .= "با مجموع قیمت: {$factor->total_price}";
         return $description;
     }
+
     public function store(FactorStoreRequest|array $request)
     {
         DB::beginTransaction();
@@ -194,7 +195,7 @@ class FactorService
             throw $exception;
         }
     }
-    private static function calculatePriceForFactor(Factor $factor): void
+    public static function calculatePriceForFactor(Factor $factor): void
     {
         $totalPrice = 0;
 
@@ -223,9 +224,11 @@ class FactorService
 
             $totalPrice += $price;
         }
+
         // Update the total price for the factor
         $factor->update(['total_price' => $totalPrice]);
     }
+
     public function update(FactorUpdateRequest $request, $factor_id)
     {
         DB::beginTransaction();
