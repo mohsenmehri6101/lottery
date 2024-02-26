@@ -139,7 +139,7 @@ class ReserveService
 
             /** @var Factor $factor */
             $factor = $factorService->store(['reserve_ids' => $reserveIds, 'user_id' => get_user_id_login()]);
-            $factor->update(['description'=>$factorService::calculateDescription($factor)]);
+            $factor->update(['description'=>$factorService::calculateDescription($factor),'total_price'=>$factorService::justCalculatePriceForFactor($factor)]);
 
             # create link payment
             /** @var PaymentService $paymentService */

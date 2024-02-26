@@ -36,9 +36,22 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('gym_criticisms', function (Blueprint $table) {
+            $table->id();
+            $table->comment('انتقادات از سالن ورزشی');
+            $table->string('name')->nullable()->comment('نام');
+            $table->unsignedBigInteger('gym_id')->nullable()->comment('gym_id');
+            $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
+            $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
+            $table->timestamps();
+
+        });
     }
+
     public function down(): void
     {
+        Schema::dropIfExists('gym_criticisms');
         Schema::dropIfExists('gyms');
     }
 };
