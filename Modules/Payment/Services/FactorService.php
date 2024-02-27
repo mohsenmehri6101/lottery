@@ -135,67 +135,32 @@ class FactorService
         return $description;
     }
 
-    public function store(FactorStoreRequest|array $request)
+    public static function calculatePriceForFactor(Factor $factor): float|int|string
     {
-        DB::beginTransaction();
-        try {
-            if (is_array($request)) {
-                $loginRequest = new FactorStoreRequest();
-                $fields = Validator::make(data: $request,
-                    rules: $loginRequest->rules(),
-                    attributes: $loginRequest->attributes(),
-                )->validate();
-            } else {
-                $fields = $request->validated();
+        $totalPrice = 0;
+        /** @var Reserve $reserve */
+        foreach ($factor->reserves as $reserve) {
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
+            /** @var Gym $gym */
+            $gym = $reserve->gym;
+            $price = $reserveTemplate->price ?? $gym->price;
+
+            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
+                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
+                $price = $discountedPrice;
             }
 
-            /**
-             * @var $reserve_id
-             * @var $reserve_ids
-             * @var $status
-             * @var $user_id
-             */
-            extract($fields);
-
-            $reserve_id = $reserve_id ?? null;
-            $reserve_ids = $reserve_ids ?? [];
-            if (isset($reserve_id)) {
-                $reserve_ids[] = $reserve_id;
-                $reserve_ids = array_unique($reserve_ids);
+            if ($reserve->want_ball && $reserveTemplate->is_ball) {
+                $price += $gym->ball_price;
             }
 
-            unset($fields['reserve_id'], $fields['reserve_ids']);
-
-            // todo check role from set column status.
-            if (!user_have_role(roles: RolesEnum::admin->name)) {
-                unset($fields['status']);
-            }
-
-            /** @var Factor $factor */
-            $factor = $this->factorRepository->create($fields);
-
-            // todo should be get from use detach
-            $detach = $detach ?? true;
-            # sync reserve to factor
-            $factor->reserves()->sync($reserve_ids, $detach);
-
-            self::calculatePriceForFactor($factor);
-
-            DB::commit();
-
-            $factor_id = $factor?->id;
-
-            // todo after return factor, set description fields
-
-            $factor->description =self::calculateDescription($factor);
-
-            return $this->factorRepository->findOrFail($factor_id);
-        } catch (Exception $exception) {
-            DB::rollBack();
-            throw $exception;
+            $totalPrice += $price;
         }
+        return $totalPrice;
     }
-    public static function calculatePriceForFactor(Factor $factor): void
+
+    public static function setPriceForFactor(Factor $factor): void
     {
         $totalPrice = 0;
 
@@ -228,35 +193,67 @@ class FactorService
         // Update the total price for the factor
         $factor->update(['total_price' => $totalPrice]);
     }
-    public static function justCalculatePriceForFactor(Factor $factor): float|int|string
+
+    public function store(FactorStoreRequest|array $request)
     {
-        $totalPrice = 0;
-        /** @var Reserve $reserve */
-        foreach ($factor->reserves as $reserve) {
-            /** @var ReserveTemplate $reserveTemplate */
-            $reserveTemplate = $reserve->reserveTemplate;
-            /** @var Gym $gym */
-            $gym = $reserve->gym;
-            $price = $reserveTemplate->price ?? $gym->price;
-
-            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
-                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
-                $price = $discountedPrice;
+        DB::beginTransaction();
+        try {
+            if (is_array($request)) {
+                $loginRequest = new FactorStoreRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $loginRequest->rules(),
+                    attributes: $loginRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
             }
 
-            if ($reserve->want_ball && $reserveTemplate->is_ball) {
-                $price += $gym->ball_price;
+            /**
+             * @var $reserve_id
+             * @var $reserve_ids
+             * @var $status
+             * @var $user_id
+             * @var $gym_id
+             */
+            extract($fields);
+
+            $reserve_id = $reserve_id ?? null;
+            $reserve_ids = $reserve_ids ?? [];
+            if (isset($reserve_id)) {
+                $reserve_ids[] = $reserve_id;
+                $reserve_ids = array_unique($reserve_ids);
             }
 
-            // Update the price for the reserve
-            $factor->reserves()->updateExistingPivot(
-                $reserve->id,
-                ['price' => $price]
-            );
+            unset($fields['reserve_id'], $fields['reserve_ids']);
 
-            $totalPrice += $price;
+            // todo check role from set column status.
+            if (!user_have_role(roles: RolesEnum::admin->name)) {
+                unset($fields['status']);
+            }
+
+            /** @var Factor $factor */
+            $factor = $this->factorRepository->create($fields);
+
+            // todo should be get from use detach
+            $detach = $detach ?? true;
+            # sync reserve to factor
+            $factor->reserves()->sync($reserve_ids, $detach);
+
+            self::setPriceForFactor($factor);
+
+            DB::commit();
+
+            $factor_id = $factor?->id;
+
+            // todo after return factor, set description fields
+
+            $factor->description =self::calculateDescription($factor);
+
+            return $this->factorRepository->findOrFail($factor_id);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
         }
-        return $totalPrice;
     }
 
     public function update(FactorUpdateRequest $request, $factor_id)
@@ -295,7 +292,7 @@ class FactorService
 
             $factor->reserves()->sync($reserve_ids, $detach);
 
-            self::calculatePriceForFactor($factor);
+            self::setPriceForFactor($factor);
 
             DB::commit();
 
@@ -306,6 +303,7 @@ class FactorService
             throw $exception;
         }
     }
+
     public function destroy($factor_id): bool
     {
         DB::beginTransaction();
@@ -331,4 +329,5 @@ class FactorService
     {
         return Factor::getStatusTitle($status);
     }
+
 }

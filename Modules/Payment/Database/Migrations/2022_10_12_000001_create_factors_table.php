@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('total_price_vat', 15, 3)->default(0)->comment('مجموع قیمت شامل مالیات'); // مجموع قیمت با مالیات
             $table->text('description')->nullable()->comment('توضیحات');
             $table->tinyInteger('status')->nullable()->default(Factor::status_unknown/*0*/)->comment('وضعیت پرداخت');
+            $table->unsignedBigInteger('gym_id')->nullable()->comment('gym_id');
             $table->unsignedBigInteger('user_id')->nullable()->comment('کاربری که فاکتور براش ایجاد شده');
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
             $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');

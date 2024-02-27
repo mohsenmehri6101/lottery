@@ -18,6 +18,7 @@ class FactorStoreRequest extends FormRequest
             'description' => "nullable|string",
             'status' => "nullable|numeric|in:$statuses",
             'user_id' => 'nullable|exists:users,id',
+            'gym_id' => 'nullable|exists:gyms,id',
         ];
     }
 

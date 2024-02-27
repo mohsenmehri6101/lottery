@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Http\Repositories\ReserveRepository;
@@ -103,6 +102,7 @@ class ReserveService
     {
         DB::beginTransaction();
         try {
+
             $fields = $request->validated();
 
             /**
@@ -113,6 +113,7 @@ class ReserveService
             $reserves = collect($reserves);
 
             $reserveIds = [];
+            $gym_id = null;
 
             # save reserves
             $reserves->each(function ($reserve) use (&$reserveIds) {
@@ -121,7 +122,7 @@ class ReserveService
                 if (!isset($reserve['gym_id']) || !filled($reserve['gym_id'])) {
                     /** @var ReserveTemplate $reserveTemplate */
                     $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
-                    $reserve['gym_id'] = $reserveTemplate->gym_id;
+                    $gym_id = $reserve['gym_id'] = $reserveTemplate->gym_id;
                 }
 
                 # user_id
@@ -131,6 +132,7 @@ class ReserveService
                 /** @var Reserve $reserveModel */
                 $reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;
+
             });
 
             # save factor
@@ -138,8 +140,17 @@ class ReserveService
             $factorService = resolve('FactorService');
 
             /** @var Factor $factor */
-            $factor = $factorService->store(['reserve_ids' => $reserveIds, 'user_id' => get_user_id_login()]);
-            $factor->update(['description'=>$factorService::calculateDescription($factor),'total_price'=>$factorService::justCalculatePriceForFactor($factor)]);
+            $factor = $factorService->store([
+                'reserve_ids' => $reserveIds,
+                'user_id' => get_user_id_login(),
+                'gym_id'=>$gym_id
+            ]);
+
+
+            $factor->update([
+                'description'=>$factorService::calculateDescription($reservesData),
+                'total_price'=>$factorService::calculatePriceForFactor($factor),
+            ]);
 
             # create link payment
             /** @var PaymentService $paymentService */

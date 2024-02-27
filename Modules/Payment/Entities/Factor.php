@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Authentication\Entities\User;
+use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Reserve;
+use Modules\Gym\Entities\ReserveTemplate;
 
 /**
  * @property integer $id
@@ -23,6 +25,7 @@ use Modules\Gym\Entities\Reserve;
  * @property string $description_short
  * @property integer $status
  * @property integer $user_id
+ * @property integer $gym_id
  * @property integer $payment_id_paid
  * @property integer $user_creator
  * @property integer $user_editor
@@ -48,6 +51,7 @@ class Factor extends Model
         'description',
         'status',
         'user_id',
+        'gym_id',
         'payment_id_paid',
         'user_creator',
         'user_editor',
@@ -63,6 +67,7 @@ class Factor extends Model
         'description' => 'string',
         'status' => 'integer',
         'user_id' => 'integer',
+        'gym_id' => 'integer',
         'payment_id_paid' => 'integer',
         'user_creator' => 'integer',
         'user_editor' => 'integer',
@@ -71,7 +76,7 @@ class Factor extends Model
         'deleted_at' => 'timestamp',
     ];
 
-    protected $appends=[
+    protected $appends = [
         'description_short',
     ];
 
@@ -89,17 +94,28 @@ class Factor extends Model
     protected static function boot(): void
     {
         parent::boot();
-        static::creating(function ($item) {
+        static::creating(function ($factor) {
             # user_creator
-            if (is_null($item?->user_creator)) {
-                $item->user_creator = set_user_creator();
+            if (is_null($factor?->user_creator)) {
+                $factor->user_creator = set_user_creator();
             }
             # user_editor
-            if (is_null($item->user_editor)) {
-                $item->user_editor = set_user_creator();
+            if (is_null($factor->user_editor)) {
+                $factor->user_editor = set_user_creator();
             }
             # code
-            $item->code = self::generate_factor_random_code($item?->code ?? null);
+            $factor->code = self::generate_factor_random_code($factor?->code ?? null);
+
+
+            if (!filled($factor->description)) {
+                $factor->description = self::calculateDescription($factor->reserves()->get());
+            }
+
+            if (!filled($factor->total_price)) {
+                $factor->total_price = self::calculatePriceForFactor($factor);
+            }
+
+
         });
         static::updating(function ($item) {
             # user_editor
@@ -186,10 +202,66 @@ class Factor extends Model
         $descriptionShort = preg_replace('/شناسه رزرو:\s*\d+\s*,\s*/', '', $description);
         return $descriptionShort;
     }
-
     public function paymentPaid(): HasOne
     {
         return $this->hasOne(Payment::class, 'id', 'payment_id_paid');
     }
 
+    public static function calculatePriceForFactor(Factor $factor): float|int|string
+    {
+        $totalPrice = 0;
+        /** @var Reserve $reserve */
+        foreach ($factor->reserves as $reserve) {
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
+            /** @var Gym $gym */
+            $gym = $reserve->gym;
+            $price = $reserveTemplate->price ?? $gym->price;
+
+            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
+                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
+                $price = $discountedPrice;
+            }
+
+            if ($reserve->want_ball && $reserveTemplate->is_ball) {
+                $price += $gym->ball_price;
+            }
+
+            $totalPrice += $price;
+        }
+        return $totalPrice;
+    }
+
+    public static function calculateDescription(Factor $factor): string
+    {
+        $description = "فاکتور مربوط به ";
+        // Load associated reserves with their templates and gyms
+        $reserves = $factor->reserves()->with('reserveTemplate.gym', 'user')->get();
+        // Build description
+        foreach ($reserves as $reserve) {
+            $gymName = $reserve->reserveTemplate->gym->name;
+            $reserveId = $reserve->id;
+            $reserveDate = $reserve->dated_at->format('Y-m-d');
+            $discount = $reserve->reserveTemplate->discount;
+            $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
+            $ballPrice = $reserve->reserveTemplate->gym->ball_price;
+
+            // Check if user information is available
+            if ($reserve->user) {
+                // Check if name and family are set
+                if ($reserve->user->name && $reserve->user->family) {
+                    $userInfo = "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})";
+                } else {
+                    $userInfo = "({$reserve->user->mobile})";
+                }
+            } else {
+                $userInfo = '';
+            }
+
+            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
+        }
+        // Add total price to the description
+        $description .= "با مجموع قیمت: {$factor->total_price}";
+        return $description;
+    }
 }

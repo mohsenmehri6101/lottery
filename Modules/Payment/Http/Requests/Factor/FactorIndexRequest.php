@@ -18,8 +18,8 @@ class FactorIndexRequest extends FormRequest
         $withs_allows = implode(',', Factor::$relations_);
         $statuses = implode(',', Factor::getStatus());
 
-        $fillables=(new Factor())->getFillable();
-        $list_fillable=convert_array_to_string($fillables);
+        $fillables = (new Factor())->getFillable();
+        $list_fillable = convert_array_to_string($fillables);
 
         return [
             'paginate' => 'nullable|boolean',
@@ -34,6 +34,7 @@ class FactorIndexRequest extends FormRequest
             'description' => "nullable|string",
             'status' => "nullable|numeric|in:$statuses",
             'user_id' => 'nullable|exists:users,id',
+            'gym_id' => 'nullable|exists:gyms,id',
             'user_creator' => 'nullable|exists:users,id',
             'user_editor' => 'nullable|exists:users,id',
             'payment_id' => 'nullable|exists:payments,id',
