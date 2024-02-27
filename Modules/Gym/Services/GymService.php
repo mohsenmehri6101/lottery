@@ -19,6 +19,7 @@ use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
 use Modules\Gym\Http\Requests\Gym\GymShowRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreFreeRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
+use Modules\Gym\Http\Requests\Gym\GymToggleActivateRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
 use Modules\Gym\Http\Requests\Gym\GetInitializeRequestsSelectors;
@@ -70,6 +71,27 @@ class GymService
             });
         });
         return $query;
+    }
+
+    public function toggleGymActivated(GymToggleActivateRequest $request,$gym_id): int
+    {
+        try {
+            $fields = $request->validated();
+            $status = $fields['status'] || null;
+
+            /** @var Gym $gym */
+            $gym = $this->gymRepository->findOrFail($gym_id);
+
+            $new_status = $status || $gym->status === Gym::status_active ? Gym::status_disable : Gym::status_active;
+
+            $fields_update = ['status'=>$new_status];
+            $this->gymRepository->update($gym, $fields_update);
+
+            return $new_status;
+
+        } catch (Exception $exception) {
+            throw $exception;
+        }
     }
 
     public function index(GymIndexRequest|array $request)

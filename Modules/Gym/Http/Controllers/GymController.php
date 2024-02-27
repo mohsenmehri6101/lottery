@@ -5,6 +5,7 @@ namespace Modules\Gym\Http\Controllers;
 use App\Helper\Response\ResponseHelper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Gym\Entities\Gym;
 use Modules\Gym\Http\Requests\Gym\DeleteImageGymRequest;
 use Modules\Gym\Http\Requests\Gym\GetInitializeRequestsSelectors;
 use Modules\Gym\Http\Requests\Gym\GymIndexRequest;
@@ -12,6 +13,7 @@ use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
 use Modules\Gym\Http\Requests\Gym\GymShowRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreFreeRequest;
 use Modules\Gym\Http\Requests\Gym\GymStoreRequest;
+use Modules\Gym\Http\Requests\Gym\GymToggleActivateRequest;
 use Modules\Gym\Http\Requests\Gym\GymUpdateRequest;
 use Modules\Gym\Http\Requests\Gym\MyGymsRequest;
 use Modules\Gym\Services\GymService;
@@ -66,6 +68,27 @@ class GymController extends Controller
     {
         $gyms = $this->gymService->index($request);
         return ResponseHelper::responseSuccessIndex(data: $gyms);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/toggle-gym-activated/{id}",
+     *     tags={"gyms"},
+     *     summary="تغییر وضعیت باشگاه(فعال|غیرفعال)",
+     *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="number"),description="id"),
+     *     @OA\Parameter(name="per_page",in="query",required=false, @OA\Schema(type="string"),description="per_page"),
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function toggleGymActivated(GymToggleActivateRequest $request,$gym_id)
+    {
+        $new_status = $this->gymService->toggleGymActivated($request,$gym_id);
+
+        $status_text = $new_status ==Gym::status_active ? 'فعال' : 'غیرفعال';
+        $message = "سالن با موفقیت $status_text شد";
+        return ResponseHelper::responseSuccessIndex(data:['new_status'=>$new_status],message: $message);
     }
 
     /**

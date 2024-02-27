@@ -24,6 +24,7 @@ Route::prefix('gyms')->name('gyms_')->group(function () {
     Route::get('gym-status', [GymController::class, 'gymsStatus'])->name('gym_status');
     Route::get('/', [GymController::class, 'index'])->name('index');
     Route::get('/{id}', [GymController::class, 'show'])->name('show');
+    Route::post('/toggle-gym-activated/{id}', [GymController::class, 'toggleGymActivated'])->name('toggle_gym_activated');
     Route::post('/gym-free', [GymController::class, 'storeFree'])->name('gym_free');
     Route::post('/', [GymController::class, 'store'])->middleware('auth:api')->name('store');
     Route::post('/{id}', [GymController::class, 'update'])->middleware('auth:api')->name('post_update');
