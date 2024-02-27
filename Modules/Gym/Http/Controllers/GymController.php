@@ -69,7 +69,7 @@ class GymController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/my-gyms",
+     *     path="/api/v1/gyms/my-gyms",
      *     tags={"gyms"},
      *     summary="لیست باشگاه های ورزشی من(برای مسئول سالن ورزشی)",
      *     @OA\Parameter(name="paginate",in="query",required=false, @OA\Schema(type="string"),description="paginate"),
