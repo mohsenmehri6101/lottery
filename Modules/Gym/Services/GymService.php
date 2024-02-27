@@ -118,6 +118,7 @@ class GymService
             $query= $query
                 ->whereNotNull('user_gym_manager_id')
                 ->where('user_gym_manager_id',$user_id);
+
             return $this->gymRepository->resolve_paginate(query: $query);
 
         } catch (Exception $exception) {
