@@ -31,6 +31,47 @@ class GymService
     {
     }
 
+    public function indexHelper($fields=[])
+    {
+        /**
+         * @var $min_price
+         * @var $max_price
+         * @var $withs
+         * @var $dated_at
+         */
+        extract($fields);
+
+        $max_price = $max_price ?? null;
+        $min_price = $min_price ?? null;
+        $dated_at = $dated_at ?? null;
+        $withs = $withs ?? [];
+        unset($fields['withs']);
+
+        if (isset($fields['dated_at']) && filled($fields['dated_at'])) {
+            $withs[] = 'reserves';
+        }
+
+        $query = $this->gymRepository->queryFull(inputs: $fields, relations: $withs);
+
+        $query = $query->when($max_price, function ($query_) use ($max_price) {
+            return $query_->where('price', '<=', $max_price);
+        })->when($min_price, function ($query_) use ($min_price) {
+            return $query_->where('price', '>=', $min_price);
+        });
+
+        $query = $query->when(in_array('reserves', $withs), function ($queryReserve) use ($dated_at) {
+            $queryReserve->whereHas('reserves', function (Builder $query) use ($dated_at) {
+                return $query->when(filled($dated_at), function ($queryReserve) use ($dated_at) {
+                    /** @var ReserveRepository $reserveRepository */
+                    $reserveRepository = resolve('ReserveRepository');
+                    $fields_reserves = ['dated_at' => $dated_at];
+                    return $reserveRepository->queryByInputs(query: $queryReserve, inputs: $fields_reserves);
+                });
+            });
+        });
+        return $query;
+    }
+
     public function index(GymIndexRequest|array $request)
     {
         try {
@@ -45,42 +86,7 @@ class GymService
                 $fields = $request->validated();
             }
 
-            /**
-             * @var $min_price
-             * @var $max_price
-             * @var $withs
-             * @var $dated_at
-             */
-            extract($fields);
-
-            $max_price = $max_price ?? null;
-            $min_price = $min_price ?? null;
-            $dated_at = $dated_at ?? null;
-            $withs = $withs ?? [];
-            unset($fields['withs']);
-
-            if (isset($fields['dated_at']) && filled($fields['dated_at'])) {
-                $withs[] = 'reserves';
-            }
-
-            $query = $this->gymRepository->queryFull(inputs: $fields, relations: $withs);
-
-            $query = $query->when($max_price, function ($query_) use ($max_price) {
-                return $query_->where('price', '<=', $max_price);
-            })->when($min_price, function ($query_) use ($min_price) {
-                return $query_->where('price', '>=', $min_price);
-            });
-
-            $query = $query->when(in_array('reserves', $withs), function ($queryReserve) use ($dated_at) {
-                $queryReserve->whereHas('reserves', function (Builder $query) use ($dated_at) {
-                    return $query->when(filled($dated_at), function ($queryReserve) use ($dated_at) {
-                        /** @var ReserveRepository $reserveRepository */
-                        $reserveRepository = resolve('ReserveRepository');
-                        $fields_reserves = ['dated_at' => $dated_at];
-                        return $reserveRepository->queryByInputs(query: $queryReserve, inputs: $fields_reserves);
-                    });
-                });
-            });
+            $query = $this->indexHelper($fields);
 
             return $this->gymRepository->resolve_paginate(query: $query);
 
@@ -106,9 +112,13 @@ class GymService
             }
 
             $user_id = get_user_id_login();
-            $fields['user_gym_manager_id'] = $user_id;
 
-            return $this->index($fields);
+            $query = $this->indexHelper($fields);
+
+            $query= $query
+                ->whereNotNull('user_gym_manager_id')
+                ->where('user_gym_manager_id',$user_id);
+            return $this->gymRepository->resolve_paginate(query: $query);
 
         } catch (Exception $exception) {
             throw $exception;
