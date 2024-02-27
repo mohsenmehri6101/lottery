@@ -27,7 +27,6 @@ class ReserveService
     public function __construct(public ReserveRepository $reserveRepository)
     {
     }
-
     public function index(ReserveIndexRequest|array $request)
     {
         try {
@@ -46,7 +45,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function myReserve(MyReserveRequest $request)
     {
         try {
@@ -59,7 +57,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function show(ReserveShowRequest $request, $reserve_id)
     {
         try {
@@ -75,7 +72,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function store(ReserveStoreRequest $request)
     {
         DB::beginTransaction();
@@ -97,7 +93,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): ?array
     {
         DB::beginTransaction();
@@ -158,12 +153,6 @@ class ReserveService
             throw $exception;
         }
     }
-
-    /**
-     * @param ReserveStoreBlockRequest $request
-     * @return mixed
-     * @throws Exception
-     */
     public function storeBlocks(ReserveStoreBlockRequest $request): mixed
     {
         DB::beginTransaction();
@@ -184,7 +173,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function update(ReserveUpdateRequest $request, $reserve_id)
     {
         DB::beginTransaction();
@@ -203,7 +191,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function destroy($reserve_id)
     {
         DB::beginTransaction();
@@ -222,7 +209,6 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function reserveBetweenDates(ReserveBetweenDateRequest $request): Collection|array
     {
         try {
@@ -242,10 +228,8 @@ class ReserveService
             throw $exception;
         }
     }
-
     public function statuses(Request $request): array|bool|int|string|null
     {
         return Reserve::getStatusTitle();
     }
-
 }

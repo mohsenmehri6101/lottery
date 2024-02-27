@@ -454,15 +454,16 @@ class GymDatabaseSeeder extends Seeder
         for ($i = 0; $i < $number_record; $i++) {
             $user_id_random = User::query()->inRandomOrder()->first()->id;
 
+            /** @var Reserve $reserve */
+            $reserve = Reserve::query()->inRandomOrder()->first();
+
             /** @var Factor $factor */
             $factor = Factor::query()->create([
                 'total_price' => 0,
                 'status' => $faker->randomElement([Factor::status_paid, Factor::status_unpaid, Factor::status_unknown]),
                 'user_id' => $user_id_random,
+                'gym_id' => $reserve->gym_id,
             ]);
-
-            /** @var Reserve $reserve */
-            $reserve = Reserve::query()->inRandomOrder()->first();
 
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
         }

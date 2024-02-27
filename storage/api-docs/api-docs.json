@@ -6975,6 +6975,15 @@
                         }
                     },
                     {
+                        "name": "user_gym_manager_id",
+                        "in": "query",
+                        "description": "user_gym_manager_id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "search",
                         "in": "query",
                         "description": "search",
@@ -7501,13 +7510,13 @@
                 ]
             }
         },
-        "/api/v1/gyms/my-gyms": {
+        "/api/v1/my-gyms": {
             "get": {
                 "tags": [
                     "gyms"
                 ],
-                "summary": "لیست باشگاه های ورزشی من((برای مسئول سالن ورزشی)",
-                "operationId": "650ccb35a38e5ebd5e7ae6b15f4b601e",
+                "summary": "لیست باشگاه های ورزشی من(برای مسئول سالن ورزشی)",
+                "operationId": "515a50d257ea6436b811f79392c6fa91",
                 "parameters": [
                     {
                         "name": "paginate",
@@ -7570,6 +7579,24 @@
                         "required": false,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender_acceptance",
+                        "in": "query",
+                        "description": "gender_acceptance",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "priority_show",
+                        "in": "query",
+                        "description": "priority_show",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
@@ -7672,6 +7699,15 @@
                         }
                     },
                     {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "user_id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "user_creator",
                         "in": "query",
                         "description": "user_creator",
@@ -7692,7 +7728,16 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "relations:list is",
+                        "description": "relations:list is:userCreator, userEditor, city, scores, keywords, categories, images, urlImages, tags,sports, attributes, reserveTemplates, reserves",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dated_at",
+                        "in": "query",
+                        "description": "dated_at",
                         "required": false,
                         "schema": {
                             "type": "string"

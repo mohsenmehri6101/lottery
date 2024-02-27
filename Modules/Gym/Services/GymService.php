@@ -93,33 +93,23 @@ class GymService
     public function myGyms(MyGymsRequest|array $request)
     {
         try {
-            $fields = $request->validated();
-
-            /**
-             * @var $max_price
-             * @var $min_price
-             */
-            extract($fields);
-
-            $max_price = $max_price ?? null;
-            $min_price = $min_price ?? null;
+            if (is_array($request))
+            {
+                $my_gym_request = new MyGymsRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $my_gym_request->rules(),
+                    attributes: $my_gym_request->attributes()
+                )->validate();
+            }
+            else
+            {
+                $fields = $request->validated();
+            }
 
             $user_id = get_user_id_login();
+            $fields['user_gym_manager_id'] = $user_id;
 
-            $fields = [...$fields, 'user_gym_manager_id' => $user_id];
-
-            $query = $this->gymRepository->queryFull(inputs: $fields);
-
-            $query = $query->whereNotNull('user_gym_manager_id');
-
-            $query = $query
-                ->when($max_price, function ($query_) use ($max_price) {
-                    return $query_->where('price', '<=', $max_price);
-                })
-                ->when($min_price, function ($query_) use ($min_price) {
-                    return $query_->where('price', '>=', $min_price);
-                });
-            return $this->gymRepository->resolve_paginate(query: $query);
+            return $this->index($fields);
 
         } catch (Exception $exception) {
             throw $exception;
