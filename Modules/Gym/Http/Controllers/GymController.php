@@ -360,4 +360,5 @@ class GymController extends Controller
         $lists = $this->gymService->getInitializeRequestsSelectors($request);
         return ResponseHelper::responseSuccess(data: $lists);
     }
+
 }
