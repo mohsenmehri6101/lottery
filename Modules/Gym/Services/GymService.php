@@ -40,7 +40,8 @@ class GymService
                     rules: $gymIndexRequest->rules(),
                     attributes: $gymIndexRequest->attributes()
                 )->validate();
-            } else {
+            }
+            else {
                 $fields = $request->validated();
             }
 
@@ -51,8 +52,6 @@ class GymService
              * @var $dated_at
              */
             extract($fields);
-
-            /* ------------------------------------------ */
 
             $max_price = $max_price ?? null;
             $min_price = $min_price ?? null;

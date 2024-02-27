@@ -54,4 +54,5 @@ class GymIndexRequest extends FormRequest
             'deleted_at' => 'nullable',
         ];
     }
+
 }

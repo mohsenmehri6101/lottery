@@ -6,7 +6,9 @@ class MyGymsRequest extends GymIndexRequest
 {
     public function authorize(): bool
     {
-        return is_gym_manager();
+        return true;
+        // todo should be set
+        // return is_gym_manager();
     }
 
 }

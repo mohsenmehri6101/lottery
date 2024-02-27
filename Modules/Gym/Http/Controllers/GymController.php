@@ -72,6 +72,7 @@ class GymController extends Controller
      *     path="/api/v1/gyms/my-gyms",
      *     tags={"gyms"},
      *     summary="لیست باشگاه های ورزشی من(برای مسئول سالن ورزشی)",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="paginate",in="query",required=false, @OA\Schema(type="string"),description="paginate"),
      *     @OA\Parameter(name="per_page",in="query",required=false, @OA\Schema(type="string"),description="per_page"),
      *     @OA\Parameter(name="page",in="query",required=false, @OA\Schema(type="string"),description="page"),

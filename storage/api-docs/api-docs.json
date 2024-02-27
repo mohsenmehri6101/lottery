@@ -7510,13 +7510,13 @@
                 ]
             }
         },
-        "/api/v1/my-gyms": {
+        "/api/v1/gyms/my-gyms": {
             "get": {
                 "tags": [
                     "gyms"
                 ],
                 "summary": "لیست باشگاه های ورزشی من(برای مسئول سالن ورزشی)",
-                "operationId": "515a50d257ea6436b811f79392c6fa91",
+                "operationId": "650ccb35a38e5ebd5e7ae6b15f4b601e",
                 "parameters": [
                     {
                         "name": "paginate",
