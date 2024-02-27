@@ -7011,6 +7011,15 @@
                         }
                     },
                     {
+                        "name": "reason_gym_disabled",
+                        "in": "query",
+                        "description": "reason_gym_disabled",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "gender_acceptance",
                         "in": "query",
                         "description": "gender_acceptance",
@@ -7230,6 +7239,15 @@
                         "name": "name",
                         "in": "query",
                         "description": "Gym name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "reason_gym_disabled",
+                        "in": "query",
+                        "description": "reason_gym_disabled",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -7510,6 +7528,62 @@
                 ]
             }
         },
+        "/api/v1/toggle-gym-activated/{id}": {
+            "post": {
+                "tags": [
+                    "gyms"
+                ],
+                "summary": "تغییر وضعیت باشگاه(فعال|غیرفعال)",
+                "operationId": "32667fa5ee4c8050f8c38f652338f6cc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "per_page",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/gyms/my-gyms": {
             "get": {
                 "tags": [
@@ -7576,6 +7650,15 @@
                         "name": "description",
                         "in": "query",
                         "description": "description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "reason_gym_disabled",
+                        "in": "query",
+                        "description": "reason_gym_disabled",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -7862,6 +7945,15 @@
                         "name": "name",
                         "in": "query",
                         "description": "name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "reason_gym_disabled",
+                        "in": "query",
+                        "description": "reason_gym_disabled",
                         "required": false,
                         "schema": {
                             "type": "string"

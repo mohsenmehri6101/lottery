@@ -75,14 +75,13 @@ class GymController extends Controller
      *     path="/api/v1/toggle-gym-activated/{id}",
      *     tags={"gyms"},
      *     summary="تغییر وضعیت باشگاه(فعال|غیرفعال)",
-     *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="number"),description="id"),
-     *     @OA\Parameter(name="per_page",in="query",required=false, @OA\Schema(type="string"),description="per_page"),
-     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="number"),description="gym id"),
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status:1,3"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
      */
-    public function toggleGymActivated(GymToggleActivateRequest $request,$gym_id)
+    public function toggleGymActivated(GymToggleActivateRequest $request,$gym_id): JsonResponse
     {
         $new_status = $this->gymService->toggleGymActivated($request,$gym_id);
 
