@@ -72,7 +72,7 @@ class GymController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/toggle-gym-activated/{id}",
+     *     path="/api/v1/gyms/toggle-gym-activated/{id}",
      *     tags={"gyms"},
      *     summary="تغییر وضعیت باشگاه(فعال|غیرفعال)",
      *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="number"),description="gym id"),

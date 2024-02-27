@@ -7539,25 +7539,16 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "id",
+                        "description": "gym id",
                         "required": true,
                         "schema": {
                             "type": "number"
                         }
                     },
                     {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "per_page",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "status",
                         "in": "query",
-                        "description": "status",
+                        "description": "status:1,3",
                         "required": false,
                         "schema": {
                             "type": "integer"
