@@ -82,7 +82,8 @@ class GymService
                     attributes: $gymIndexRequest->attributes()
                 )->validate();
             }
-            else {
+            else
+            {
                 $fields = $request->validated();
             }
 

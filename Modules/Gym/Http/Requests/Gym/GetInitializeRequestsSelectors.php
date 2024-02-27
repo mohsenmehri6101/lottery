@@ -20,5 +20,4 @@ class GetInitializeRequestsSelectors extends FormRequest
             'withs.*' => "nullable|string|in:$withs_allows",
         ];
     }
-
 }
