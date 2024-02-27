@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->comment('(باشگاه های ورزشی)باشگاه ورزشی های ورزشی');
             $table->string('name')->nullable()->comment('نام');
             $table->text('description')->nullable()->comment('توضیحات');
+            $table->string('reason_gym_disabled')->nullable()->comment('');
             $table->decimal('price', 15, 3)->default(0)->comment('قیمت');
             // info locations
             $table->string('latitude')->nullable()->comment('عرض جغرافیایی');
@@ -27,7 +28,6 @@ return new class extends Migration {
             $table->decimal('ball_price', 15, 3)->default(0)->nullable()->comment('قیمت توپ ورزشی');
             $table->integer('score')->nullable()->default(0)->comment('score');
             $table->tinyInteger('status')->nullable()->default(Gym::status_active)->comment(implode(' - ', Gym::getStatusGymPersian()));
-            $table->string('reason_gym_disabled')->nullable()->comment('');
             $table->bigInteger('like_count')->default(0)->comment('like count');
             $table->bigInteger('dislike_count')->default(0)->comment('dislike count');
             $table->tinyInteger('profit_share_percentage')->nullable()->comment('مقدار سهم سود(سایت) از این سالن ورزشی');
