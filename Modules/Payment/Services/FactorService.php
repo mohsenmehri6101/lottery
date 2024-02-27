@@ -23,6 +23,7 @@ class FactorService
     public function __construct(public FactorRepository $factorRepository)
     {
     }
+
     public function index(FactorIndexRequest|array $request)
     {
         try {
@@ -80,12 +81,14 @@ class FactorService
             throw $exception;
         }
     }
+
     public function myFactor(MyFactorRequest $request)
     {
         $fields = $request->validated();
         $fields['user_id'] = get_user_id_login();
         return $this->index($fields);
     }
+
     public function show(FactorShowRequest $request, $factor_id)
     {
         try {
@@ -101,63 +104,6 @@ class FactorService
         } catch (Exception $exception) {
             throw $exception;
         }
-    }
-    public static function calculateDescription(Factor $factor): string
-    {
-        $description = "فاکتور مربوط به ";
-        // Load associated reserves with their templates and gyms
-        $reserves = $factor->reserves()->with('reserveTemplate.gym', 'user')->get();
-        // Build description
-        foreach ($reserves as $reserve) {
-            $gymName = $reserve->reserveTemplate->gym->name;
-            $reserveId = $reserve->id;
-            $reserveDate = $reserve->dated_at->format('Y-m-d');
-            $discount = $reserve->reserveTemplate->discount;
-            $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
-            $ballPrice = $reserve->reserveTemplate->gym->ball_price;
-
-            // Check if user information is available
-            if ($reserve->user) {
-                // Check if name and family are set
-                if ($reserve->user->name && $reserve->user->family) {
-                    $userInfo = "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})";
-                } else {
-                    $userInfo = "({$reserve->user->mobile})";
-                }
-            } else {
-                $userInfo = '';
-            }
-
-            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
-        }
-        // Add total price to the description
-        $description .= "با مجموع قیمت: {$factor->total_price}";
-        return $description;
-    }
-
-    public static function calculatePriceForFactor(Factor $factor): float|int|string
-    {
-        $totalPrice = 0;
-        /** @var Reserve $reserve */
-        foreach ($factor->reserves as $reserve) {
-            /** @var ReserveTemplate $reserveTemplate */
-            $reserveTemplate = $reserve->reserveTemplate;
-            /** @var Gym $gym */
-            $gym = $reserve->gym;
-            $price = $reserveTemplate->price ?? $gym->price;
-
-            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
-                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
-                $price = $discountedPrice;
-            }
-
-            if ($reserve->want_ball && $reserveTemplate->is_ball) {
-                $price += $gym->ball_price;
-            }
-
-            $totalPrice += $price;
-        }
-        return $totalPrice;
     }
 
     public static function setPriceForFactor(Factor $factor): void
@@ -189,8 +135,7 @@ class FactorService
 
             $totalPrice += $price;
         }
-
-        // Update the total price for the factor
+        # Update the total price for the factor
         $factor->update(['total_price' => $totalPrice]);
     }
 
@@ -226,7 +171,7 @@ class FactorService
 
             unset($fields['reserve_id'], $fields['reserve_ids']);
 
-            // todo check role from set column status.
+            # todo check role from set column status.
             if (!user_have_role(roles: RolesEnum::admin->name)) {
                 unset($fields['status']);
             }
@@ -234,8 +179,9 @@ class FactorService
             /** @var Factor $factor */
             $factor = $this->factorRepository->create($fields);
 
-            // todo should be get from use detach
+            # todo should be get from use detach
             $detach = $detach ?? true;
+
             # sync reserve to factor
             $factor->reserves()->sync($reserve_ids, $detach);
 
@@ -245,9 +191,8 @@ class FactorService
 
             $factor_id = $factor?->id;
 
-            // todo after return factor, set description fields
-
-            $factor->description =self::calculateDescription($factor);
+            # todo after return factor, set description fields.
+            $factor->description = Factor::calculateDescription($factor);
 
             return $this->factorRepository->findOrFail($factor_id);
         } catch (Exception $exception) {
@@ -325,6 +270,7 @@ class FactorService
             throw $exception;
         }
     }
+
     public function listStatusFactor($status = null): array|bool|int|string|null
     {
         return Factor::getStatusTitle($status);

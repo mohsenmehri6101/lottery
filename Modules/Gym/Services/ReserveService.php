@@ -132,7 +132,6 @@ class ReserveService
                 /** @var Reserve $reserveModel */
                 $reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;
-
             });
 
             # save factor
@@ -144,12 +143,6 @@ class ReserveService
                 'reserve_ids' => $reserveIds,
                 'user_id' => get_user_id_login(),
                 'gym_id'=>$gym_id
-            ]);
-
-
-            $factor->update([
-                'description'=>$factorService::calculateDescription($reservesData),
-                'total_price'=>$factorService::calculatePriceForFactor($factor),
             ]);
 
             # create link payment
