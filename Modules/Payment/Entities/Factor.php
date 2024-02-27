@@ -110,7 +110,7 @@ class Factor extends Model
 
             # description
             if (!filled($factor->description)) {
-                $factor->description = self::calculateDescription($factor->reserves()->get());
+                $factor->description = self::calculateDescription($factor);
             }
 
             # total_price

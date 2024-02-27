@@ -465,11 +465,6 @@ class GymDatabaseSeeder extends Seeder
             $reserve = Reserve::query()->inRandomOrder()->first();
 
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
-
-            $factor->update([
-                'total_price' => /*$factor->reserves()->sum('price')*/ 1000,
-                'description'=>FactorService::calculateDescription($factor),
-                ]);
         }
     }
 

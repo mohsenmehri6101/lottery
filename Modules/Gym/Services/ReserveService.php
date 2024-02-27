@@ -27,6 +27,7 @@ class ReserveService
     public function __construct(public ReserveRepository $reserveRepository)
     {
     }
+
     public function index(ReserveIndexRequest|array $request)
     {
         try {
@@ -97,7 +98,6 @@ class ReserveService
         }
     }
 
-    # payment Payment
     public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): ?array
     {
         DB::beginTransaction();
@@ -158,8 +158,6 @@ class ReserveService
             throw $exception;
         }
     }
-
-    # payment Payment
 
     /**
      * @param ReserveStoreBlockRequest $request
