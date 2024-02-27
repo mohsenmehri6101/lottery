@@ -15,5 +15,4 @@ class GymToggleActivateRequest extends FormRequest
         ];
     }
 
-
 }

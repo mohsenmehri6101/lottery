@@ -7528,13 +7528,13 @@
                 ]
             }
         },
-        "/api/v1/toggle-gym-activated/{id}": {
+        "/api/v1/gyms/toggle-gym-activated/{id}": {
             "post": {
                 "tags": [
                     "gyms"
                 ],
                 "summary": "تغییر وضعیت باشگاه(فعال|غیرفعال)",
-                "operationId": "32667fa5ee4c8050f8c38f652338f6cc",
+                "operationId": "d39f96a108e1cf9c0cc91d60a21f1b9c",
                 "parameters": [
                     {
                         "name": "id",

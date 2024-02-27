@@ -77,12 +77,18 @@ class GymService
     {
         try {
             $fields = $request->validated();
-            $status = $fields['status'] || null;
+
+            /**
+             * @var $status
+             */
+            extract($fields);
+
+            $status = $status ?? null;
 
             /** @var Gym $gym */
             $gym = $this->gymRepository->findOrFail($gym_id);
 
-            $new_status = $status || $gym->status === Gym::status_active ? Gym::status_disable : Gym::status_active;
+            $new_status = $status ?? $gym->status === Gym::status_active ? Gym::status_disable : Gym::status_active;
 
             $fields_update = ['status'=>$new_status];
             $this->gymRepository->update($gym, $fields_update);

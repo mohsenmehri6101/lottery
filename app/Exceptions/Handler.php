@@ -28,7 +28,6 @@ class Handler extends ExceptionHandler
 
     public function report(Throwable $e): void
     {
-//         dd($e->getMessage(),$e->getLine()/*,$e->getTrace()*/);
         parent::report($e);
         ExceptionService::reporter($e);
     }
