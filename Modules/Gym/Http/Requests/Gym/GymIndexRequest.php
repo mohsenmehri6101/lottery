@@ -28,6 +28,7 @@ class GymIndexRequest extends FormRequest
             'search' => 'nullable|filled|min:3',
             'name' => 'nullable',
             'description' => 'nullable',
+            'reason_gym_disabled' => 'nullable',
             'price' => 'nullable',
             'max_price' => 'nullable',
             'min_price' => 'nullable',

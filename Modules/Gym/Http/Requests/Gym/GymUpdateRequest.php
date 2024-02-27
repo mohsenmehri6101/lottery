@@ -47,6 +47,7 @@ class GymUpdateRequest extends FormRequest
         $rules = [
             'name' => 'nullable|filled',
             'description' => 'nullable',
+            'reason_gym_disabled' => 'nullable',
             'price' => 'nullable',
             'status' => "nullable|numeric|in:$list_status_allowable",
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",

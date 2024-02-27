@@ -25,6 +25,7 @@ use Modules\Geographical\Entities\City;
  * @property integer $city_id
  * @property string $address
  * @property string $short_address
+ * @property string $reason_gym_disabled
  * @property integer $score
  * @property integer $status
  * @property integer $gender_acceptance

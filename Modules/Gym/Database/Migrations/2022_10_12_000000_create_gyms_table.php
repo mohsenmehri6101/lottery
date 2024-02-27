@@ -26,7 +26,8 @@ return new class extends Migration {
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
             $table->decimal('ball_price', 15, 3)->default(0)->nullable()->comment('قیمت توپ ورزشی');
             $table->integer('score')->nullable()->default(0)->comment('score');
-            $table->tinyInteger('status')->nullable()->default(Gym::status_active)->comment('status');
+            $table->tinyInteger('status')->nullable()->default(Gym::status_active)->comment(implode(' - ', Gym::getStatusGymPersian()));
+            $table->string('reason_gym_disabled')->nullable()->comment('');
             $table->bigInteger('like_count')->default(0)->comment('like count');
             $table->bigInteger('dislike_count')->default(0)->comment('dislike count');
             $table->tinyInteger('profit_share_percentage')->nullable()->comment('مقدار سهم سود(سایت) از این سالن ورزشی');
