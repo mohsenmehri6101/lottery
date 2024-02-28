@@ -27,6 +27,7 @@ class ReserveService
     public function __construct(public ReserveRepository $reserveRepository)
     {
     }
+
     public function index(ReserveIndexRequest|array $request)
     {
         try {
@@ -52,6 +53,7 @@ class ReserveService
             $user_id = get_user_id_login();
             $fields['user_id'] = $user_id;
             return $this->index($fields);
+            // todo check what is wrong ?
             $query = $this->reserveRepository->queryFull(inputs: $fields);
         } catch (Exception $exception) {
             throw $exception;
