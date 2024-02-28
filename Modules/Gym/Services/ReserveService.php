@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Http\Repositories\ReserveRepository;
+use Modules\Gym\Http\Requests\Reserve\MyGymReserveRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
@@ -59,6 +61,26 @@ class ReserveService
             throw $exception;
         }
     }
+
+    public function myGymReserve(MyGymReserveRequest $request)
+    {
+        try {
+            $fields = $request->validated();
+            #################################
+            $user_id = get_user_id_login();
+            $fields['user_id'] = $user_id;
+            $gym_ids = Gym::query()->where('user_gym_manager_id',$user_id)->pluck('id')->toArray();
+            $query = $this->reserveRepository->queryFull(inputs: $fields);
+            $query = $this->reserveRepository->byArray($query,'gym_id',$gym_ids);
+            #################################
+            return $this->reserveRepository->resolve_paginate(query: $query);
+
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+
     public function show(ReserveShowRequest $request, $reserve_id)
     {
         try {

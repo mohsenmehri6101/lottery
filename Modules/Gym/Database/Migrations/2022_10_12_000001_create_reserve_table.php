@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->boolean('is_ball')->nullable()->comment('اجاره توپ');
             $table->tinyInteger('gender_acceptance')->nullable()->comment('پذیرش جنسیت');
             $table->boolean('discount')->nullable()->default(0)->comment('تخفیف');
-            $table->tinyInteger('status')->nullable()->default(ReserveTemplate::status_active/*1*/)->comment('');
+            $table->tinyInteger('status')->nullable()->default(ReserveTemplate::status_active/*1*/)->comment(implode(' - ', Reserve::getStatusPersian()));
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
             $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
             $table->timestamps();

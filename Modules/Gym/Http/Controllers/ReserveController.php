@@ -5,6 +5,7 @@ namespace Modules\Gym\Http\Controllers;
 use App\Helper\Response\ResponseHelper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Gym\Http\Requests\Reserve\MyGymReserveRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveBetweenDateRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveIndexRequest;
 use Modules\Gym\Http\Requests\Reserve\ReserveShowRequest;
@@ -79,6 +80,34 @@ class ReserveController extends Controller
         return ResponseHelper::responseSuccess(data: $reserves);
     }
 
+    
+    /**
+     * @OA\Get(
+     *     path="/api/v1/reserves/my-gym-reserves",
+     *     tags={"reserves"},
+     *     summary="لیست رزور های سالن های من(مخصوص مسئول سالن ورزشی)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="paginate",in="query",required=false, @OA\Schema(type="string"),description="paginate"),
+     *     @OA\Parameter(name="per_page",in="query",required=false, @OA\Schema(type="string"),description="per_page"),
+     *     @OA\Parameter(name="page",in="query",required=false, @OA\Schema(type="string"),description="page"),
+     *     @OA\Parameter(name="id",in="query",required=false, @OA\Schema(type="integer"),description="id"),
+     *     @OA\Parameter(name="reserve_template_id",in="query",required=false, @OA\Schema(type="integer"),description="reserve_template_id"),
+     *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="user_id"),
+     *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
+     *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="integer"),description="user_creator"),
+     *     @OA\Parameter(name="user_editor",in="query",required=false, @OA\Schema(type="integer"),description="user_editor"),
+     *     @OA\Parameter(name="dated_at",in="query",required=false, @OA\Schema(type="string"),description="dated_at"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is:userCreator,userEditor,user,reserveTemplate,gym,factors"),
+     *     @OA\Parameter(name="created_at",in="query",required=false, @OA\Schema(type="string"),description="created_at"),
+     *     @OA\Parameter(name="updated_at",in="query",required=false, @OA\Schema(type="string"),description="updated_at"),
+     *     @OA\Parameter(name="deleted_at",in="query",required=false, @OA\Schema(type="string"),description="deleted_at"),     *  )
+     */
+    public function myGymReserve(MyGymReserveRequest $request): JsonResponse
+    {
+        $reserves = $this->reserveService->myGymReserve($request);
+        return ResponseHelper::responseSuccess(data: $reserves);
+    }
+
     /**
      * @OA\Get(
      *     path="/api/v1/reserves/{id}",
@@ -143,7 +172,7 @@ class ReserveController extends Controller
     public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): JsonResponse
     {
         $reserve = $this->reserveService->storeAndPrintFactorAndCreateLinkPayment($request);
-        return $reserve ? ResponseHelper::responseSuccessStore(data: ['url'=>$reserve]) : ResponseHelper::responseFailedStore();
+        return $reserve ? ResponseHelper::responseSuccessStore(data: ['url' => $reserve]) : ResponseHelper::responseFailedStore();
     }
 
     /**
