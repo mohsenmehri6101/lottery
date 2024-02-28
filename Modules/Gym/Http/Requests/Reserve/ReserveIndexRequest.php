@@ -4,6 +4,7 @@ namespace Modules\Gym\Http\Requests\Reserve;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Gym\Entities\Reserve;
+use Modules\Payment\Entities\Payment;
 use function convert_withs_from_string_to_array;
 
 class ReserveIndexRequest extends FormRequest
@@ -16,7 +17,7 @@ class ReserveIndexRequest extends FormRequest
     public function rules(): array
     {
         $withs_allows = implode(',', Reserve::$relations_);
-        $statuses = implode(',', Reserve::getPaymentStatus());
+        $statuses = implode(',', Payment::getStatusPayment());
 
         return [
             'paginate' => 'nullable|boolean',

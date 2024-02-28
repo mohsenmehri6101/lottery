@@ -1,6 +1,5 @@
 <?php
 
-use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Route;
 
 # php artisan serve --host=192.168.125.8 --port=8000
@@ -53,12 +52,14 @@ Route::prefix('admin')->group(function () {
     Route::get('/errors', [\App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/factors', [\App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/payments', [\App\Http\Controllers\HomeController::class, 'index']);
+    Route::get('/reserves', [\App\Http\Controllers\HomeController::class, 'index']);
 });
-
-Route::get('test-test-test', function () {
-    $faker = FakerFactory::create();
-    return $faker->url();
+/*   -------------------------------------------------------------------------------------  */
+Route::prefix('manager')->group(function () {
+    Route::get('/gyms', [\App\Http\Controllers\HomeController::class, 'index']);
+    Route::get('/reserves', [\App\Http\Controllers\HomeController::class, 'index']);
 });
+/*   -------------------------------------------------------------------------------------  */
 
 /*
 * 3 روز.

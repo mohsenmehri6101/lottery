@@ -80,7 +80,7 @@ class ReserveController extends Controller
         return ResponseHelper::responseSuccess(data: $reserves);
     }
 
-    
+
     /**
      * @OA\Get(
      *     path="/api/v1/reserves/my-gym-reserves",
@@ -92,15 +92,15 @@ class ReserveController extends Controller
      *     @OA\Parameter(name="page",in="query",required=false, @OA\Schema(type="string"),description="page"),
      *     @OA\Parameter(name="id",in="query",required=false, @OA\Schema(type="integer"),description="id"),
      *     @OA\Parameter(name="reserve_template_id",in="query",required=false, @OA\Schema(type="integer"),description="reserve_template_id"),
-     *     @OA\Parameter(name="user_id",in="query",required=false, @OA\Schema(type="integer"),description="user_id"),
      *     @OA\Parameter(name="status",in="query",required=false, @OA\Schema(type="integer"),description="status"),
-     *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="integer"),description="user_creator"),
-     *     @OA\Parameter(name="user_editor",in="query",required=false, @OA\Schema(type="integer"),description="user_editor"),
      *     @OA\Parameter(name="dated_at",in="query",required=false, @OA\Schema(type="string"),description="dated_at"),
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is:userCreator,userEditor,user,reserveTemplate,gym,factors"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is: userCreator,userEditor,user,reserveTemplate,gym,factors"),
      *     @OA\Parameter(name="created_at",in="query",required=false, @OA\Schema(type="string"),description="created_at"),
      *     @OA\Parameter(name="updated_at",in="query",required=false, @OA\Schema(type="string"),description="updated_at"),
-     *     @OA\Parameter(name="deleted_at",in="query",required=false, @OA\Schema(type="string"),description="deleted_at"),     *  )
+     *     @OA\Parameter(name="deleted_at",in="query",required=false, @OA\Schema(type="string"),description="deleted_at"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
      */
     public function myGymReserve(MyGymReserveRequest $request): JsonResponse
     {
