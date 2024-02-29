@@ -2,6 +2,7 @@
 
 namespace Modules\Payment\Services;
 
+use App\Exceptions\Contracts\ForbiddenCustomException;
 use Exception;
 use Modules\Payment\Http\Requests\Transaction\TransactionIndexRequest;
 use Modules\Payment\Http\Requests\Transaction\TransactionShowRequest;
@@ -17,6 +18,10 @@ class TransactionService
     public function index(TransactionIndexRequest $request)
     {
         try {
+            if(!is_admin()){
+                throw new ForbiddenCustomException();
+            }
+
             $fields = $request->validated();
             return $this->transactionRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {

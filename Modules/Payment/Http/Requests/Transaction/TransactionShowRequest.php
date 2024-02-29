@@ -8,6 +8,11 @@ use function convert_withs_from_string_to_array;
 
 class TransactionShowRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return is_admin();
+    }
+
     protected function prepareForValidation(): void
     {
         $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
@@ -22,4 +27,5 @@ class TransactionShowRequest extends FormRequest
             'withs.*' => "nullable|string|in:$withs_allows",
         ];
     }
+
 }
