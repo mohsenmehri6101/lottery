@@ -4,6 +4,7 @@ namespace Modules\Payment\Services;
 
 use App\Exceptions\Contracts\ForbiddenCustomException;
 use Exception;
+use Modules\Payment\Http\Requests\Transaction\MyGymsTransactionRequest;
 use Modules\Payment\Http\Requests\Transaction\TransactionIndexRequest;
 use Modules\Payment\Http\Requests\Transaction\TransactionShowRequest;
 use Modules\Payment\Http\Repositories\TransactionRepository;

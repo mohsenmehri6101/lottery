@@ -30,10 +30,10 @@ class FactorService
     {
         try {
             if (is_array($request)) {
-                $userStoreRequest = new FactorIndexRequest();
+                $factorIndexRequest = new FactorIndexRequest();
                 $fields = Validator::make(data: $request,
-                    rules: $userStoreRequest->rules(),
-                    attributes: $userStoreRequest->attributes(),
+                    rules: $factorIndexRequest->rules(),
+                    attributes: $factorIndexRequest->attributes(),
                 )->validate();
             } else {
                 $fields = $request->validated();
@@ -91,15 +91,23 @@ class FactorService
         return $this->index($fields);
     }
 
-    public function myGymsFactor(MyGymsFactorRequest $request)
+    public function myGymsFactor(MyGymsFactorRequest|array $request)
     {
         try {
-
              if(!is_gym_manager()){
                  throw new ForbiddenCustomException();
              }
 
-            $fields = $request->validated();
+             # $fields = $request->validated();
+            if (is_array($request)) {
+                $myTransactionFactorRequest = new MyGymsFactorRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $myTransactionFactorRequest->rules(),
+                    attributes: $myTransactionFactorRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
 
             $user_id = get_user_id_login();
             $fields['user_id'] = $user_id;
