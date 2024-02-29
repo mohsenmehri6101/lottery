@@ -169,11 +169,14 @@ class PaymentService
         // سود مسئول سالن
         $gym_profit = $factor->total_price * ($profit_share_percentage / 100);
 
+        $user_resource = $factor->user_id;
+        $user_resource=filled($user_resource) ? $user_resource : get_user_id_login();
+
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
         Transaction::query()->create([
             'user_destination' => $user_gym_manager_id,
             // todo should be can set user_id if gym-manager want set reserve from user. or not ?!!
-            'user_resource' => $factor->user_id ?? get_user_id_login(),
+            'user_resource' => $user_resource,
             'price' => $gym_profit,
             'description' => 'تراکنش برای مسئول سالن',
             'specification' => Transaction::SPECIFICATION_CREDIT, // بستانکار
@@ -188,7 +191,7 @@ class PaymentService
         Transaction::query()->create([
             'user_destination' => self::USER_ID_SYSTEM,
             // todo should be can set user_id if gym-manager want set reserve from user. or not ?!!
-            'user_resource' => $factor->user_id ?? get_user_id_login(),
+            'user_resource' => $user_resource,
             'price' => $site_income,
             'description' => 'تراکنش برای مسئول سایت',
             'specification' => Transaction::SPECIFICATION_DEBIT, // بدهکار

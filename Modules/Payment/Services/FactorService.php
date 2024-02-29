@@ -177,6 +177,9 @@ class FactorService
                 /** @var Reserve $reserveFirst */
                 $reserveFirst = Reserve::query()->findOrFail($reserve_id_first);
                 $fields['gym_id'] = $reserveFirst->gym_id ?? null;
+                if (!isset($fields['user_id']) || !filled($fields['user_id'])) {
+                    $fields['user_id'] = $user_id= $user_id ?? $reserveFirst->user_id;
+                }
             }
 
             if (!isset($fields['user_id']) || !filled($fields['user_id'])) {
