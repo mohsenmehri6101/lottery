@@ -6,6 +6,7 @@ use App\Helper\Response\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Payment\Http\Requests\Payment\MyPaymentsRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentCreateLinkRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
@@ -114,6 +115,106 @@ class PaymentController extends Controller
     public function index(PaymentIndexRequest $request): JsonResponse
     {
         $payments = $this->paymentService->index($request);
+        return ResponseHelper::responseSuccess(data: $payments);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/payments/my-payments",
+     *     tags={"payments"},
+     *     summary="List payments",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="paginate",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Paginate"
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Per page"
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Page"
+     *     ),
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="ID"
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="Status"
+     *     ),
+     *     @OA\Parameter(
+     *         name="resnumber",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *         description="Resnumber"
+     *     ),
+     *     @OA\Parameter(
+     *         name="amount",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="number", format="float"),
+     *         description="Amount"
+     *     ),
+     *     @OA\Parameter(
+     *         name="factor_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="Factor ID"
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer"),
+     *         description="User ID"
+     *     ),
+     *     @OA\Parameter(
+     *         name="created_at",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time"),
+     *         description="Created at"
+     *     ),
+     *     @OA\Parameter(
+     *         name="updated_at",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time"),
+     *         description="Updated at"
+     *     ),
+     *     @OA\Parameter(
+     *         name="deleted_at",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date-time"),
+     *         description="Deleted at"
+     *     ),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent())
+     * )
+     */
+    public function myPayments(MyPaymentsRequest $request): JsonResponse
+    {
+        $payments = $this->paymentService->myPayments($request);
         return ResponseHelper::responseSuccess(data: $payments);
     }
 

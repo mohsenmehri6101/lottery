@@ -117,7 +117,9 @@ class FactorService
 
             return $this->factorRepository->resolve_paginate(query: $query);
 
-        } catch (Exception $exception) {
+        }
+        catch (Exception $exception)
+        {
             throw $exception;
         }
     }

@@ -2,6 +2,7 @@
 
 namespace Modules\Payment\Services;
 
+use App\Exceptions\Contracts\ForbiddenCustomException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Transaction;
 use Modules\Payment\Http\Repositories\FactorRepository;
 use Modules\Payment\Http\Repositories\PaymentRepository;
+use Modules\Payment\Http\Requests\Payment\MyPaymentsRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentCreateLinkRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
@@ -32,6 +34,38 @@ class PaymentService
             $fields = $request->validated();
             return $this->paymentRepository->resolve_paginate(inputs: $fields);
         } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    public function myPayments(MyPaymentsRequest $request)
+    {
+        try {
+
+            if(!is_gym_manager()){
+                throw new ForbiddenCustomException();
+            }
+
+            if (is_array($request)) {
+                $myPaymentsRequest = new MyPaymentsRequest();
+                $fields = Validator::make(data: $request,
+                    rules: $myPaymentsRequest->rules(),
+                    attributes: $myPaymentsRequest->attributes(),
+                )->validate();
+            } else {
+                $fields = $request->validated();
+            }
+
+            $user_id = get_user_id_login();
+            $fields['user_id'] = $user_id;
+
+            $query = $this->paymentRepository->queryFull(inputs: $fields);
+
+            return $this->paymentRepository->resolve_paginate(query: $query);
+
+        }
+        catch (Exception $exception)
+        {
             throw $exception;
         }
     }

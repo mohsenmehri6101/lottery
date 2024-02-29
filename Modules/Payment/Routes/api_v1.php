@@ -35,18 +35,23 @@ Route::prefix('banks')->name('banks_')->group(function () {
     Route::put('/{id}', [BankController::class, 'update'])->middleware('auth:api')->name('update');
     Route::delete('/{id}', [BankController::class, 'destroy'])->middleware('auth:api')->name('destroy');
 });
+
 # payments
 Route::prefix('payments')->name('payments_')->group(function () {
     Route::get('/', [PaymentController::class, 'index'])->middleware('auth:api')->name('index');
+    Route::get('/my-payments', [PaymentController::class, 'myPayments'])->middleware('auth:api')->name('my_payments');
+
     # payping
     Route::post('/create-link-payment', [PaymentController::class, 'createLinkPayment'])->middleware('auth:api')->name('create_link_payment');
     Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('confirm_payment_get');
     Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('confirm_payment_post');
+
     # sadad
     Route::post('/create-link-payment-sadad', [PaymentController::class, 'createLinkPaymentSadad'])->middleware('auth:api')->name('create_link_payment');
     Route::get('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_get');
     Route::post('/confirm-payment-sadad', [PaymentController::class, 'confirmPaymentSadad'])->name('confirm_payment_post');
     Route::get('/{id}', [PaymentController::class, 'show'])->middleware('auth:api')->name('show');
+
 });
 
 # transactions

@@ -6,8 +6,8 @@
     <title>
         رزر آنلاین باشگاه ورزشی
     </title>
-    <script type="module" crossorigin src="{{ url('/assets/index-c9312551.js') }}"></script>
-    <link rel="stylesheet" href='{{ url("assets/index-d4abe445.css") }}'>
+    <script type="module" crossorigin src="{{ url('/assets/index-3da1e8b5.js') }}"></script>
+    <link rel="stylesheet" href='{{ url("assets/index-64714e6f.css") }}'>
 </head>
 <body>
 <div id='app'></div>
