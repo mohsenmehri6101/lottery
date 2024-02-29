@@ -13527,7 +13527,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "withs",
+                        "description": "withs:userCreator,userEditor,payments,paymentPaid,user,reserves",
                         "required": false,
                         "schema": {
                             "type": "string"

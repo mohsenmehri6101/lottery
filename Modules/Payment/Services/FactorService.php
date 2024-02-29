@@ -17,6 +17,7 @@ use Modules\Payment\Http\Requests\Factor\FactorUpdateRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 use Modules\Payment\Http\Requests\Factor\MyFactorRequest;
+use Modules\Payment\Http\Requests\Factor\MyGymsFactorRequest;
 
 class FactorService
 {
@@ -89,6 +90,25 @@ class FactorService
         return $this->index($fields);
     }
 
+    public function myGymsFactor(MyGymsFactorRequest $request)
+    {
+        try {
+            $fields = $request->validated();
+            #################################
+            $user_id = get_user_id_login();
+            $fields['user_id'] = $user_id;
+            $gym_ids = Gym::query()->where('user_gym_manager_id',$user_id)->pluck('id')->toArray();
+            $query = $this->factorRepository->queryFull(inputs: $fields);
+            $query = $this->factorRepository->byArray($query,'gym_id',$gym_ids);
+            #################################
+
+            return $this->factorRepository->resolve_paginate(query: $query);
+
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
     public function show(FactorShowRequest $request, $factor_id)
     {
         try {
@@ -143,6 +163,7 @@ class FactorService
     {
         DB::beginTransaction();
         try {
+
             if (is_array($request)) {
                 $loginRequest = new FactorStoreRequest();
                 $fields = Validator::make(data: $request,

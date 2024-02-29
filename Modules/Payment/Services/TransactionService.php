@@ -14,7 +14,6 @@ class TransactionService
     public function __construct(public TransactionRepository $transactionRepository)
     {
     }
-
     public function index(TransactionIndexRequest $request)
     {
         try {

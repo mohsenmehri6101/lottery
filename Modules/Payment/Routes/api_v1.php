@@ -11,6 +11,7 @@ use Modules\Payment\Http\Controllers\TransactionController;
 Route::prefix('factors')->name('factors_')->group(function () {
     Route::get('/', [FactorController::class, 'index'])->middleware('auth:api')->name('index');
     Route::get('/statuses', [FactorController::class, 'listStatusFactor'])->middleware('auth:api')->name('statuses');
+    Route::get('/my-gyms-factor', [FactorController::class, 'myGymsFactor'])->middleware('auth:api')->name('my_gyms_factor');
     Route::get('/my-factor', [FactorController::class, 'myFactor'])->middleware('auth:api')->name('my_factor');
     Route::get('/{id}', [FactorController::class, 'show'])->middleware('auth:api')->name('show');
     Route::post('/', [FactorController::class, 'store'])->middleware('auth:api')->name('store');
