@@ -171,6 +171,18 @@ class FactorService
 
             unset($fields['reserve_id'], $fields['reserve_ids']);
 
+            # If gym_id is not set in the input fields, get it from ReserveTemplate
+            if (!isset($fields['gym_id']) || !filled($fields['gym_id'])) {
+                $reserve_id_first = $reserve_ids[0];
+                /** @var Reserve $reserveFirst */
+                $reserveFirst = Reserve::query()->findOrFail($reserve_id_first);
+                $fields['gym_id'] = $reserveFirst->gym_id ?? null;
+            }
+
+            if (!isset($fields['user_id']) || !filled($fields['user_id'])) {
+                $fields['user_id'] = get_user_id_login() ?? null;
+            }
+
             # todo check role from set column status.
             if (!user_have_role(roles: RolesEnum::admin->name)) {
                 unset($fields['status']);

@@ -21,9 +21,11 @@ use Illuminate\Support\Facades\Validator;
 class PaymentService
 {
     const USER_ID_SYSTEM = 1;
+
     public function __construct(public PaymentRepository $paymentRepository)
     {
     }
+
     public function index(PaymentIndexRequest $request)
     {
         try {
@@ -33,6 +35,7 @@ class PaymentService
             throw $exception;
         }
     }
+
     public function show(PaymentShowRequest $request, $payment_id)
     {
         try {
@@ -49,6 +52,7 @@ class PaymentService
             throw $exception;
         }
     }
+
     public function createLinkPayment(PaymentCreateLinkRequest|array $request): ?string
     {
         try {
@@ -83,7 +87,7 @@ class PaymentService
             $user = $factor->user;
             $returnUrl = route('api_v1_payment_payments_confirm_payment_get') ?? null;
             $payerName = $factor?->user?->full_name ?? null;
-            # todo better set description of factor and total price and dated at and reserve template id and gym_id
+            # todo better set description of factor and total-price and dated-at and reserve template id and gym_id
             $description = isset($description) && filled($description) ? $description : $mobile;
             # Updated description to include more relevant information
 
@@ -119,10 +123,11 @@ class PaymentService
 
             return $url;
         } catch (Exception $exception) {
-            Log::info('',[$exception->getMessage(),$exception->getLine(),$exception->getTrace()]);
+            Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
             throw new $exception;
         }
     }
+
     public function confirmPayment(Request $request): bool
     {
         $fields = $request->all();
@@ -133,17 +138,17 @@ class PaymentService
         $PaymentPaypingService = resolve('PaymentPaypingService');
         ####################################################################
         /** @var Payment $payment */
-        $payment = Payment::query()->where('resnumber',$resnumber)->firstOrFail();
+        $payment = Payment::query()->where('resnumber', $resnumber)->firstOrFail();
         ####################################################################
         /** @var Factor $factor */
         $factor = $payment->factor;
         ####################################################################
-        $factor_id=$factor->payments()->latest()->first()->id;
-        if($PaymentPaypingService->confirmPayment(authority: $ref_id,amount: $factor->total_price,factor_id: $factor_id)){
+        $factor_id = $factor->payments()->latest()->first()->id;
+        if ($PaymentPaypingService->confirmPayment(authority: $ref_id, amount: $factor->total_price, factor_id: $factor_id)) {
             $factor->status = Factor::status_paid;
             $payment->status = Payment::status_paid;
             $payment->save();
-            $factor->payment_id_paid =$payment->id;
+            $factor->payment_id_paid = $payment->id;
             $factor->save();
 
             self::save_transactions($factor);
@@ -153,6 +158,7 @@ class PaymentService
         ####################################################################
         return false;
     }
+
     public static function save_transactions(Factor $factor): void
     {
         // محاسبه مقدار سود مسئول سالن
@@ -165,10 +171,9 @@ class PaymentService
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سالن
         Transaction::query()->create([
-            'user_destination' =>$user_gym_manager_id,
+            'user_destination' => $user_gym_manager_id,
             // todo should be can set user_id if gym-manager want set reserve from user. or not ?!!
-            'user_resource'=>get_user_id_login(),
-            'user_id' => $user_gym_manager_id,
+            'user_resource' => $factor->user_id ?? get_user_id_login(),
             'price' => $gym_profit,
             'description' => 'تراکنش برای مسئول سالن',
             'specification' => Transaction::SPECIFICATION_CREDIT, // بستانکار
@@ -181,10 +186,9 @@ class PaymentService
 
         // ثبت رکورد در جدول تراکنش‌ها برای مسئول سایت
         Transaction::query()->create([
-            'user_destination' =>self::USER_ID_SYSTEM,
+            'user_destination' => self::USER_ID_SYSTEM,
             // todo should be can set user_id if gym-manager want set reserve from user. or not ?!!
-            'user_resource'=>get_user_id_login(),
-            'user_id' => self::USER_ID_SYSTEM,
+            'user_resource' => $factor->user_id ?? get_user_id_login(),
             'price' => $site_income,
             'description' => 'تراکنش برای مسئول سایت',
             'specification' => Transaction::SPECIFICATION_DEBIT, // بدهکار
@@ -193,6 +197,7 @@ class PaymentService
         ]);
 
     }
+
     public function destroy($payment_id): bool
     {
         DB::beginTransaction();
@@ -211,6 +216,7 @@ class PaymentService
             throw $exception;
         }
     }
+
     public function createLinkPaymentSadad(PaymentCreateLinkRequest $request): ?string
     {
         try {
@@ -242,34 +248,35 @@ class PaymentService
 
             /** @var $payment $payment */
             $payment = $factor->payments()->create([
-                'status'=>Payment::status_unpaid,
-                'resnumber'=>Payment::resnumberUnique(),
-                'amount'=>$amount,
-                'user_id'=>$user->id,
+                'status' => Payment::status_unpaid,
+                'resnumber' => Payment::resnumberUnique(),
+                'amount' => $amount,
+                'user_id' => $user->id,
             ]);
-                $url = $PaymentPaypingService->createLinkPayment(
-                    clientRefId: $payment->resnumber,
-                    mobile: $mobile,
-                    amount: $amount,
-                    returnUrl: $returnUrl,
-                    description: $description,
-                    payerName: $payerName,
-                );
+            $url = $PaymentPaypingService->createLinkPayment(
+                clientRefId: $payment->resnumber,
+                mobile: $mobile,
+                amount: $amount,
+                returnUrl: $returnUrl,
+                description: $description,
+                payerName: $payerName,
+            );
 
             return '';
         } catch (Exception $exception) {
             throw new $exception;
         }
     }
+
     public static function fake_payment(Factor $factor): void
     {
         Payment::query()->create([
-                'status'=>Payment::status_paid,
-                'resnumber'=>Str::random(5),
-                'amount'=>$factor->total_price,
-                'factor_id'=>$factor->id,
-                'user_id'=>$factor->user_id,
-            ]);
+            'status' => Payment::status_paid,
+            'resnumber' => Str::random(5),
+            'amount' => $factor->total_price,
+            'factor_id' => $factor->id,
+            'user_id' => $factor->user_id,
+        ]);
 
         $factor->update(['status' => Factor::status_paid]);
     }

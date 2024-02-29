@@ -36,6 +36,7 @@ class TransactionController extends Controller
      *     @OA\Parameter(name="user_creator", in="query", required=false, @OA\Schema(type="integer"), description="user_creator"),
      *     @OA\Parameter(name="user_editor", in="query", required=false, @OA\Schema(type="integer"), description="user_editor"),
      *     @OA\Parameter(name="timed_at", in="query", required=false, @OA\Schema(type="string"), description="timed_at"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:userDestination,userResource,userCreator,userEditor"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      * )
@@ -69,6 +70,7 @@ class TransactionController extends Controller
      *     summary="Show transaction details",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer"), description="Transaction ID"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:userDestination,userResource,userCreator,userEditor"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=404, description="Transaction not found", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),

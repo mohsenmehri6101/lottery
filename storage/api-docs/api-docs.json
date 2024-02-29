@@ -14437,6 +14437,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "withs",
+                        "in": "query",
+                        "description": "withs:userDestination,userResource,userCreator,userEditor",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -14511,6 +14520,15 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "withs",
+                        "in": "query",
+                        "description": "withs:userDestination,userResource,userCreator,userEditor",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],

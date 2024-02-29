@@ -327,7 +327,7 @@ class RoleService
     public static function userHaveRoles($user, $roles = []): bool
     {
         $roles = self::prepare_roles($roles)?->toArray() ?? [];
-        $roles_user = $user->roles->pluck('id')?->toArray() ?? [];
+        $roles_user = $user?->roles?->pluck('id')?->toArray() ?? [];
         $roles = collect($roles);
         $result = true;
         $roles->map(function ($role) use ($roles_user, &$result) {

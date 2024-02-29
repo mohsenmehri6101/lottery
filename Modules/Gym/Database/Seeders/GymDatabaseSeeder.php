@@ -32,6 +32,7 @@ use Modules\Gym\Services\ImageService;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Payment;
 use Modules\Payment\Services\FactorService;
+use Modules\Payment\Services\PaymentService;
 use Modules\Slider\Entities\Slider;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
@@ -177,7 +178,7 @@ class GymDatabaseSeeder extends Seeder
                     'score' => $faker->numberBetween(1, 5),
                     'status' => $faker->numberBetween(0, 2),
                     'profit_share_percentage' => $faker->numberBetween(1, 12),
-                    'is_ball'=>$is_ball,
+                    'is_ball' => $is_ball,
                     'ball_price' => $is_ball ? $faker->randomElement([150000, 200000]) : 0,
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
                     'like_count' => $faker->numberBetween(15, 85),
@@ -249,7 +250,7 @@ class GymDatabaseSeeder extends Seeder
                     'cod' => $faker->boolean,
                     'is_ball' => $faker->boolean,
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
-                    'discount' => $faker->randomElement([null,null,null,null,5,10,15,20]),
+                    'discount' => $faker->randomElement([null, null, null, null, 5, 10, 15, 20]),
                     'status' => $faker->randomElement([
                         ReserveTemplate::status_active,
                         ReserveTemplate::status_active,
@@ -279,12 +280,10 @@ class GymDatabaseSeeder extends Seeder
             $user_creator_or_editor = User::query()->inRandomOrder()->first()->id;
             /** @var ReserveTemplate $reserve_template */
             $reserve_template = ReserveTemplate::query()->inRandomOrder()->first();
-
-            // Generate random data for a reserve reservation
+            // Generate random data for a reserve reservation.
             $georgian_date = $faker->dateTimeThisMonth();
-
-            // Convert the Georgian date to a Carbon\Carbon object
-            $carbon_date = self::getRandomDateThisWeek();/*Carbon::instance($georgian_date);*/
+            // Convert the Georgian date to a Carbon\Carbon object.
+            $carbon_date = self::getRandomDateThisWeek();/* Carbon::instance($georgian_date); */
 
             // Format the Carbon date as 'Y-m-d' (date format)
             $formatted_georgian_date = $carbon_date->format('Y-m-d');
@@ -314,7 +313,18 @@ class GymDatabaseSeeder extends Seeder
                 ];
 
                 // Create a new reserve reservation using the model
-                Reserve::query()->create($reserve_fake);
+                /** @var Reserve $reserve */
+                $reserve = Reserve::query()->create($reserve_fake);
+
+                /** @var FactorService $factorService */
+                $factorService = resolve('FactorService');
+
+                /** @var Factor $factor */
+                $factor = $factorService->store(['reserve_id' => $reserve->id, 'status' => Reserve::status_active]);
+                $factor->update(['description' => Factor::calculateDescription($factor)]);
+
+                PaymentService::save_transactions($factor);
+                PaymentService::fake_payment($factor);
             }
         }
     }
@@ -328,8 +338,6 @@ class GymDatabaseSeeder extends Seeder
         $randomTimestamp = mt_rand($startOfWeek->timestamp, $endOfWeek->timestamp);
         // Create a Carbon object from the random timestamp
         return Carbon::createFromTimestamp($randomTimestamp);
-        //
-        //        return $randomDate;
     }
 
     function helperFunctionUserFake($count = 60): void
@@ -550,8 +558,8 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionGymFake();
         self::helperFunctionReservesFake();
         self::helperFunctionSliderFake();
-        self::helperFunctionFactorFake();
-        self::helperFunctionFakePayment();
+//        self::helperFunctionFactorFake();
+//        self::helperFunctionFakePayment();
         self::helperFunctionCommonComplaintFake();
         self::helperFunctionComplaintFake();
         // self::helperFunctionFakeAttributeGymPrice();
