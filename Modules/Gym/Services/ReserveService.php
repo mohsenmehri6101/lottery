@@ -2,6 +2,7 @@
 
 namespace Modules\Gym\Services;
 
+use App\Exceptions\Contracts\ForbiddenCustomException;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -65,6 +66,10 @@ class ReserveService
     public function myGymReserve(MyGymReserveRequest $request)
     {
         try {
+            if(is_gym_manager()){
+                throw new ForbiddenCustomException();
+            }
+
             $fields = $request->validated();
             #################################
             $user_id = get_user_id_login();

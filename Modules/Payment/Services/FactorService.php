@@ -2,6 +2,7 @@
 
 namespace Modules\Payment\Services;
 
+use App\Exceptions\Contracts\ForbiddenCustomException;
 use App\Permissions\RolesEnum;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,10 @@ class FactorService
     public function myGymsFactor(MyGymsFactorRequest $request)
     {
         try {
+            if(is_gym_manager()){
+                throw new ForbiddenCustomException();
+            }
+
             $fields = $request->validated();
             #################################
             $user_id = get_user_id_login();
@@ -100,7 +105,6 @@ class FactorService
             $gym_ids = Gym::query()->where('user_gym_manager_id',$user_id)->pluck('id')->toArray();
             $query = $this->factorRepository->queryFull(inputs: $fields);
             $query = $this->factorRepository->byArray($query,'gym_id',$gym_ids);
-            #################################
 
             return $this->factorRepository->resolve_paginate(query: $query);
 
