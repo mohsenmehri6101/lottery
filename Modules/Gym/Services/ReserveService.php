@@ -169,6 +169,11 @@ class ReserveService
                 'gym_id'=>$gym_id
             ]);
 
+            $factor->update([
+                'description'=>Factor::calculateDescription($factor),
+                'total_price'=>Factor::calculatePriceForFactor($factor)
+            ]);
+
             # create link payment
             /** @var PaymentService $paymentService */
             $paymentService = resolve('PaymentService');

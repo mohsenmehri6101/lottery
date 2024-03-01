@@ -321,7 +321,10 @@ class GymDatabaseSeeder extends Seeder
 
                 /** @var Factor $factor */
                 $factor = $factorService->store(['reserve_id' => $reserve->id, 'status' => Reserve::status_active]);
-                $factor->update(['description' => Factor::calculateDescription($factor)]);
+                $factor->update([
+                    'description'=>Factor::calculateDescription($factor),
+                    'total_price'=>Factor::calculatePriceForFactor($factor)
+                ]);
 
                 PaymentService::save_transactions($factor);
                 PaymentService::fake_payment($factor);
