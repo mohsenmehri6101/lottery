@@ -11,8 +11,10 @@ use Modules\Authentication\Services\UserService;
 use Modules\Gym\Entities\ReserveTemplate;
 use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Image;
+use Modules\Gym\Http\Repositories\AttributeRepository;
 use Modules\Gym\Http\Repositories\GymRepository;
 use Modules\Gym\Http\Repositories\ReserveRepository;
+use Modules\Gym\Http\Repositories\SportRepository;
 use Modules\Gym\Http\Requests\Gym\DeleteImageGymRequest;
 use Modules\Gym\Http\Requests\Gym\GymIndexRequest;
 use Modules\Gym\Http\Requests\Gym\GymLikeRequest;
@@ -39,6 +41,8 @@ class GymService
          * @var $max_price
          * @var $withs
          * @var $dated_at
+         * @var $sports
+         * @var $attributes
          */
         extract($fields);
 
@@ -46,13 +50,28 @@ class GymService
         $min_price = $min_price ?? null;
         $dated_at = $dated_at ?? null;
         $withs = $withs ?? [];
+        $sports = $sports ?? [];
+        $attributes = $attributes ?? [];
         unset($fields['withs']);
         unset($fields['min_price']);
         unset($fields['max_price']);
+        unset($fields['sports']);
+        unset($fields['attributes']);
 
+        # ##########
+        # attributes
+        if(count($attributes)){
+            $withs[]='attributes';
+        }
+        # sports
+        if(count($sports)){
+            $withs[]='sports';
+        }
         if (isset($fields['dated_at']) && filled($fields['dated_at'])) {
             $withs[] = 'reserves';
         }
+
+        $withs=array_unique($withs);
 
         $query = $this->gymRepository->queryFull(inputs: $fields, relations: $withs);
 
@@ -72,6 +91,25 @@ class GymService
                 });
             });
         });
+        $query = $query->when(in_array('sports', $withs), function ($querySport) use ($sports) {
+            $querySport->whereHas('sports', function (Builder $query) use ($sports) {
+                return $query->when(count($sports), function ($querySport) use ($sports) {
+                    /** @var SportRepository $sportRepository */
+                    $sportRepository = resolve('SportRepository');
+                    return $sportRepository->byArray($querySport,'id',$sports);
+                });
+            });
+        });
+        $query = $query->when(in_array('attributes', $withs), function ($querySport) use ($attributes) {
+            $querySport->whereHas('attributes', function (Builder $query) use ($attributes) {
+                return $query->when(count($attributes), function ($queryAttribute) use ($attributes) {
+                    /** @var AttributeRepository $attributeRepository */
+                    $attributeRepository = resolve('AttributeRepository');
+                    return $attributeRepository->byArray($queryAttribute,'id',$attributes);
+                });
+            });
+        });
+
         return $query;
     }
 

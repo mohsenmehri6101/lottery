@@ -219,6 +219,7 @@ class GymServiceProvider extends ServiceProvider
         $this->app->singleton('ReserveTemplateRepository', function ($app) use ($reserveTemplateRepository) {
             return $reserveTemplateRepository;
         });
+
         # ReserveTemplateService
         $this->app->singleton('ReserveTemplateService', function ($app) use ($reserveTemplateRepository,$gymRepository) {
             return new \Modules\Gym\Services\ReserveTemplateService($reserveTemplateRepository,$gymRepository);

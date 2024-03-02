@@ -10,6 +10,7 @@
         "ghasedak/laravel": "^2.1",
         "ghasedak/php": "^2.1",
         "guzzlehttp/guzzle": "^7.2",
+        "hekmatinasser/verta": "^8.3",
         "intervention/image": "^3.3",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.10",

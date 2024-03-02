@@ -37,25 +37,34 @@ class GymIndexRequest extends FormRequest
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'priority_show' => "nullable|numeric",
             'profit_share_percentage' => 'nullable|min:0|max:100',
-
             'city_id' => 'nullable|exists:cities,id',
             'short_address' => "nullable",
             'address' => "nullable",
-
             'score' => "nullable",
             'status' => "nullable|numeric|in:$list_status_allowable",
             'like_count' => 'nullable',
             'dislike_count' => 'nullable',
+
             'user_id' => 'nullable|exists:users,id',
             'user_creator' => 'nullable|exists:users,id',
             'user_editor' => 'nullable|exists:users,id',
+
             'withs' => 'nullable|array',
             'withs.*' => "nullable|string|in:$withs_allows",
+
+            # sports
+            'sports' => 'nullable|array',
+            'sports.*' => 'required|filled|exists:sports,id',
+
+            # attributes
+            'attributes' => 'nullable|array',
+            'attributes.*' => 'required|filled|exists:attributes,id',
+
             'dated_at' => 'nullable',
             'created_at' => 'nullable',
             'updated_at' => 'nullable',
             'deleted_at' => 'nullable',
         ];
-    }
 
+    }
 }

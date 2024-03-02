@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Authentication\Entities\User;
+use Modules\Gym\Entities\Gym;
 use Modules\Gym\Entities\Reserve;
+use Modules\Gym\Entities\ReserveTemplate;
 
 /**
  * @property integer $id
@@ -202,6 +204,7 @@ class Factor extends Model
         $descriptionShort = preg_replace('/شناسه رزرو:\s*\d+\s*,\s*/', '', $description);
         return $descriptionShort;
     }
+
     public function paymentPaid(): HasOne
     {
         return $this->hasOne(Payment::class, 'id', 'payment_id_paid');
@@ -211,9 +214,18 @@ class Factor extends Model
     {
         $totalPrice = 0;
         foreach ($factor->reserves as $reserve) {
+
+            /** @var ReserveTemplate $reserveTemplate */
             $reserveTemplate = $reserve->reserveTemplate;
+
+            /*   -------------------------------------   */
+
+            /** @var Gym $gym */
             $gym = $reserve->gym;
-            $price = $reserveTemplate->price ?? $gym->price;
+
+            $reserve_template_price = filled($reserveTemplate->price) && $reserveTemplate->price != 0 ? $reserveTemplate->price : null;
+
+            $price = $reserve_template_price ?? $gym->price;
 
             if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
                 $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
@@ -232,13 +244,18 @@ class Factor extends Model
     public static function calculateDescription(Factor $factor): string
     {
         $description = "فاکتور مربوط به ";
+        /** @var Reserve $reserve */
         foreach ($factor->reserves as $reserve) {
-            $gymName = $reserve->reserveTemplate->gym->name;
+
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
+
+            $gymName = $reserveTemplate->gym->name;
             $reserveId = $reserve->id;
-            $reserveDate = $reserve->dated_at->format('Y-m-d');
-            $discount = $reserve->reserveTemplate->discount;
+            $reserveDate = $reserve->dated_at_persian;
+            $discount = $reserveTemplate->discount;
             $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
-            $ballPrice = $reserve->reserveTemplate->gym->ball_price;
+            $ballPrice = $reserveTemplate->gym->ball_price;
 
             $userInfo = $reserve->user ? ($reserve->user->name && $reserve->user->family ?
                 "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})" :

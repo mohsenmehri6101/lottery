@@ -71,6 +71,10 @@ class Reserve extends Model
         'deleted_at' => 'timestamp',
     ];
     protected $hidden = [];
+
+    public $appends=[
+        'dated_at_persian'
+    ];
     public static array $relations_ = [
         'userCreator',
         'userEditor',
@@ -168,5 +172,10 @@ class Reserve extends Model
     public function attributePrices(): BelongsToMany
     {
         return $this->belongsToMany(AttributePrice::class, 'attribute_gym_price_reserve');
+    }
+
+    public function getDatedAtPersianAttribute(): string
+    {
+        return verta($this->dated_at)->format('Y-m-d');
     }
 }
