@@ -7,9 +7,15 @@ use Modules\Payment\Entities\Payment;
 
 class PaymentIndexRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
+    }
+
     public function rules(): array
     {
         $statuses_payments = implode(',', Payment::getStatusPayment());
+        $withs_allows = implode(',', Payment::$relations_);
 
         // todo check payment show just user_id him self not all of the payment list.
 
@@ -28,6 +34,9 @@ class PaymentIndexRequest extends FormRequest
             'user_id' => 'nullable|exists:users,id',
             'user_creator' => 'nullable|exists:users,id',
             'user_editor' => 'nullable|exists:users,id',
+
+            'withs' => 'nullable|array',
+            'withs.*' => "nullable|string|in:$withs_allows",
 
             'created_at' => 'nullable',
             'updated_at' => 'nullable',

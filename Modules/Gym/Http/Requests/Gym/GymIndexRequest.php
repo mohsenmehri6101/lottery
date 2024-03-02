@@ -29,9 +29,11 @@ class GymIndexRequest extends FormRequest
             'name' => 'nullable',
             'description' => 'nullable',
             'reason_gym_disabled' => 'nullable',
+
             'price' => 'nullable',
-            'max_price' => 'nullable',
             'min_price' => 'nullable',
+            'max_price' => 'nullable',
+
             'gender_acceptance' => "nullable|numeric|in:$status_gender_acceptances",
             'priority_show' => "nullable|numeric",
             'profit_share_percentage' => 'nullable|min:0|max:100',

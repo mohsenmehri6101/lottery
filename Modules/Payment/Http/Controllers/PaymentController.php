@@ -87,6 +87,7 @@ class PaymentController extends Controller
      *         @OA\Schema(type="integer"),
      *         description="User ID"
      *     ),
+     *    @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is"),
      *     @OA\Parameter(
      *         name="created_at",
      *         in="query",
@@ -187,6 +188,7 @@ class PaymentController extends Controller
      *         @OA\Schema(type="integer"),
      *         description="User ID"
      *     ),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is"),
      *     @OA\Parameter(
      *         name="created_at",
      *         in="query",

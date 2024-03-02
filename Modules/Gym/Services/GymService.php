@@ -47,6 +47,8 @@ class GymService
         $dated_at = $dated_at ?? null;
         $withs = $withs ?? [];
         unset($fields['withs']);
+        unset($fields['min_price']);
+        unset($fields['max_price']);
 
         if (isset($fields['dated_at']) && filled($fields['dated_at'])) {
             $withs[] = 'reserves';
@@ -54,10 +56,10 @@ class GymService
 
         $query = $this->gymRepository->queryFull(inputs: $fields, relations: $withs);
 
-        $query = $query->when($max_price, function ($query_) use ($max_price) {
-            return $query_->where('price', '<=', $max_price);
-        })->when($min_price, function ($query_) use ($min_price) {
-            return $query_->where('price', '>=', $min_price);
+        $query = $query->when($max_price, function ($_query) use ($max_price) {
+            return $_query->where('price', '<=', $max_price);
+        })->when($min_price, function ($_query) use ($min_price) {
+            return $_query->where('price', '>=', $min_price);
         });
 
         $query = $query->when(in_array('reserves', $withs), function ($queryReserve) use ($dated_at) {
