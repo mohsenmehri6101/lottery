@@ -140,6 +140,7 @@ class ReserveService
             $gym_id = null;
 
             # save reserves
+            $reservesModels = [];
             $reserves->each(function ($reserve) use (&$reserveIds) {
                 $reserve_template_id = $reserve['reserve_template_id'];
 
@@ -154,7 +155,7 @@ class ReserveService
                     $reserve['user_id'] = get_user_id_login();
                 }
                 /** @var Reserve $reserveModel */
-                $reserveModel = $this->reserveRepository->create($reserve);
+                $reservesModels[]=$reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;
             });
 
@@ -167,8 +168,8 @@ class ReserveService
                 'reserve_ids' => $reserveIds,
                 'user_id' => get_user_id_login(),
                 'gym_id'=>$gym_id,
-                'description'=>Factor::calculateDescriptionReserves($reserves),
-                'total_price'=>Factor::calculatePriceForFactorReserves($reserves)
+                'description'=>Factor::calculateDescriptionReserves(collect($reservesModels)),
+                'total_price'=>Factor::calculatePriceForFactorReserves(collect($reservesModels))
             ]);
 
             // $factor->update([

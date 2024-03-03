@@ -33,7 +33,7 @@ use Modules\Gym\Entities\ReserveTemplate;
  * @property $updated_at
  * @property $deleted_at
  */
-class Factor extends Model
+class Factor_ extends Model
 {
     use SoftDeletes, UserEditor, UserCreator;
 
@@ -210,26 +210,29 @@ class Factor extends Model
         return $this->hasOne(Payment::class, 'id', 'payment_id_paid');
     }
 
-    public static function calculatePriceForFactor(Factor $factor): float|int|string
+    public static function calculatePriceForFactor(Factor_ $factor): float|int|string
     {
         $totalPrice = 0;
         foreach ($factor->reserves as $reserve) {
+
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
 
             /*   -------------------------------------   */
 
             /** @var Gym $gym */
             $gym = $reserve->gym;
 
-            $reserve_template_price = filled($reserve->reserveTemplate->price) && $reserve->reserveTemplate->price != 0 ? $reserve->reserveTemplate->price : null;
+            $reserve_template_price = filled($reserveTemplate->price) && $reserveTemplate->price != 0 ? $reserveTemplate->price : null;
 
             $price = $reserve_template_price ?? $gym->price;
 
-            if ($reserve->reserveTemplate->discount > 0 && $reserve->reserveTemplate->discount <= 100) {
-                $discountedPrice = $price * (1 - $reserve->reserveTemplate->discount / 100);
+            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
+                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
                 $price = $discountedPrice;
             }
 
-            if ($reserve->want_ball && $reserve->reserveTemplate->is_ball) {
+            if ($reserve->want_ball && $reserveTemplate->is_ball) {
                 $price += $gym->ball_price;
             }
 
@@ -238,22 +241,31 @@ class Factor extends Model
         return $totalPrice;
     }
 
+
     public static function calculatePriceForFactorReserves($reserves): float|int|string
     {
         $totalPrice = 0;
         foreach ($reserves as $reserve) {
 
-            $reserve_template_price = filled($reserve->reserveTemplate->price) && $reserve->reserveTemplate->price != 0 ? $reserve->reserveTemplate->price : null;
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
 
-            $price = $reserve_template_price ?? $reserve->gym->price;
+            /*   -------------------------------------   */
 
-            if ($reserve->reserveTemplate->discount > 0 && $reserve->reserveTemplate->discount <= 100) {
-                $discountedPrice = $price * (1 - $reserve->reserveTemplate->discount / 100);
+            /** @var Gym $gym */
+            $gym = $reserve->gym;
+
+            $reserve_template_price = filled($reserveTemplate->price) && $reserveTemplate->price != 0 ? $reserveTemplate->price : null;
+
+            $price = $reserve_template_price ?? $gym->price;
+
+            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
+                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
                 $price = $discountedPrice;
             }
 
-            if ($reserve->want_ball && $reserve->reserveTemplate->is_ball) {
-                $price += $reserve->gym->ball_price;
+            if ($reserve->want_ball && $reserveTemplate->is_ball) {
+                $price += $gym->ball_price;
             }
 
             $totalPrice += $price;
@@ -261,7 +273,7 @@ class Factor extends Model
         return $totalPrice;
     }
 
-    public static function calculateDescription(Factor $factor): string
+    public static function calculateDescription(Factor_ $factor): string
     {
         $description = "فاکتور مربوط به ";
         /** @var Reserve $reserve */
