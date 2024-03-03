@@ -241,6 +241,38 @@ class Factor extends Model
         return $totalPrice;
     }
 
+
+    public static function calculatePriceForFactorReserves($reserves): float|int|string
+    {
+        $totalPrice = 0;
+        foreach ($reserves as $reserve) {
+
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
+
+            /*   -------------------------------------   */
+
+            /** @var Gym $gym */
+            $gym = $reserve->gym;
+
+            $reserve_template_price = filled($reserveTemplate->price) && $reserveTemplate->price != 0 ? $reserveTemplate->price : null;
+
+            $price = $reserve_template_price ?? $gym->price;
+
+            if ($reserveTemplate->discount > 0 && $reserveTemplate->discount <= 100) {
+                $discountedPrice = $price * (1 - $reserveTemplate->discount / 100);
+                $price = $discountedPrice;
+            }
+
+            if ($reserve->want_ball && $reserveTemplate->is_ball) {
+                $price += $gym->ball_price;
+            }
+
+            $totalPrice += $price;
+        }
+        return $totalPrice;
+    }
+
     public static function calculateDescription(Factor $factor): string
     {
         $description = "فاکتور مربوط به ";
@@ -264,6 +296,33 @@ class Factor extends Model
             $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
         }
         $description .= "با مجموع قیمت: {$factor->total_price}";
+        return $description;
+    }
+
+    public static function calculateDescriptionReserves($reserves): string
+    {
+        $total_price = self::calculatePriceForFactorReserves($reserves);
+        $description = "فاکتور مربوط به ";
+        /** @var Reserve $reserve */
+        foreach ($reserves as $reserve) {
+
+            /** @var ReserveTemplate $reserveTemplate */
+            $reserveTemplate = $reserve->reserveTemplate;
+
+            $gymName = $reserveTemplate->gym->name;
+            $reserveId = $reserve->id;
+            $reserveDate = $reserve->dated_at_persian;
+            $discount = $reserveTemplate->discount;
+            $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
+            $ballPrice = $reserveTemplate->gym->ball_price;
+
+            $userInfo = $reserve->user ? ($reserve->user->name && $reserve->user->family ?
+                "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})" :
+                "({$reserve->user->mobile})") : '';
+
+            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
+        }
+        $description .= "با مجموع قیمت: {$total_price}";
         return $description;
     }
 
