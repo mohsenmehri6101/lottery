@@ -3,6 +3,7 @@
 namespace Modules\Payment\Services;
 
 use App\Exceptions\Contracts\CreateLinkPaymentException;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
 use Exception;
@@ -64,7 +65,8 @@ class PaymentPaypingService
                 'clientRefId' => $clientRefId, /* شماره فاکتور */
                 'payerIdentity' => $mobile, /* شماره موبایل یا ایمیل پرداخت کننده */
                 'payerName' => $payerName, /* نام کاربر پرداخت کننده */
-                'amount' => is_string($amount) ? floatval($amount) : $amount, /* required *//* مبلغ تراکنش */
+//                'amount' => is_string($amount) ? floatval($amount) : $amount, /* required *//* مبلغ تراکنش */
+                'amount' => 2000, /* required *//* مبلغ تراکنش */
                 'Description' => $description, /* توضیحات */
                 'returnUrl' => $returnUrl, /* required *//* آدرس برگشتی از سمت درگاه */
             ];
@@ -80,6 +82,7 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
             $code = $responseData['code'] ?? null;
+            Log::info('',$responseData);
 
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
                 return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;
@@ -88,7 +91,6 @@ class PaymentPaypingService
             throw new CreateLinkPaymentException(/*extra_data:[$response->json()]*/);
 
         } catch (Exception $exception) {
-            // Handle exceptions
             throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
         }
     }

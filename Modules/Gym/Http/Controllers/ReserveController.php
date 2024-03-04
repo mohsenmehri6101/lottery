@@ -171,8 +171,8 @@ class ReserveController extends Controller
      */
     public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): JsonResponse
     {
-        $reserve = $this->reserveService->storeAndPrintFactorAndCreateLinkPayment($request);
-        return $reserve ? ResponseHelper::responseSuccessStore(data: ['url' => $reserve]) : ResponseHelper::responseFailedStore();
+        $data = $this->reserveService->storeAndPrintFactorAndCreateLinkPayment($request);
+        return $data ? ResponseHelper::responseSuccessStore(data:$data) : ResponseHelper::responseFailedStore();
     }
 
     /**
