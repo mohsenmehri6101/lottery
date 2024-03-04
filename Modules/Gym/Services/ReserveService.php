@@ -168,14 +168,14 @@ class ReserveService
                 'reserve_ids' => $reserveIds,
                 'user_id' => get_user_id_login(),
                 'gym_id'=>$gym_id,
-                'description'=>Factor::calculateDescriptionReserves(collect($reservesModels)),
-                'total_price'=>Factor::calculatePriceForFactorReserves(collect($reservesModels))
+                # 'description'=>Factor::calculateDescriptionReserves(collect($reservesModels)),
+                # 'total_price'=>Factor::calculatePriceForFactorReserves(collect($reservesModels))
             ]);
 
-            // $factor->update([
-            // 'description'=>Factor::calculateDescription($factor),
-            // 'total_price'=>Factor::calculatePriceForFactor($factor)
-            // ]);
+             $factor->update([
+             'description'=>Factor::calculateDescription($factor),
+             'total_price'=>Factor::calculatePriceForFactor($factor)
+             ]);
 
             # create link payment
             /** @var PaymentService $paymentService */

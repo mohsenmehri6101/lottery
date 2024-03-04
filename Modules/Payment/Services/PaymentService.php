@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\Authentication\Entities\User;
+use Modules\Gym\Entities\Reserve;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Transaction;
 use Modules\Payment\Http\Repositories\FactorRepository;
@@ -126,15 +127,14 @@ class PaymentService
             # Updated description to include more relevant information
 
             /** @var Payment $payment */ // todo should be active.
-            /*$payment = $factor->payments()->create([
+            $payment = $factor->payments()->create([
                 'status'=>Payment::status_unpaid,
                 'resnumber'=>Payment::resnumberUnique(),
                 'amount'=>$amount,
                 'user_id'=>$user->id,
-            ]);*/
+            ]);
 
-            $url = null;/*
-                 $PaymentPaypingService->createLinkPayment(
+            $url = $PaymentPaypingService->createLinkPayment(
                     clientRefId: $payment->resnumber,
                     mobile: $mobile,
                     amount: $amount,
@@ -142,22 +142,22 @@ class PaymentService
                     description: $description,
                     payerName: $payerName,
                 );
-            */
 
-            $url = Str::random();
+
+            // $url = Str::random();
 
             # todo this is fake.
-            self::fake_payment($factor);
-            self::save_transactions($factor);
+            // self::fake_payment($factor);
+            // self::save_transactions($factor);
 
-            // if(filled($url)){
-            //     /** @var Factor $factor */
-            //     $factor->reserves()->update(['status' => Reserve::status_reserving]);
-            // }
+             if(filled($url)){
+                 /** @var Factor $factor */
+                 $factor->reserves()->update(['status' => Reserve::status_reserving]);
+             }
 
             return $url;
         } catch (Exception $exception) {
-            Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
+            # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
             throw new $exception;
         }
     }
