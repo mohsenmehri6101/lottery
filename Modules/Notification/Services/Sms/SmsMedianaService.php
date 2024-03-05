@@ -2,7 +2,7 @@
 
 namespace Modules\Notification\Services\Sms;
 
-use Exception;
+use Modules\Exception\Services\Contracts\SmsException;
 use Illuminate\Support\Facades\Http;
 
 class SmsMedianaService implements SmsInterface
@@ -28,10 +28,10 @@ class SmsMedianaService implements SmsInterface
             if ($response->ok() && $responseData['status'] === 'OK') {
                 return true;
             } else {
-                // Handle error if necessary
-                return false;
+                // Handle error by throwing an SmsException
+                throw new SmsException("Error sending SMS: " . $responseData['errorMessage'], $response->status());
             }
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             // Log or handle the exception
             report($e);
             return false;
