@@ -2,9 +2,9 @@
 
 namespace Modules\Notification\Services\Sms;
 
-use Modules\Exception\Services\Contracts\SmsException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
+use Exception;
 
 class SmsMedianaService implements SmsInterface
 {
@@ -17,7 +17,7 @@ class SmsMedianaService implements SmsInterface
         self::$apiKey = Config::get('services.median.api_key', 'DEFAULT_MEDIAN_API_KEY');
     }
 
-    public static function send_sms(string|int $mobile, string $message = null): bool
+    public static function send_sms(string|int $mobile, string $message = null, bool $throwException = true): bool
     {
         self::initialize();
 
@@ -37,14 +37,23 @@ class SmsMedianaService implements SmsInterface
             if ($response->ok() && $responseData['status'] === 'OK') {
                 return true;
             } else {
-                // Handle error by throwing an SmsException
-                throw new SmsException("Error sending SMS: " . $responseData['errorMessage'], $response->status());
+                // Log or handle the error
+                if ($throwException) {
+                    throw new Exception("Error sending SMS: " . $responseData['errorMessage']);
+                } else {
+                    report(new Exception("Error sending SMS: " . $responseData['errorMessage']));
+                    return false;
+                }
             }
-        } catch (\Throwable $e) {
+        } catch (Exception $exception) {
             // Log or handle the exception
-            report($e);
-            return false;
+            if ($throwException) {
+                throw $exception;
+            } else {
+                report($exception);
+                return false;
+            }
         }
     }
-    
+
 }

@@ -9,13 +9,6 @@ use Ghasedak\GhasedakApi;
 
 class SmsGhasedakService implements SmsInterface
 {
-    /*
-    10008566
-    300002525
-    5000121212
-    5000270
-    210002100
-    */
     const DEFAULT_LINE_NUMBER = '10008566';
 
     private static function getApiKeyGhasedak()
@@ -23,7 +16,7 @@ class SmsGhasedakService implements SmsInterface
         return config('configs.notifications.sms.ghasedak.api_key');
     }
 
-    public static function send_sms(string|int $mobile, string $message = null): bool
+    public static function send_sms(string|int $mobile, string $message = null, bool $throwException = true): bool
     {
         try {
             $api_key = self::getApiKeyGhasedak();
@@ -32,8 +25,12 @@ class SmsGhasedakService implements SmsInterface
             $ghasedak_api->SendSimple($mobile, $message, self::DEFAULT_LINE_NUMBER);
             return true;
         } catch (ApiException|HttpException|Exception $e) {
-            report($e);
-            return false;
+            if ($throwException) {
+                throw $e;
+            } else {
+                report($e);
+                return false;
+            }
         }
     }
 }
