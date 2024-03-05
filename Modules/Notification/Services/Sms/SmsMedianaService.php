@@ -4,14 +4,23 @@ namespace Modules\Notification\Services\Sms;
 
 use Modules\Exception\Services\Contracts\SmsException;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Config;
 
 class SmsMedianaService implements SmsInterface
 {
-    private static $baseUrl = 'MEDIAN_API_BASE_URL';
-    private static $apiKey = 'MEDIAN_API_KEY';
+    private static $baseUrl;
+    private static $apiKey;
+
+    public static function initialize()
+    {
+        self::$baseUrl = Config::get('services.median.base_url', 'DEFAULT_MEDIAN_BASE_URL');
+        self::$apiKey = Config::get('services.median.api_key', 'DEFAULT_MEDIAN_API_KEY');
+    }
 
     public static function send_sms(string|int $mobile, string $message = null): bool
     {
+        self::initialize();
+
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -37,4 +46,5 @@ class SmsMedianaService implements SmsInterface
             return false;
         }
     }
+    
 }
