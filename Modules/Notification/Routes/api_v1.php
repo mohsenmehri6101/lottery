@@ -4,9 +4,12 @@ use Illuminate\Support\Facades\Route;
 use Modules\Notification\Http\Controllers\EventController;
 use Modules\Notification\Http\Controllers\NotificationController;
 
+/*   ---------------------------------------------------------   */
+
 Route::middleware('auth:api')->group(function () {
     # notifications
     Route::prefix('notifications')->name('notifications_')->group(function () {
+         Route::get('/test-send-sms', [NotificationController::class, 'testSendSms'])->name('test-send-sms');
         // Route::get('/', [NotificationController::class, 'index'])->name('index');
         // Route::get('/my-notifications', [NotificationController::class, 'myNotifications'])->name('my_notifications');
         // Route::get('/my-new-notifications', [NotificationController::class, 'myNewNotifications'])->name('my_new_notifications');

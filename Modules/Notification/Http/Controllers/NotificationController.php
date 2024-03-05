@@ -6,6 +6,7 @@ use App\Helper\Response\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Modules\Notification\Http\Requests\Notification\NotificationStoreRequest;
+use Modules\Notification\Http\Requests\Notification\NotificationTestRequest;
 use Modules\Notification\Services\NotificationService;
 
 class NotificationController extends Controller
@@ -38,6 +39,25 @@ class NotificationController extends Controller
     {
         $notification = $this->notificationService->store($request);
         return $notification ? ResponseHelper::responseSuccessStore(data: $notification) : ResponseHelper::responseFailedStore();
+    }
+
+    /**
+     * @OA\Get (
+     *     path="/api/v1/notifications/test-send-sms",
+     *     tags={"notifications"},
+     *     summary="test send sms",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="mobile",in="query",required=false, @OA\Schema(type="string"),description="mobile"),
+     *     @OA\Parameter(name="message",in="query",required=false, @OA\Schema(type="string"),description="message"),
+     *     @OA\Parameter(name="service",in="query",required=false, @OA\Schema(type="string"),description="service"),
+     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
+     *  )
+     */
+    public function testSendSms(NotificationTestRequest $request): JsonResponse
+    {
+        $status_send_sms = $this->notificationService->testSendSms($request);
+        return $status_send_sms ? ResponseHelper::responseSuccessStore(data: ['status'=>$status_send_sms]) : ResponseHelper::responseFailedStore();
     }
 
 }

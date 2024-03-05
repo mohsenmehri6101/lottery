@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Notification\Http\Repositories\NotificationRepository;
 use Modules\Notification\Http\Requests\Notification\NotificationStoreRequest;
+use Modules\Notification\Http\Requests\Notification\NotificationTestRequest;
 
 class NotificationService extends Controller
 {
@@ -58,6 +59,26 @@ class NotificationService extends Controller
             return $notification;
         } catch (Exception $exception) {
             DB::rollBack();
+            throw $exception;
+        }
+    }
+
+    public function testSendSms(NotificationTestRequest $request): bool
+    {
+        try {
+            $fields = $request->validated();
+
+            /**
+             * @var $mobile
+             * @var $message
+             * @var $service
+             */
+            extract($fields);
+            $service = $service || 'mediana';
+
+            return send_sms(mobile: $mobile, message: $message, service: $service);
+
+        } catch (Exception $exception) {
             throw $exception;
         }
     }

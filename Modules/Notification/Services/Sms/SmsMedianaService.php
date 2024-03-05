@@ -55,5 +55,4 @@ class SmsMedianaService implements SmsInterface
             }
         }
     }
-
 }
