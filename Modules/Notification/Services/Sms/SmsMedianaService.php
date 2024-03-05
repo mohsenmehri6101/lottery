@@ -2,8 +2,8 @@
 
 namespace Modules\Notification\Services\Sms;
 
-use GuzzleHttp\Client;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 class SmsMedianaService implements SmsInterface
 {
@@ -13,27 +13,19 @@ class SmsMedianaService implements SmsInterface
     public static function send_sms(string|int $mobile, string $message = null): bool
     {
         try {
-            $client = new Client([
-                'base_uri' => self::$baseUrl,
-                'timeout' => 10,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . self::$apiKey,
-                ],
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . self::$apiKey,
+            ])->post(self::$baseUrl . '/send-sms', [
+                'recipient' => [$mobile],
+                'sender' => 'YOUR_SENDER_NUMBER',
+                'time' => now()->toIso8601String(),
+                'message' => $message,
             ]);
 
-            $response = $client->post('/send-sms', [
-                'json' => [
-                    'recipient' => [$mobile],
-                    'sender' => 'YOUR_SENDER_NUMBER',
-                    'time' => date('c'),
-                    'message' => $message,
-                ],
-            ]);
+            $responseData = $response->json();
 
-            $responseData = json_decode($response->getBody(), true);
-
-            if ($responseData['status'] === 'OK') {
+            if ($response->ok() && $responseData['status'] === 'OK') {
                 return true;
             } else {
                 // Handle error if necessary
