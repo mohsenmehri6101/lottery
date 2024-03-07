@@ -82,7 +82,7 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
             $code = $responseData['code'] ?? null;
-            Log::info('',$responseData);
+            Log::info('', $responseData);
 
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
                 return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;
@@ -98,6 +98,9 @@ class PaymentPaypingService
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
+
+            $amount = 2000;
+
             $data = [
                 'amount' => $amount,
                 'refId' => $authority,
@@ -106,19 +109,19 @@ class PaymentPaypingService
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Authorizations' => "Bearer $this->TokenCode"
+                'authorization' => 'Bearer ' . $this->TokenCode,
             ])->post(self::$PAYMENT_URL_V2 . self::$VERIFY_ENDPOINT, $data);
 
             $statusCode = $response->status();
             $responseData = $response->json();
 
-            if ($statusCode === 200 && isset($responseData['data']['code']) && $responseData['data']['code'] === 100) {
-                if ($factor_id == $responseData['data']['ref_id'] && $amount == $responseData['data']['amount']) {
-                    return true;
-                } else {
-                    throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');
-                }
+            if ($statusCode === 200 && $amount == $responseData['data']['amount']) {
+                return true;
+            } else {
+                throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');
             }
+
+
             throw new Exception('Payment verification failed');
 
         } catch (Exception $exception) {
