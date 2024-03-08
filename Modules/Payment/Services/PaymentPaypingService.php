@@ -116,7 +116,8 @@ class PaymentPaypingService
             if ($statusCode === 200 && $amount == $responseData['amount'])
             {
                 return true;
-            } else
+            }
+            else
             {
                 throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');
             }
