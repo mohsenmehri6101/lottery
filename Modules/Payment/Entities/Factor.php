@@ -212,30 +212,7 @@ class Factor extends Model
 
     public static function calculatePriceForFactor(Factor $factor): float|int|string
     {
-        $totalPrice = 0;
-        foreach ($factor->reserves as $reserve) {
-
-            /*   -------------------------------------   */
-
-            /** @var Gym $gym */
-            $gym = $reserve->gym;
-
-            $reserve_template_price = filled($reserve->reserveTemplate->price) && $reserve->reserveTemplate->price != 0 ? $reserve->reserveTemplate->price : null;
-
-            $price = $reserve_template_price ?? $gym->price;
-
-            if ($reserve->reserveTemplate->discount > 0 && $reserve->reserveTemplate->discount <= 100) {
-                $discountedPrice = $price * (1 - $reserve->reserveTemplate->discount / 100);
-                $price = $discountedPrice;
-            }
-
-            if ($reserve->want_ball && $reserve->reserveTemplate->is_ball) {
-                $price += $gym->ball_price;
-            }
-
-            $totalPrice += $price;
-        }
-        return $totalPrice;
+        return self::calculatePriceForFactorReserves($factor->reserves);
     }
 
     public static function calculatePriceForFactorReserves($reserves): float|int|string
@@ -252,7 +229,7 @@ class Factor extends Model
                 $price = $discountedPrice;
             }
 
-            if ($reserve->want_ball && $reserve->reserveTemplate->is_ball) {
+            if ($reserve->reserveTemplate->is_ball && $reserve->want_ball) {
                 $price += $reserve->gym->ball_price;
             }
 
@@ -263,28 +240,7 @@ class Factor extends Model
 
     public static function calculateDescription(Factor $factor): string
     {
-        $description = "فاکتور مربوط به ";
-        /** @var Reserve $reserve */
-        foreach ($factor->reserves as $reserve) {
-
-            /** @var ReserveTemplate $reserveTemplate */
-            $reserveTemplate = $reserve->reserveTemplate;
-
-            $gymName = $reserveTemplate->gym->name;
-            $reserveId = $reserve->id;
-            $reserveDate = $reserve->dated_at_persian;
-            $discount = $reserveTemplate->discount;
-            $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
-            $ballPrice = $reserveTemplate->gym->ball_price;
-
-            $userInfo = $reserve->user ? ($reserve->user->name && $reserve->user->family ?
-                "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})" :
-                "({$reserve->user->mobile})") : '';
-
-            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, تخفیف: {$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice}), ";
-        }
-        $description .= "با مجموع قیمت: {$factor->total_price}";
-        return $description;
+        return self::calculatePriceForFactorReserves($factor->reserves);
     }
 
     public static function calculateDescriptionReserves($reserves): string
@@ -301,8 +257,14 @@ class Factor extends Model
             $reserveId = $reserve->id;
             $reserveDate = $reserve->dated_at_persian;
             $discount = $reserveTemplate->discount;
-            $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
-            $ballPrice = $reserveTemplate->gym->ball_price;
+
+            // اگر توپ مورد نیاز نباشد، اطلاعات مربوط به توپ به توضیحات اضافه نمی‌شود
+            $ballStatus = '';
+            $ballPrice = '';
+            if ($reserve->want_ball) {
+                $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
+                $ballPrice = $reserveTemplate->gym->ball_price;
+            }
 
             $userInfo = $reserve->user ? ($reserve->user->name && $reserve->user->family ?
                 "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})" :

@@ -179,7 +179,7 @@ class GymDatabaseSeeder extends Seeder
                     'status' => $faker->numberBetween(0, 2),
                     'profit_share_percentage' => $faker->numberBetween(1, 12),
                     'is_ball' => $is_ball,
-                    'ball_price' => $is_ball ? $faker->randomElement([150000, 200000]) : 0,
+                    'ball_price' => $is_ball ? $faker->randomElement([100000,150000, 200000]) : 0,
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
                     'like_count' => $faker->numberBetween(15, 85),
                     'dislike_count' => $faker->numberBetween(10, 90),
@@ -206,7 +206,7 @@ class GymDatabaseSeeder extends Seeder
                 $attributes = Attribute::query()->inRandomOrder()->limit(rand(1, 3))->get();
                 $gym->attributes()->attach($attributes);
 
-                self::helperFunctionReserveTemplatesFake($gym->id);
+                self::helperFunctionReserveTemplatesFake(gym_id:$gym->id,is_ball:$is_ball);
 
                 # set image
                 $image_directory = public_path('fake_images/');
@@ -217,7 +217,7 @@ class GymDatabaseSeeder extends Seeder
         }
     }
 
-    public static function helperFunctionReserveTemplatesFake(int $gym_id): void
+    public static function helperFunctionReserveTemplatesFake(int $gym_id,$is_ball=false): void
     {
         $faker = \Faker\Factory::create();
         $days = $faker->randomElement([7, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]); // Randomly choose between 7, 5, or 6 (with a higher chance of 7)
@@ -241,6 +241,7 @@ class GymDatabaseSeeder extends Seeder
                 if (strtotime($to) >= strtotime('24:00') || strtotime($to) >= strtotime('22:00')) {
                     break; // Exit the loop if it's near 22:00 or 24:00
                 }
+                $is_ball_reserve_template = $is_ball ? $faker->boolean : false;
                 ReserveTemplate::query()->create([
                     'from' => $from,
                     'to' => $to,
@@ -248,7 +249,7 @@ class GymDatabaseSeeder extends Seeder
                     'week_number' => $week_number, // Set the week_number
                     'price' => $price, // Use the same price for all records
                     'cod' => $faker->boolean,
-                    'is_ball' => $faker->boolean,
+                    'is_ball' => $is_ball_reserve_template,
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
                     'discount' => $faker->randomElement([null, null, null, null, 5, 10, 15, 20]),
                     'status' => $faker->randomElement([
@@ -277,22 +278,26 @@ class GymDatabaseSeeder extends Seeder
         $count = $count ?? $faker->numberBetween(600, 800);
 
         for ($i = 0; $i < $count; $i++) {
+
             $user_creator_or_editor = User::query()->inRandomOrder()->first()->id;
+
             /** @var ReserveTemplate $reserve_template */
             $reserve_template = ReserveTemplate::query()->inRandomOrder()->first();
-            // Generate random data for a reserve reservation.
+
+            # Generate random data for a reserve reservation.
             $georgian_date = $faker->dateTimeThisMonth();
-            // Convert the Georgian date to a Carbon\Carbon object.
+
+            # Convert the Georgian date to a Carbon\Carbon object.
             $carbon_date = self::getRandomDateThisWeek();/* Carbon::instance($georgian_date); */
 
-            // Format the Carbon date as 'Y-m-d' (date format)
+            # Format the Carbon date as 'Y-m-d' (date format)
             $formatted_georgian_date = $carbon_date->format('Y-m-d');
 
-            // Convert the Carbon date to a Jalali (Persian) date and format it
+            # Convert the Carbon date to a Jalali (Persian) date and format it
             $jalali_date = Jalalian::fromCarbon($carbon_date);
             $formatted_jalali_date = $jalali_date->format('Y-m-d');
 
-            // Check if a record with the same dated_at and reserve_template_id already exists
+            # Check if a record with the same dated_at and reserve_template_id already exists
             $existing_record = Reserve::query()
                 ->where('dated_at', $formatted_georgian_date)
                 ->where('reserve_template_id', $reserve_template->id)
@@ -308,11 +313,12 @@ class GymDatabaseSeeder extends Seeder
                     'user_creator' => $user_creator_or_editor,
                     'user_editor' => $user_creator_or_editor,
                     'dated_at' => $formatted_georgian_date,
+                    'status'=>Reserve::status_reserved,
                     'reserved_at' => $formatted_georgian_date, // You can customize this as needed
                     'reserved_user_id' => User::query()->inRandomOrder()->first()->id,
                 ];
 
-                // Create a new reserve reservation using the model
+                # Create a new reserve reservation using the model
                 /** @var Reserve $reserve */
                 $reserve = Reserve::query()->create($reserve_fake);
 

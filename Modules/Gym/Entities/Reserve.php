@@ -31,7 +31,6 @@ use Carbon\Carbon;
 class Reserve extends Model
 {
     use SoftDeletes, GetCastsModel, UserCreator, UserEditor;
-
     const status_unknown = 0;
     const status_active = 1;
     const status_inactive = 2;
@@ -40,6 +39,7 @@ class Reserve extends Model
     const status_reserved = 5;
 
     protected $table = 'reserves';
+
     protected $fillable = [
         'id',
         'reserve_template_id',
@@ -56,6 +56,7 @@ class Reserve extends Model
         'updated_at',
         'deleted_at',
     ];
+
     protected $casts = [
         'id' => 'integer',
         'reserve_template_id' => 'integer',
@@ -72,11 +73,13 @@ class Reserve extends Model
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
+
     protected $hidden = [];
 
     public $appends = [
         'dated_at_persian'
     ];
+
     public static array $relations_ = [
         'userCreator',
         'userEditor',

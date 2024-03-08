@@ -176,6 +176,7 @@ class Gym extends Model
             self::status_not_confirm,
         ];
     }
+
     public static function getStatusGymPersian(): array
     {
         return [
