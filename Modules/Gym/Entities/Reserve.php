@@ -30,7 +30,9 @@ use Carbon\Carbon;
  */
 class Reserve extends Model
 {
+
     use SoftDeletes, GetCastsModel, UserCreator, UserEditor;
+
     const status_unknown = 0;
     const status_active = 1;
     const status_inactive = 2;

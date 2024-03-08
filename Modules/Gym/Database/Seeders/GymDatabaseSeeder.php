@@ -314,6 +314,7 @@ class GymDatabaseSeeder extends Seeder
                     'user_editor' => $user_creator_or_editor,
                     'dated_at' => $formatted_georgian_date,
                     'status'=>Reserve::status_reserved,
+                    'want_ball'=>$reserve_template->gym->is_ball ? $faker->boolean : false,
                     'reserved_at' => $formatted_georgian_date, // You can customize this as needed
                     'reserved_user_id' => User::query()->inRandomOrder()->first()->id,
                 ];

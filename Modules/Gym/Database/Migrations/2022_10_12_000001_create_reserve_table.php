@@ -52,7 +52,6 @@ return new class extends Migration {
             $table->unique(['attribute_gym_price_id', 'reserve_id'], 'unique_attribute_gym_price_reserve');
         });
     }
-
     public function down(): void
     {
         Schema::dropIfExists('attribute_gym_price_reserve');
