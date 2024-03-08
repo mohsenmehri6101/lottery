@@ -237,7 +237,7 @@ class Factor extends Model
 
     public static function calculateDescription(Factor $factor): string
     {
-        return self::calculatePriceForFactorReserves($factor->reserves);
+        return self::calculateDescriptionReserves($factor->reserves);
     }
 
     public static function calculateDescriptionReserves($reserves): string
@@ -269,5 +269,4 @@ class Factor extends Model
         $description .= "با مجموع قیمت: {$total_price}";
         return $description;
     }
-
 }

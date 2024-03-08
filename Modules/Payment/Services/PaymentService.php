@@ -179,6 +179,12 @@ class PaymentService
         $factor_id = $factor->payments()->latest()->first()->id;
         if ($PaymentPaypingService->confirmPayment(authority: $ref_id, amount: $factor->total_price, factor_id: $factor_id)) {
             $factor->status = Factor::status_paid;
+//            $factor->update([
+//                'status'=>Factor::status_paid,
+//                'description'=>Factor::calculateDescription($factor),
+//                'total_price'=>Factor::calculatePriceForFactor($factor)
+//            ]);
+
             $payment->status = Payment::status_paid;
             $factor_id = $factor->reserves()->update(['status'=>Reserve::status_reserved]);
             $payment->save();

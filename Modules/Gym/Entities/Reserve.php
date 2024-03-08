@@ -30,7 +30,6 @@ use Carbon\Carbon;
  */
 class Reserve extends Model
 {
-
     use SoftDeletes, GetCastsModel, UserCreator, UserEditor;
 
     const status_unknown = 0;
@@ -41,7 +40,6 @@ class Reserve extends Model
     const status_reserved = 5;
 
     protected $table = 'reserves';
-
     protected $fillable = [
         'id',
         'reserve_template_id',
@@ -58,7 +56,6 @@ class Reserve extends Model
         'updated_at',
         'deleted_at',
     ];
-
     protected $casts = [
         'id' => 'integer',
         'reserve_template_id' => 'integer',
@@ -75,13 +72,10 @@ class Reserve extends Model
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
-
     protected $hidden = [];
-
     public $appends = [
         'dated_at_persian'
     ];
-
     public static array $relations_ = [
         'userCreator',
         'userEditor',
@@ -90,12 +84,10 @@ class Reserve extends Model
         'gym',
         'factors',
     ];
-
     public function gym(): BelongsTo
     {
         return $this->belongsTo(Gym::class);
     }
-
     protected static function boot(): void
     {
         parent::boot();
@@ -117,7 +109,6 @@ class Reserve extends Model
             }
         });
     }
-
     public static function getStatusTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusPersian();
@@ -132,7 +123,6 @@ class Reserve extends Model
         }
         return $statuses;
     }
-
     public static function getStatusPersian(): array
     {
         return [
@@ -196,6 +186,6 @@ class Reserve extends Model
 
     public function getDatedAtPersianAttribute(): string
     {
-        return verta($this->dated_at)->format('Y-m-d');
+        return verta($this->dated_at)->format('d/m/Y');
     }
 }

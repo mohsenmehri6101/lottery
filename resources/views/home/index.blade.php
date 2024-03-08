@@ -7,8 +7,8 @@
         رزر آنلاین باشگاه ورزشی
     </title>
     <meta name="enamad" content="249015" />
-    <script type="module" crossorigin src="{{ url('/assets/index-164de256.js') }}"></script>
-    <link rel="stylesheet" href='{{ url("assets/index-9b7c249a.css") }}'>
+    <script type="module" crossorigin src="{{ url('/assets/index-95e4fd64.js') }}"></script>
+    <link rel="stylesheet" href='{{ url("assets/index-9b095982.css") }}'>
 </head>
 <body>
     <div id='app'>
