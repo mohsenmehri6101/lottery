@@ -21,7 +21,6 @@ class PaymentPaypingService
         $this->TokenCode = $token ?? env('PAYMENT_PAYPING_TOKEN');
     }
 
-
     private function getErrorMessage($errorCode): string
     {
         return self::ERROR_CODES[$errorCode] ?? 'Unknown error occurred';

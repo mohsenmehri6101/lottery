@@ -37,6 +37,8 @@ class Reserve extends Model
     const status_inactive = 2;
     const status_blocked = 3;
     const status_reserving = 4;
+    const status_reserved = 5;
+
     protected $table = 'reserves';
     protected $fillable = [
         'id',
@@ -72,7 +74,7 @@ class Reserve extends Model
     ];
     protected $hidden = [];
 
-    public $appends=[
+    public $appends = [
         'dated_at_persian'
     ];
     public static array $relations_ = [
@@ -134,6 +136,19 @@ class Reserve extends Model
             self::status_inactive => 'غیرفعال',
             self::status_blocked => 'بلاک شده',
             self::status_reserving => 'در حال رزرو',
+            self::status_reserved => 'رزرو شده',
+        ];
+    }
+
+    public static function getStatus(): array
+    {
+        return [
+            self::status_unknown,
+            self::status_active,
+            self::status_inactive,
+            self::status_blocked,
+            self::status_reserving,
+            self::status_reserved,
         ];
     }
 

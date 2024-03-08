@@ -6,7 +6,6 @@ use App\Exceptions\Contracts\ForbiddenCustomException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\Authentication\Entities\User;
 use Modules\Gym\Entities\Reserve;
@@ -167,24 +166,21 @@ class PaymentService
         $fields = $request->all();
         $ref_id = $fields['refid'] ?? null;
         $resnumber = $client_ref_id = $fields['clientrefid'] ?? null;
-
         ####################################################################
         /** @var PaymentPaypingService $PaymentPaypingService */
         $PaymentPaypingService = resolve('PaymentPaypingService');
-
         ####################################################################
         /** @var Payment $payment */
         $payment = Payment::query()->where('resnumber', $resnumber)->firstOrFail();
-
         ####################################################################
         /** @var Factor $factor */
         $factor = $payment->factor;
-
         ####################################################################
         $factor_id = $factor->payments()->latest()->first()->id;
         if ($PaymentPaypingService->confirmPayment(authority: $ref_id, amount: $factor->total_price, factor_id: $factor_id)) {
             $factor->status = Factor::status_paid;
             $payment->status = Payment::status_paid;
+            $factor_id = $factor->reserves()->update(['status'=>Reserve::status_reserving]);
             $payment->save();
             $factor->payment_id_paid = $payment->id;
             $factor->save();
