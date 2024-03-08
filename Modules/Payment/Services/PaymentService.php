@@ -180,7 +180,7 @@ class PaymentService
         if ($PaymentPaypingService->confirmPayment(authority: $ref_id, amount: $factor->total_price, factor_id: $factor_id)) {
             $factor->status = Factor::status_paid;
             $payment->status = Payment::status_paid;
-            $factor_id = $factor->reserves()->update(['status'=>Reserve::status_reserving]);
+            $factor_id = $factor->reserves()->update(['status'=>Reserve::status_reserved]);
             $payment->save();
             $factor->payment_id_paid = $payment->id;
             $factor->save();
