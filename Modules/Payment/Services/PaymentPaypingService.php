@@ -61,12 +61,12 @@ class PaymentPaypingService
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
+            $amount = 2000;
             $data = [
                 'clientRefId' => $clientRefId, /* شماره فاکتور */
                 'payerIdentity' => $mobile, /* شماره موبایل یا ایمیل پرداخت کننده */
                 'payerName' => $payerName, /* نام کاربر پرداخت کننده */
-//                'amount' => is_string($amount) ? floatval($amount) : $amount, /* required *//* مبلغ تراکنش */
-                'amount' => 2000, /* required *//* مبلغ تراکنش */
+                'amount' => $amount /*is_string($amount) ? floatval($amount) : $amount*/, /* required *//* مبلغ تراکنش */
                 'Description' => $description, /* توضیحات */
                 'returnUrl' => $returnUrl, /* required *//* آدرس برگشتی از سمت درگاه */
             ];
@@ -82,7 +82,6 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
             $code = $responseData['code'] ?? null;
-            Log::info('', $responseData);
 
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
                 return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;
@@ -100,7 +99,6 @@ class PaymentPaypingService
         try {
 
             $amount = 2000;
-
             $data = [
                 'amount' => $amount,
                 'refId' => $authority,
@@ -115,12 +113,13 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
 
-            if ($statusCode === 200 && $amount == $responseData['data']['amount']) {
+            if ($statusCode === 200 && $amount == $responseData['amount'])
+            {
                 return true;
-            } else {
+            } else
+            {
                 throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');
             }
-
 
             throw new Exception('Payment verification failed');
 

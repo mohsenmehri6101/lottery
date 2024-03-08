@@ -253,10 +253,14 @@ class PaymentController extends Controller
         $link = $this->paymentService->createLinkPayment($request);
         return ResponseHelper::responseSuccessShow(data:['link'=>$link],message: 'لینک پرداخت با موفقیت ایجاد شد');
     }
-    public function confirmPayment(Request $request): JsonResponse
+
+    public function confirmPayment(Request $request)
     {
-        $status = $this->paymentService->confirmPayment($request);
-        return ResponseHelper::responseSuccessShow();
+        $confirmCode = $this->paymentService->confirmPayment($request) ?? '';
+        $status = $confirmCode && filled($confirmCode);
+        $url = route('web.confirm.payment') . '?confirm_code=' . $confirmCode . '&status='.$status;
+
+        return redirect()->to($url);
     }
 
     /**

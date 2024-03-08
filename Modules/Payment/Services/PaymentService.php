@@ -162,20 +162,24 @@ class PaymentService
         }
     }
 
-    public function confirmPayment(Request $request): bool
+    public function confirmPayment(Request $request)
     {
         $fields = $request->all();
         $ref_id = $fields['refid'] ?? null;
         $resnumber = $client_ref_id = $fields['clientrefid'] ?? null;
+
         ####################################################################
         /** @var PaymentPaypingService $PaymentPaypingService */
         $PaymentPaypingService = resolve('PaymentPaypingService');
+
         ####################################################################
         /** @var Payment $payment */
         $payment = Payment::query()->where('resnumber', $resnumber)->firstOrFail();
+
         ####################################################################
         /** @var Factor $factor */
         $factor = $payment->factor;
+
         ####################################################################
         $factor_id = $factor->payments()->latest()->first()->id;
         if ($PaymentPaypingService->confirmPayment(authority: $ref_id, amount: $factor->total_price, factor_id: $factor_id)) {
@@ -186,11 +190,9 @@ class PaymentService
             $factor->save();
 
             self::save_transactions($factor);
-
-            return true;
+            return  $payment->resnumber;
         }
-        ####################################################################
-        return false;
+        return null;
     }
 
     public static function save_transactions(Factor $factor): void
