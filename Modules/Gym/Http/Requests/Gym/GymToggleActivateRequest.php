@@ -14,5 +14,4 @@ class GymToggleActivateRequest extends FormRequest
             'status' => "nullable|numeric|in:$list_status_allowable",
         ];
     }
-
 }
