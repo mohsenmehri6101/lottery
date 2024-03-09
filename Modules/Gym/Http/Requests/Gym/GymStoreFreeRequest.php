@@ -24,7 +24,6 @@ class GymStoreFreeRequest extends FormRequest
         ];
 
     }
-
     public function attributes(): array
     {
         return [
@@ -37,5 +36,4 @@ class GymStoreFreeRequest extends FormRequest
             'address' => __('custom.gyms.gyms.address'),
         ];
     }
-
 }

@@ -18,7 +18,6 @@ class GymIndexRequest extends FormRequest
             $this->merge(['is_ball' => $is_ball ? 1 : 0]);
         }
     }
-
     public function rules(): array
     {
         $withs_allows = implode(',', Gym::$relations_);

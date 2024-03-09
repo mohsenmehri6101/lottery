@@ -10,7 +10,6 @@ class GetInitializeRequestsSelectors extends FormRequest
     {
         $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
     }
-
     public function rules(): array
     {
         $lists = ['gyms','tags','categories','sports','attributes','keywords','cities','provinces','gender_acceptances'];
@@ -20,5 +19,4 @@ class GetInitializeRequestsSelectors extends FormRequest
             'withs.*' => "nullable|string|in:$withs_allows",
         ];
     }
-
 }

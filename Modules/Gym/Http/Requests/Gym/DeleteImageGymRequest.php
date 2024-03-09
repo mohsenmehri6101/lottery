@@ -10,7 +10,6 @@ class DeleteImageGymRequest extends FormRequest
     {
         $this->merge(['images' => convert_withs_from_string_to_array(withs: $this->get(key: 'images'))]);
     }
-
     public function rules(): array
     {
         return [

@@ -10,7 +10,6 @@ use Modules\Gym\Entities\Gym;
 class GymUpdateRequest extends FormRequest
 {
     use CustomFormRequestTrait;
-
     protected function prepareForValidation(): void
     {
         if ($this->has('is_ball')) {
@@ -18,7 +17,6 @@ class GymUpdateRequest extends FormRequest
             $this->merge(['is_ball' => $is_ball ? 1 : 0]);
         }
     }
-
     public function authorize(): bool
     {
         $gym_id = request('id');
@@ -32,13 +30,11 @@ class GymUpdateRequest extends FormRequest
                     ->where('user_id', $logged_in_user_id)
                     ->exists());
     }
-
     public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         $this->set_validator_update_unique();
         parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
     }
-
     public function rules(): array
     {
         $list_status_allowable = trim(implode(',', Gym::getStatusGym()));
@@ -100,7 +96,6 @@ class GymUpdateRequest extends FormRequest
 
         return $rules;
     }
-
     public function attributes(): array
     {
         return [

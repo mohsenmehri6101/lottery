@@ -15,7 +15,6 @@ class GymStoreRequest extends FormRequest
             $this->merge(['is_ball' => $is_ball ? 1 : 0]);
         }
     }
-
     public function rules(): array
     {
         $list_status_allowable = trim(implode(',', Gym::getStatusGym()));
@@ -96,7 +95,6 @@ class GymStoreRequest extends FormRequest
 
         return $rules;
     }
-
     public function attributes(): array
     {
         return [

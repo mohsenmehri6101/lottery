@@ -10,5 +10,4 @@ class MyGymsRequest extends GymIndexRequest
         // todo should be set
         // return is_gym_manager();
     }
-
 }
