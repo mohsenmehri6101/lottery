@@ -36,6 +36,7 @@ Route::get('/my-courses', [\App\Http\Controllers\HomeController::class, 'index']
 Route::get('/my-purchases', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/rules', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/confirm-payment', [\App\Http\Controllers\HomeController::class, 'index'])->name('web.confirm.payment');
+Route::get('/reserves/tracking-code', [\App\Http\Controllers\HomeController::class, 'index'])->name('web.confirm.payment');
 Route::get('/gyms/{id}', [\App\Http\Controllers\HomeController::class, 'index']);
 /*   -------------------------------------------------------------------------------------  */
 Route::prefix('admin')->group(function () {

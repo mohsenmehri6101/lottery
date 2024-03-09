@@ -105,5 +105,4 @@ class ProvinceService
             throw $exception;
         }
     }
-
 }

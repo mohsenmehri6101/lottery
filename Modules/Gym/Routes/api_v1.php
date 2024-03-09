@@ -74,7 +74,7 @@ Route::prefix('reserves')->name('reserves_')->group(function () {
     Route::get('/statuses', [ReserveController::class, 'statuses'])->name('statuses');
     Route::get('/my-reserves', [ReserveController::class, 'myReserve'])->name('my-reserves');
     Route::get('/my-gym-reserves', [ReserveController::class, 'myGymReserve'])->name('my-gym-reserves');
-    Route::get('/{id}', [ReserveController::class, 'show'])->middleware('auth:api')->name('show');
+    Route::get('/{id}', [ReserveController::class, 'show'])/*->middleware('auth:api')*/->name('show');
     Route::post('/', [ReserveController::class, 'store'])->middleware('auth:api')->name('store');
     Route::post('/store-and-print-factor-and-create-link-payment', [ReserveController::class, 'storeAndPrintFactorAndCreateLinkPayment'])->middleware('auth:api')->name('store_and_print_factor_and_create_link_payment');
     Route::post('/blocks', [ReserveController::class, 'storeBlocks'])->middleware('auth:api')->name('store_blocks');
