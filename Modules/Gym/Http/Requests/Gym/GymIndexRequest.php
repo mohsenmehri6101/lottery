@@ -12,6 +12,11 @@ class GymIndexRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge(['withs' => convert_withs_from_string_to_array(withs: $this->get(key: 'withs'))]);
+
+        if ($this->has('is_ball')) {
+            $is_ball = $this->get('is_ball');
+            $this->merge(['is_ball' => $is_ball ? 1 : 0]);
+        }
     }
 
     public function rules(): array
@@ -38,9 +43,10 @@ class GymIndexRequest extends FormRequest
             'priority_show' => "nullable|numeric",
             'profit_share_percentage' => 'nullable|min:0|max:100',
             'city_id' => 'nullable|exists:cities,id',
-            'short_address' => "nullable",
-            'address' => "nullable",
-            'score' => "nullable",
+            'short_address' => 'nullable',
+            'address' => 'nullable',
+            'score' => 'nullable',
+            'is_ball' => 'nullable',
             'status' => "nullable|numeric|in:$list_status_allowable",
             'like_count' => 'nullable',
             'dislike_count' => 'nullable',
