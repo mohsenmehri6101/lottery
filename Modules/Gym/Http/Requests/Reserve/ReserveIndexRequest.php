@@ -24,6 +24,7 @@ class ReserveIndexRequest extends FormRequest
             'per_page' => 'nullable',
             'page' => 'nullable',
             'id' => 'nullable|exists:categories,id',
+            'tracking_code' => 'nullable',
             'reserve_template_id' => 'nullable|exists:reserve_templates,id',
             'user_id' => 'nullable|exists:users,id',
             'payment_status' => "nullable|numeric|in:$statuses",

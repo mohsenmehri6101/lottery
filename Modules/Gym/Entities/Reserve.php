@@ -16,13 +16,16 @@ use Carbon\Carbon;
 
 /**
  * @property integer $id
+ * @property string $tracking_code
+ * @property integer $status
+ * @property string $reserved_at
  * @property integer $reserve_template_id
  * @property integer $gym_id
  * @property integer $user_id
  * @property integer $payment_status
  * @property integer $user_creator
  * @property integer $user_editor
- * @property $dated_at
+ * @property string  $dated_at
  * @property integer $want_ball
  * @property $created_at
  * @property $updated_at
@@ -40,8 +43,10 @@ class Reserve extends Model
     const status_reserved = 5;
 
     protected $table = 'reserves';
+
     protected $fillable = [
         'id',
+        'tracking_code',
         'reserve_template_id',
         'gym_id',
         'user_id',
@@ -56,8 +61,10 @@ class Reserve extends Model
         'updated_at',
         'deleted_at',
     ];
+
     protected $casts = [
         'id' => 'integer',
+        'tracking_code' => 'string',
         'reserve_template_id' => 'integer',
         'gym_id' => 'integer',
         'user_id' => 'integer',
@@ -101,6 +108,11 @@ class Reserve extends Model
             if (is_null($item->user_editor)) {
                 $item->user_editor = set_user_creator();
             }
+
+            # tracking_code
+            if (is_null($item->tracking_code)) {
+                $item->tracking_code = self::generate_tracking_code_random($item->dated_at);
+            }
         });
         static::updating(function ($item) {
             # user_editor
@@ -109,6 +121,21 @@ class Reserve extends Model
             }
         });
     }
+
+    public static function generate_tracking_code_random($dated_at = null): string
+    {
+        if (is_null($dated_at)) {
+            $dated_at = now();
+        } else {
+            $dated_at = Carbon::parse($dated_at);
+        }
+
+        $date_prefix = $dated_at->format('Ymd');
+        $random_number = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        return $date_prefix . $random_number;
+    }
+
+
     public static function getStatusTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusPersian();
@@ -183,7 +210,6 @@ class Reserve extends Model
     {
         return $this->belongsToMany(AttributePrice::class, 'attribute_gym_price_reserve');
     }
-
     public function getDatedAtPersianAttribute(): string
     {
         return verta($this->dated_at)->format('d/m/Y');

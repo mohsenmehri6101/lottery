@@ -27,9 +27,11 @@ return new class extends Migration {
             $table->softDeletes();
             $table->unique(['from', 'to', 'week_number', 'gym_id']);
         });
+
         Schema::create('reserves', function (Blueprint $table) {
             $table->comment('وقت های سالن های ذخیره شده توسط کاربر');
             $table->id();
+            $table->string('tracking_code')->nullable()->comment('کد پیگیری');
             $table->tinyInteger('status')->nullable()->default(Reserve::status_unknown/*0*/)->comment('');
             $table->unsignedBigInteger('reserve_template_id')->nullable();
             $table->unsignedBigInteger('gym_id')->nullable();
@@ -45,6 +47,7 @@ return new class extends Migration {
             $table->softDeletes();
             $table->unique(['dated_at', 'reserve_template_id']);
         });
+
         Schema::create('attribute_gym_price_reserve', function (Blueprint $table) {
             $table->comment('جدول ثبت قیمت هر امکانات برای هر نمونه وقت ذخیره شده');
             $table->bigInteger('attribute_gym_price_id');

@@ -9723,7 +9723,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "relations:list is",
+                        "description": "relations:list is:userCreator,userEditor,user,reserveTemplate,gym,factors",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -12472,6 +12472,67 @@
                         "name": "user_ids",
                         "in": "query",
                         "description": "user_ids",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notifications/test-send-sms": {
+            "get": {
+                "tags": [
+                    "notifications"
+                ],
+                "summary": "test send sms",
+                "operationId": "356b7ff2bc71a8decc6e2cd88c44ff5f",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "mobile",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "message",
+                        "in": "query",
+                        "description": "message",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "service",
+                        "in": "query",
+                        "description": "service",
                         "required": false,
                         "schema": {
                             "type": "string"

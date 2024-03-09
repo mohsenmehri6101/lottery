@@ -95,8 +95,13 @@ class ReserveService
              * @var $withs
              */
             extract($fields);
+
             $withs = $withs ?? [];
-            return $this->reserveRepository->withRelations(relations: $withs)->findOrFail($reserve_id);
+            return $this->reserveRepository->withRelations(relations: $withs)
+                ->where('id',$reserve_id)
+                ->orWhere('tracking_code',$reserve_id)
+                ->first();
+
         } catch (Exception $exception) {
             throw $exception;
         }

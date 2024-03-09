@@ -17,4 +17,10 @@ class ReserveRepository extends BaseRepository
         return Reserve::$relations_;
     }
 
+    public function fillable_search(): array
+    {
+        return [
+            'tracking_code',
+        ];
+    }
 }

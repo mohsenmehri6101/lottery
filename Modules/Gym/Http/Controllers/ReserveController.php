@@ -115,7 +115,7 @@ class ReserveController extends Controller
      *     summary="show reserve",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id",in="path",required=true, @OA\Schema(type="integer"),description="id"),
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="relations:list is:userCreator,userEditor,user,reserveTemplate,gym,factors"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )

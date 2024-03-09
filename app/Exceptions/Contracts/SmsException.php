@@ -1,9 +1,10 @@
 <?php
 
-namespace Modules\Exception\Services\Contracts;
+namespace App\Exceptions\Contracts;
 
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use Modules\Exception\Services\Contracts\BaseException;
 
 class SmsException extends BaseException
 {
