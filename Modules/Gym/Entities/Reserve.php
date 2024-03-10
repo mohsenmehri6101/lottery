@@ -135,7 +135,6 @@ class Reserve extends Model
         return $date_prefix . $random_number;
     }
 
-
     public static function getStatusTitle($status = null): array|bool|int|string|null
     {
         $statuses = self::getStatusPersian();
