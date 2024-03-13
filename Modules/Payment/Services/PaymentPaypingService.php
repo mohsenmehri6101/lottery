@@ -60,7 +60,7 @@ class PaymentPaypingService
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
-            $amount = 2000;
+            # $amount = 2000;
             $data = [
                 'clientRefId' => $clientRefId, /* شماره فاکتور */
                 'payerIdentity' => $mobile, /* شماره موبایل یا ایمیل پرداخت کننده */
@@ -96,8 +96,7 @@ class PaymentPaypingService
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
-
-            $amount = 2000;
+            # $amount = 2000;
             $data = [
                 'amount' => $amount,
                 'refId' => $authority,
@@ -112,12 +111,9 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
 
-            if ($statusCode === 200 && $amount == $responseData['amount'])
-            {
+            if ($statusCode === 200 && $amount == $responseData['amount']) {
                 return true;
-            }
-            else
-            {
+            } else {
                 throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');
             }
 
