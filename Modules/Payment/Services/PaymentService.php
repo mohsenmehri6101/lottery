@@ -89,14 +89,17 @@ class PaymentService
 
     public function createLinkPayment(PaymentCreateLinkRequest|array $request): ?string
     {
+        DB::beginTransaction();
         try {
+
             if (is_array($request)) {
                 $loginRequest = new PaymentCreateLinkRequest();
                 $fields = Validator::make(data: $request,
                     rules: $loginRequest->rules(),
                     attributes: $loginRequest->attributes(),
                 )->validate();
-            } else {
+            } else
+             {
                 $fields = $request->validated();
             }
 
@@ -154,8 +157,11 @@ class PaymentService
                  $factor->reserves()->update(['status' => Reserve::status_reserving]);
              }
 
+             DB::commit();
             return $url;
-        } catch (Exception $exception) {
+        } catch (Exception $exception) 
+        {
+            DB::rollBack();
             # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
             throw new $exception;
         }
@@ -163,6 +169,8 @@ class PaymentService
 
     public function confirmPayment(Request $request)
     {
+        DB::beginTransaction();
+        try{
         $fields = $request->all();
         $ref_id = $fields['refid'] ?? null;
         $resnumber = $client_ref_id = $fields['clientrefid'] ?? null;
@@ -179,11 +187,11 @@ class PaymentService
         $factor_id = $factor->payments()->latest()->first()->id;
         if ($PaymentPaypingService->confirmPayment(authority: $ref_id, amount: $factor->total_price, factor_id: $factor_id)) {
             $factor->status = Factor::status_paid;
-//            $factor->update([
-//                'status'=>Factor::status_paid,
-//                'description'=>Factor::calculateDescription($factor),
-//                'total_price'=>Factor::calculatePriceForFactor($factor)
-//            ]);
+            //            $factor->update([
+            //                'status'=>Factor::status_paid,
+            //                'description'=>Factor::calculateDescription($factor),
+            //                'total_price'=>Factor::calculatePriceForFactor($factor)
+            //            ]);
 
             $payment->status = Payment::status_paid;
             $factor_id = $factor->reserves()->update(['status'=>Reserve::status_reserved]);
@@ -194,7 +202,13 @@ class PaymentService
             self::save_transactions($factor);
             return  $payment->resnumber;
         }
-        return null;
+        DB::commit();
+    } catch (Exception $exception) 
+    {
+        DB::rollBack();
+        # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
+        throw new $exception;
+    }
     }
 
     public static function save_transactions(Factor $factor): void
