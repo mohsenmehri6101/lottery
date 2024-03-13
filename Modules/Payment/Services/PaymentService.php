@@ -169,6 +169,8 @@ class PaymentService
 
     public function confirmPayment(Request $request)
     {
+        DB::beginTransaction();
+        try{
         $fields = $request->all();
         $ref_id = $fields['refid'] ?? null;
         $resnumber = $client_ref_id = $fields['clientrefid'] ?? null;
@@ -200,7 +202,13 @@ class PaymentService
             self::save_transactions($factor);
             return  $payment->resnumber;
         }
-        return null;
+        DB::commit();
+    } catch (Exception $exception) 
+    {
+        DB::rollBack();
+        # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
+        throw new $exception;
+    }
     }
 
     public static function save_transactions(Factor $factor): void
