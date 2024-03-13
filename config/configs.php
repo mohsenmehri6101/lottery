@@ -56,6 +56,10 @@ return [
             'max_priority_limit' => 10
         ],
         'sms' => [
+            'farazsms' => [
+                'base_url' => 'https://ippanel.com/services.jspd',
+                'api_key' => env('FARAZSMS_API_KEY'),
+            ],
             'ghasedak' => [
                 'api_key' => env('API_KEY_GHASEDAK')
             ],
@@ -67,7 +71,7 @@ return [
             'max_random_code_factor' => 990000,
         ],
         'zarinpal' => [
-            'merchant_id' => env('PAYMENT_ZARINPAL_TOKEN','jfdlkajafjhio'),
+            'merchant_id' => env('PAYMENT_ZARINPAL_TOKEN', 'jfdlkajafjhio'),
             'payment_url' => 'https://api.zarinpal.com/pg/v4/payment/',
         ],
     ],

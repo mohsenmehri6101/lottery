@@ -12,6 +12,9 @@ if (!function_exists('send_sms')) {
                 } else if ($service === 'mediana') {
                     return \Modules\Notification\Services\Sms\SmsMedianaService::send_sms(mobile: $mobile, message: $message);
                 }
+                else if ($service === 'farazsms') {
+                    return \Modules\Notification\Services\Sms\SmsFarazService::send_sms(mobile: $mobile, message: $message);
+                }
             } else {
                 \Illuminate\Support\Facades\Log::info('send_sms', [$mobile, $message]);
             }

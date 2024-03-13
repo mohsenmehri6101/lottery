@@ -65,16 +65,37 @@ class Error extends Model
         'exception' => 'string',
         'message' => 'string',
         'user_creator' => 'integer',
-        'stack_trace' => 'json',
-        'requests' => 'json',
-        'headers' => 'json',
-        'user_agent' => 'string',
-        'extra_date' => 'json',
 
+        'stack_trace' => 'array',
+        'requests' => 'array',
+        'headers' => 'array',
+        'extra_date' => 'array',
+
+        'user_agent' => 'string',
         'created_at' => 'date',
         'updated_at' => 'date',
         'deleted_at' => 'date',
     ];
+
+    public function setAttribute($key, $value)
+    {
+        if (in_array($key, ['stack_trace', 'requests', 'headers', 'extra_date']) && is_array($value)) {
+            $value = json_encode($value);
+        }
+
+        return parent::setAttribute($key, $value);
+    }
+
+    public function getAttribute($key)
+    {
+        $value = parent::getAttribute($key);
+
+        if (in_array($key, ['stack_trace', 'requests', 'headers', 'extra_date']) && is_string($value)) {
+            $value = json_decode($value, true);
+        }
+
+        return $value;
+    }
 
     protected $hidden = [
         # 'id'

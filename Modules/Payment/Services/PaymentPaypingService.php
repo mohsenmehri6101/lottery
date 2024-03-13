@@ -65,7 +65,7 @@ class PaymentPaypingService
                 'clientRefId' => $clientRefId, /* شماره فاکتور */
                 'payerIdentity' => $mobile, /* شماره موبایل یا ایمیل پرداخت کننده */
                 'payerName' => $payerName, /* نام کاربر پرداخت کننده */
-                'amount' => $amount /*is_string($amount) ? floatval($amount) : $amount*/, /* required *//* مبلغ تراکنش */
+                'amount' => is_string($amount) ? floatval($amount) : $amount, /* required *//* مبلغ تراکنش */
                 'Description' => $description, /* توضیحات */
                 'returnUrl' => $returnUrl, /* required *//* آدرس برگشتی از سمت درگاه */
             ];
@@ -81,6 +81,8 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
             $code = $responseData['code'] ?? null;
+
+//            Log::info('in create link payment',[$responseData]);
 
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
                 return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;

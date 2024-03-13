@@ -36,11 +36,21 @@ return new class extends Migration {
             $table->string('exception')->nullable()->comment('نوع خطا(نام خطا)');
             $table->text('message')->nullable()->comment('متن خطا');
             $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
-            $table->json('stack_trace')->nullable()->comment('محل وقوع خطا  - شرح خطا - نوع خطا');
-            $table->json('requests')->nullable()->comment('اطلاعات ارسالی توسط کاربر');
-            $table->json('headers')->nullable()->comment('اطلاعات هدر کاربر');
+
+            #### #### #### #### #### ####
+            # $table->json('stack_trace')->nullable()->comment('محل وقوع خطا');
+            # $table->json('requests')->nullable()->comment('اطلاعات ارسالی توسط کاربر');
+            # $table->json('headers')->nullable()->comment('اطلاعات هدر کاربر');
+            # $table->json('extra_date')->nullable()->comment('اطلاعات اضافی که توسط developer تنظیم شده است');
+            #### #### #### #### #### ####
+
+            $table->text('stack_trace')->nullable()->comment('محل وقوع خطا');
+            $table->text('requests')->nullable()->comment('اطلاعات ارسالی توسط کاربر');
+            $table->text('headers')->nullable()->comment('اطلاعات هدر کاربر');
+            $table->text('extra_date')->nullable()->comment('اطلاعات اضافی که توسط developer تنظیم شده است');
+
+
             $table->string('user_agent')->nullable()->comment('اطلاعات دستگاه کاربر');
-            $table->json('extra_date')->nullable()->comment('اطلاعات اضافی که توسط developer تنظیم شده است');
             $table->timestamps();
             $table->softDeletes();
         });
