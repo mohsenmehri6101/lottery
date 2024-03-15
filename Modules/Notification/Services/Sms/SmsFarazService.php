@@ -3,34 +3,41 @@
 namespace Modules\Notification\Services\Sms;
 
 use Exception;
-use Illuminate\Support\Facades\Http;
 use IPPanel\Client as IPPanelClient;
 
 class SmsFarazService implements SmsInterface
 {
-
-    private static string $baseUrl;
-    private static string $apiKey;
-
-    /*  ######################### */
-
-    public static function initialize(): void
+    public static function createPattern(IPPanelClient $client, string $message): string
     {
-        self::$baseUrl = config('configs.notifications.sms.farazsms.base_url', 'https://ippanel.com/services.jspd');
-        self::$apiKey = config('configs.notifications.sms.farazsms.api_key');
+        // Define pattern variables
+        $patternVariables = [
+            'message' => 'string',
+        ];
+
+        // Create the pattern
+        $patternCode = $client->createPattern("%message% \n سلام سالن", "description",
+            $patternVariables, '%', false);
+
+        return $patternCode;
     }
 
     public static function send_sms(string|int $mobile, string $message = null, bool $throwException = true): bool
     {
         try {
+            // Initialize the IPPanel client with your API key
             $apiKey = config('configs.notifications.sms.farazsms.api_key');
             $client = new IPPanelClient($apiKey);
 
-            $originator = config('configs.notifications.sms.farazsms.sender_number');
-            $recipient = (string) $mobile;
-            $summary = 'Sending SMS via IPPanel SDK';
+            // Create the pattern and get the pattern code
+            $patternCode = self::createPattern($client, $message);
 
-            $client->send($originator, [$recipient], $message, $summary);
+            // Send the message using the predefined pattern
+            $messageId = $client->sendPattern(
+                $patternCode,                                       // pattern code
+                config('configs.notifications.sms.originator'),    // originator
+                $mobile,                                            // recipient
+                ['message' => $message]                             // pattern values
+            );
 
             return true;
         } catch (Exception $exception) {
@@ -42,5 +49,4 @@ class SmsFarazService implements SmsInterface
             }
         }
     }
-
 }
