@@ -152,12 +152,12 @@ class Reserve extends Model
     public static function getStatusPersian(): array
     {
         return [
-            self::status_unknown => 'نامشخص',
-            self::status_active => 'فعال',
-            self::status_inactive => 'غیرفعال',
-            self::status_blocked => 'بلاک شده',
-            self::status_reserving => 'در حال رزرو',
-            self::status_reserved => 'رزرو شده',
+            self::status_unknown => 'نامشخص',/*0*/
+            self::status_active => 'فعال',/*1*/
+            self::status_inactive => 'غیرفعال',/*2*/
+            self::status_blocked => 'بلاک شده',/*3*/
+            self::status_reserving => 'در حال رزرو',/*4*/
+            self::status_reserved => 'رزرو شده',/*5*/
         ];
     }
 
