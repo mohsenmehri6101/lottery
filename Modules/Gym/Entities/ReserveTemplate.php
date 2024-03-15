@@ -40,8 +40,9 @@ class ReserveTemplate extends Model
     const status_gender_acceptance_female = 2;
     const status_gender_acceptance_all = 3;
 
-    const status_inactive=0;
+    const status_unknown=0;
     const status_active=1;
+    const status_inactive=2;
 
     protected $fillable = [
         'id',
@@ -160,18 +161,22 @@ class ReserveTemplate extends Model
         }
         return $statuses;
     }
+
     public static function getStatus(): array
     {
         return [
-            self::status_inactive,
-            self::status_active,
+            self::status_unknown,/* 0 */
+            self::status_active,/* 1 */
+            self::status_inactive,/* 2 */
         ];
     }
+
     public static function getStatusPersian(): array
     {
         return [
-            self::status_inactive => 'غیرفعال',# 0
+            self::status_unknown => 'تعریف نشده',# 0
             self::status_active => 'فعال',# 1
+            self::status_inactive => 'غیرفعال',# 2
         ];
     }
 
