@@ -122,7 +122,8 @@ class PaymentService
             $amount = $factor->total_price ?? null;
             /** @var User $user */
             $user = $factor->user;
-            $returnUrl = route('api_v1_payment_payments_confirm_payment_get') ?? null;
+            # $returnUrl = route('api_v1_payment_payments_confirm_payment_get') ?? null;
+            $returnUrl = route('web.confirm_payment_get') ?? null;
             $payerName = $factor?->user?->full_name ?? null;
             # todo better set description of factor and total-price and dated-at and reserve template id and gym_id
             $description = isset($description) && filled($description) ? $description : $mobile;
@@ -159,7 +160,7 @@ class PaymentService
 
              DB::commit();
             return $url;
-        } catch (Exception $exception) 
+        } catch (Exception $exception)
         {
             DB::rollBack();
             # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
@@ -203,7 +204,7 @@ class PaymentService
             return  $payment->resnumber;
         }
         DB::commit();
-    } catch (Exception $exception) 
+    } catch (Exception $exception)
     {
         DB::rollBack();
         # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);

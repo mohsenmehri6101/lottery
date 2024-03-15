@@ -59,6 +59,7 @@ return [
             'farazsms' => [
                 'base_url' => 'https://ippanel.com/services.jspd',
                 'api_key' => env('FARAZSMS_API_KEY'),
+                'sender_number'=>'+9810001',
             ],
             'ghasedak' => [
                 'api_key' => env('API_KEY_GHASEDAK')

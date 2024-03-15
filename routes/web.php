@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Payment\Http\Controllers\PaymentController;
 
 # php artisan serve --host=192.168.125.8 --port=8000
 # #########################################################
@@ -60,6 +61,10 @@ Route::prefix('manager')->group(function () {
     Route::get('/gyms', [\App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/reserves', [\App\Http\Controllers\HomeController::class, 'index']);
 });
+
+Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_get');
+Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_post');
+
 /*   -------------------------------------------------------------------------------------  */
 
 /*
