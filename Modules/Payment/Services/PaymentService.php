@@ -87,6 +87,11 @@ class PaymentService
         }
     }
 
+    private static function convertToToman($amountInRial)
+    {
+        return $amountInRial / 10; // Example conversion: rial to toman
+    }
+
     public function createLinkPayment(PaymentCreateLinkRequest|array $request): ?string
     {
         DB::beginTransaction();

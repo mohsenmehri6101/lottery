@@ -3,7 +3,6 @@
 namespace Modules\Payment\Services;
 
 use App\Exceptions\Contracts\CreateLinkPaymentException;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
 use Exception;
@@ -15,6 +14,11 @@ class PaymentPaypingService
     private static string $PAYMENT_URL_V2 = 'https://api.payping.ir/v2/';
     private static string $PAYMENT_ENDPOINT = 'pay';
     private static string $VERIFY_ENDPOINT = 'pay/verify';
+
+    private static function convertToToman($amountInRial): float|int
+    {
+        return $amountInRial / 10; // Example conversion: rial to toman
+    }
 
     public function __construct(string|null $token = null)
     {
@@ -60,12 +64,15 @@ class PaymentPaypingService
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
-            # $amount = 2000;
+
+            $amount = is_string($amount) ? floatval($amount) : $amount;
+            $amount = self::convertToToman($amount);
+
             $data = [
                 'clientRefId' => $clientRefId, /* شماره فاکتور */
                 'payerIdentity' => $mobile, /* شماره موبایل یا ایمیل پرداخت کننده */
                 'payerName' => $payerName, /* نام کاربر پرداخت کننده */
-                'amount' => is_string($amount) ? floatval($amount) : $amount, /* required *//* مبلغ تراکنش */
+                'amount' => $amount, /* required *//* مبلغ تراکنش */
                 'Description' => $description, /* توضیحات */
                 'returnUrl' => $returnUrl, /* required *//* آدرس برگشتی از سمت درگاه */
             ];
@@ -112,6 +119,8 @@ class PaymentPaypingService
 
             $statusCode = $response->status();
             $responseData = $response->json();
+
+            $amount = self::convertToToman($amount);
 
             if ($statusCode === 200 && $amount == $responseData['amount']) {
                 return true;
