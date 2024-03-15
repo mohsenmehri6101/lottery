@@ -30,11 +30,12 @@ class SmsFarazService implements SmsInterface
 
             // Create the pattern and get the pattern code
             $patternCode = self::createPattern($client, $message);
+            $originator = config('configs.notifications.sms.farazsms.sender_number');
 
             // Send the message using the predefined pattern
             $messageId = $client->sendPattern(
                 $patternCode,                                       // pattern code
-                config('configs.notifications.sms.originator'),    // originator
+                $originator,    // originator
                 $mobile,                                            // recipient
                 ['message' => $message]                             // pattern values
             );
@@ -49,4 +50,5 @@ class SmsFarazService implements SmsInterface
             }
         }
     }
+
 }
