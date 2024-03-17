@@ -19,11 +19,9 @@ use Modules\Payment\Http\Requests\Payment\PaymentIndexRequest;
 use Modules\Payment\Http\Requests\Payment\PaymentShowRequest;
 use Modules\Payment\Entities\Payment;
 use Illuminate\Support\Facades\Validator;
-
 class PaymentService
 {
     const USER_ID_SYSTEM = 1;
-
     public function __construct(public PaymentRepository $paymentRepository)
     {
     }
@@ -341,5 +339,4 @@ class PaymentService
 
         $factor->update(['status' => Factor::status_paid]);
     }
-
 }
