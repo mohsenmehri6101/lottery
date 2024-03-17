@@ -29,9 +29,13 @@ class SmsFarazService implements SmsInterface
             $api_key = config('configs.notifications.sms.farazsms.api_key');
             $originator = config('configs.notifications.sms.farazsms.sender_number');
 
+
             # Create the pattern and get the pattern code.
             $client = new IPPanelClient($api_key);
             $pattern_code = self::createPattern($client, $message);
+
+            dd($api_key,$originator,$pattern_code,$message);
+
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'apikey' => $api_key,
@@ -67,35 +71,4 @@ class SmsFarazService implements SmsInterface
             }
         }
     }
-
-    //    public static function send_sms(string|int $mobile, string $message = null, bool $throwException = true): bool
-    //    {
-    //        try {
-    //            # Initialize the IPPanel client with your API key
-    //            $api_key = config('configs.notifications.sms.farazsms.api_key');
-    //            $client = new IPPanelClient($api_key);
-    //
-    //            # Create the pattern and get the pattern code
-    //            $pattern_code = self::createPattern($client, $message);
-    //            $originator = config('configs.notifications.sms.farazsms.sender_number');
-    //
-    //            # Send the message using the predefined pattern
-    //            $messageId = $client->sendPattern(
-    //                $pattern_code,                                       // pattern code
-    //                $originator,                                             // originator
-    //                $mobile,                                            // recipient
-    //                ['message' => $message]                             // pattern values
-    //            );
-    //
-    //            return true;
-    //        } catch (Exception $exception) {
-    //            if ($throwException) {
-    //                throw $exception;
-    //            } else {
-    //                report($exception);
-    //                return false;
-    //            }
-    //        }
-    //    }
-
 }
