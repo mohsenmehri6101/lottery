@@ -83,14 +83,12 @@ class FactorService
             throw $exception;
         }
     }
-
     public function myFactor(MyFactorRequest $request)
     {
         $fields = $request->validated();
         $fields['user_id'] = get_user_id_login();
         return $this->index($fields);
     }
-
     public function myGymsFactor(MyGymsFactorRequest|array $request)
     {
         try {
@@ -123,7 +121,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function show(FactorShowRequest $request, $factor_id)
     {
         try {
@@ -140,7 +137,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public static function setPriceForFactor(Factor $factor): void
     {
         $totalPrice = 0;
@@ -173,7 +169,6 @@ class FactorService
         # Update the total price for the factor
         $factor->update(['total_price' => $totalPrice]);
     }
-
     public function store(FactorStoreRequest|array $request)
     {
         DB::beginTransaction();
@@ -251,7 +246,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function update(FactorUpdateRequest $request, $factor_id)
     {
         DB::beginTransaction();
@@ -299,7 +293,6 @@ class FactorService
             throw $exception;
         }
     }
-
     public function destroy($factor_id): bool
     {
         DB::beginTransaction();
@@ -321,10 +314,8 @@ class FactorService
             throw $exception;
         }
     }
-
     public function listStatusFactor($status = null): array|bool|int|string|null
     {
         return Factor::getStatusTitle($status);
     }
-
 }
