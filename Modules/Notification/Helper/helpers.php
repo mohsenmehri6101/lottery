@@ -6,7 +6,7 @@ if (!function_exists('send_sms')) {
         try {
             $app_env = env('APP_ENV', 'local');
             //todo uncomment this section for production
-            if ($app_env == 'production') {
+            if ($app_env == 'production' || true) {
                 if ($service === 'ghasedak') {
                     return \Modules\Notification\Services\Sms\SmsGhasedakService::send_sms(mobile: $mobile, message: $message);
                 } else if ($service === 'mediana') {

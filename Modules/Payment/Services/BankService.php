@@ -4,8 +4,8 @@ namespace Modules\Payment\Services;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Modules\Payment\Http\Requests\Bank\PaymentIndexRequest;
-use Modules\Payment\Http\Requests\Bank\PaymentShowRequest;
+use Modules\Payment\Http\Requests\Bank\BankIndexRequest;
+use Modules\Payment\Http\Requests\Bank\BankShowRequest;
 use Modules\Payment\Http\Requests\Bank\BankStoreRequest;
 use Modules\Payment\Http\Requests\Bank\BankUpdateRequest;
 use Modules\Payment\Entities\Bank;
@@ -17,7 +17,7 @@ class BankService
     {
     }
 
-    public function index(PaymentIndexRequest $request)
+    public function index(BankIndexRequest $request)
     {
         try {
             $fields = $request->validated();
@@ -27,7 +27,7 @@ class BankService
         }
     }
 
-    public function show(PaymentShowRequest $request, $bank_id)
+    public function show(BankShowRequest $request, $bank_id)
     {
         try {
             $fields = $request->validated();

@@ -98,8 +98,9 @@ class PaymentPaypingService
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
-            # $amount = 2000;
+
             $amount = self::convertToToman($amount);
+
             $data = [
                 'amount' => $amount,
                 'refId' => $authority,
