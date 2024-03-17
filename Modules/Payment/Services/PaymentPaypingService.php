@@ -6,7 +6,6 @@ use App\Exceptions\Contracts\CreateLinkPaymentException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
 use Exception;
-
 class PaymentPaypingService
 {
     private string $TokenCode;
@@ -14,22 +13,18 @@ class PaymentPaypingService
     private static string $PAYMENT_URL_V2 = 'https://api.payping.ir/v2/';
     private static string $PAYMENT_ENDPOINT = 'pay';
     private static string $VERIFY_ENDPOINT = 'pay/verify';
-
     private static function convertToToman($amountInRial): float|int
     {
         return $amountInRial / 10; // Example conversion: rial to toman
     }
-
     public function __construct(string|null $token = null)
     {
         $this->TokenCode = $token ?? env('PAYMENT_PAYPING_TOKEN');
     }
-
     private function getErrorMessage($errorCode): string
     {
         return self::ERROR_CODES[$errorCode] ?? 'Unknown error occurred';
     }
-
     private const ERROR_CODES = [
         1 => 'تراكنش توسط شما لغو شد',
         2 => 'رمز کارت اشتباه است.',
@@ -60,7 +55,6 @@ class PaymentPaypingService
         48 => 'پرداخت از سمت شاپرک تایید نهایی نشده است',
         49 => 'ترمینال فعال یافت نشد، لطفا مجددا تلاش کنید'
     ];
-
     public function createLinkPayment($clientRefId, $mobile, $amount, $description, $returnUrl, $payerName): string
     {
         try {
@@ -101,11 +95,11 @@ class PaymentPaypingService
             throw new CreateLinkPaymentException($this->getErrorMessage($exception->getCode()));
         }
     }
-
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
             # $amount = 2000;
+            $amount = self::convertToToman($amount);
             $data = [
                 'amount' => $amount,
                 'refId' => $authority,
@@ -119,8 +113,6 @@ class PaymentPaypingService
 
             $statusCode = $response->status();
             $responseData = $response->json();
-
-            $amount = self::convertToToman($amount);
 
             if ($statusCode === 200 && $amount == $responseData['amount']) {
                 return true;
