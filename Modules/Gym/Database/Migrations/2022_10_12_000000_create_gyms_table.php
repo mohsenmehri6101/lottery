@@ -37,7 +37,6 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
-
         Schema::create('gym_criticisms', function (Blueprint $table) {
             $table->id();
             $table->comment('انتقادات از سالن ورزشی');
@@ -55,4 +54,5 @@ return new class extends Migration {
         Schema::dropIfExists('gym_criticisms');
         Schema::dropIfExists('gyms');
     }
+
 };
