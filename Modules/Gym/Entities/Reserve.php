@@ -80,6 +80,7 @@ class Reserve extends Model
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
+
     protected $hidden = [];
     public $appends = [
         'dated_at_persian'
