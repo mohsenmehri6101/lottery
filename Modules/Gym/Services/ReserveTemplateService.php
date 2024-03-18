@@ -202,6 +202,11 @@ class ReserveTemplateService
             $to = $to ?? null;
             $gym_id = $gym_id ?? null;
 
+            /** @var GymRepository $GymRepository */
+            $GymRepository = resolve('GymRepository');
+            /** @var Gym $gym */
+            $gym = $GymRepository->find($gym_id);
+
             $reserveTemplates = DB::table('reserve_templates')
                 ->where('reserve_templates.gym_id', $gym_id)
                 ->leftJoin('reserves', function ($join) use ($to, $from) {
