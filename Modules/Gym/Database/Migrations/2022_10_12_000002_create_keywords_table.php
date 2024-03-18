@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('keyword')->unique();
             $table->string('slug');
         });
+
         Schema::create('gym_keyword', function (Blueprint $table) {
             $table->unsignedBigInteger('gym_id');
             $table->unsignedBigInteger('keyword_id');
@@ -26,4 +27,5 @@ return new class extends Migration {
         Schema::dropIfExists('gym_keyword');
         Schema::dropIfExists('keywords');
     }
+
 };

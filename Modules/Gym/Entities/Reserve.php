@@ -36,6 +36,7 @@ class Reserve extends Model
     use SoftDeletes, GetCastsModel, UserCreator, UserEditor;
 
     const status_unknown = 0;
+
     const status_active = 1;
     const status_inactive = 2;
     const status_blocked = 3;
@@ -91,10 +92,12 @@ class Reserve extends Model
         'gym',
         'factors',
     ];
+
     public function gym(): BelongsTo
     {
         return $this->belongsTo(Gym::class);
     }
+
     protected static function boot(): void
     {
         parent::boot();
@@ -115,6 +118,7 @@ class Reserve extends Model
             }
         });
         static::updating(function ($item) {
+
             # user_editor
             if (is_null($item->user_editor)) {
                 $item->user_editor = set_user_creator();

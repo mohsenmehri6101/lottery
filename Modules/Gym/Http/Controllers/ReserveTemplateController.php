@@ -153,7 +153,6 @@ class ReserveTemplateController extends Controller
         return ResponseHelper::responseSuccessUpdate(data: $reserve_template);
     }
 
-
     /**
      * @OA\Post(
      *     path="/api/v1/reserve_templates/multiple",
@@ -190,7 +189,6 @@ class ReserveTemplateController extends Controller
         $reserve_templates = $this->reserveTemplateService->multipleStore($request);
         return ResponseHelper::responseSuccessUpdate(data: $reserve_templates);
     }
-
 
     /**
      * @OA\Delete(

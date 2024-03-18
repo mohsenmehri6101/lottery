@@ -241,7 +241,8 @@ class ReserveTemplateService
                     'to' => $template->to,
                     'gym_id' => $template->gym_id,
                     'week_number' => $template->week_number,
-                    'price' => $template->price,
+                    'price' => $template->price ?? $gym->price,
+                    # 'price' => $template->price,
                     'discount' => $template->discount,
                     'gender_acceptance' => $template->gender_acceptance,
                     'status' => $template->status,
@@ -272,6 +273,7 @@ class ReserveTemplateService
             throw $exception;
         }
     }
+
     public function gender_acceptances(Request|array $request): array|bool|int|string|null
     {
         $status = $request->status ?? null;
