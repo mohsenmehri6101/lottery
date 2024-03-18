@@ -291,7 +291,11 @@ class GymDatabaseSeeder extends Seeder
             $carbon_date = self::getRandomDateThisWeek();/* Carbon::instance($georgian_date); */
 
             # Format the Carbon date as 'Y-m-d' (date format)
+            # Generate a random time component
             $formatted_georgian_date = $carbon_date->format('Y-m-d');
+            $randomTime = $faker->time('H:i:s');
+            # Combine the formatted date and random time to create the reserved_at datetime
+            $reservedAtDateTime = $formatted_georgian_date . ' ' . $randomTime;
 
             # Convert the Carbon date to a Jalali (Persian) date and format it
             $jalali_date = Jalalian::fromCarbon($carbon_date);
@@ -303,7 +307,7 @@ class GymDatabaseSeeder extends Seeder
                 ->where('reserve_template_id', $reserve_template->id)
                 ->first();
 
-            // If no existing record found, create a new reserve reservation using the model
+            # If no existing record found, create a new reserve reservation using the model
             if (!$existing_record) {
                 $reserve_fake = [
                     'reserve_template_id' => $reserve_template->id,
@@ -315,7 +319,7 @@ class GymDatabaseSeeder extends Seeder
                     'dated_at' => $formatted_georgian_date,
                     'status'=>Reserve::status_reserved,
                     'want_ball'=>$reserve_template->gym->is_ball ? $faker->boolean : false,
-                    'reserved_at' => $formatted_georgian_date, // You can customize this as needed
+                    'reserved_at' => null, // You can customize this as needed
                     'reserved_user_id' => User::query()->inRandomOrder()->first()->id,
                 ];
 
@@ -339,7 +343,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     private static function getRandomDateThisWeek(): Carbon
     {
         $currentDate = Carbon::now();
@@ -416,7 +419,6 @@ class GymDatabaseSeeder extends Seeder
             self::helperFunctionSaveAvatar($user, $random_image);
         }
     }
-
     public static function select_random_avatar_image()
     {
         $faker = \Faker\Factory::create('fa_IR');
@@ -425,7 +427,6 @@ class GymDatabaseSeeder extends Seeder
         $random_image = $faker->randomElement($image_files);
         return $random_image;
     }
-
     public static function helperFunctionSaveSliderImage(Slider $slider): void
     {
         $faker = FakerFactory::create();
@@ -442,7 +443,6 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
-
     public static function helperFunctionSliderFake($count = 15): void
     {
         $faker = FakerFactory::create();
@@ -466,7 +466,6 @@ class GymDatabaseSeeder extends Seeder
             self::helperFunctionSaveSliderImage($slider);
         }
     }
-
     public static function helperFunctionFactorFake(int $number_record = 70): void
     {
         $faker = FakerFactory::create();
@@ -487,7 +486,6 @@ class GymDatabaseSeeder extends Seeder
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
         }
     }
-
     public static function helperFunctionFakePayment($number = 80): void
     {
         $faker = FakerFactory::create();
@@ -506,12 +504,10 @@ class GymDatabaseSeeder extends Seeder
             ]);
         }
     }
-
     public static function deleteImages(): void
     {
         Artisan::call('gym:delete-images', ['--all' => true]);
     }
-
     public static function helperFunctionFakeAttributeGymPrice($count = 40): void
     {
         $faker = \Faker\Factory::create();
@@ -527,7 +523,6 @@ class GymDatabaseSeeder extends Seeder
             ]);
         }
     }
-
     public static function helperFunctionFakeAttributeGymPriceReserve($count = 100): void
     {
         $faker = \Faker\Factory::create();
@@ -556,7 +551,6 @@ class GymDatabaseSeeder extends Seeder
             // Log or handle the exception if needed
         }
     }
-
     public function run(): void
     {
         self::deleteImages();
@@ -576,5 +570,4 @@ class GymDatabaseSeeder extends Seeder
         // self::helperFunctionFakeAttributeGymPrice();
         // self::helperFunctionFakeAttributeGymPriceReserve();
     }
-
 }

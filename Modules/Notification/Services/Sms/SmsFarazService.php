@@ -24,33 +24,16 @@ class SmsFarazService implements SmsInterface
 
     public static function send_sms(string|int $mobile, string $message = null, bool $throwException = true): bool
     {
-        # self::initialize();
         try {
-            $api_key = config('configs.notifications.sms.farazsms.api_key');
-            $originator = config('configs.notifications.sms.farazsms.sender_number');
-
-
-            # Create the pattern and get the pattern code.
-            $client = new IPPanelClient($api_key);
-            $pattern_code = self::createPattern($client, $message);
-
-            dd($api_key,$originator,$pattern_code,$message);
-
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'apikey' => $api_key,
-            ])->post("https://api2.ippanel.com/api/v1/sms/pattern/normal/send",[
-                'code' => $pattern_code,
-                'sender' => $originator,
-                'recipient' => $mobile,
-                'variable' => [
-                    'message' => $message,
-                ],
-            ]);
-
+            $apiKey = config('configs.notifications.sms.farazsms.api_key');
+            $patternId = 'urwm74gu1e'; // Replace with your pattern ID
+            $senderNumber = '3000505'; // Replace with your sender number
+            $value1 = urlencode($message); // Encode the message
+            $baseUrl = '';
+            $url = $baseUrl . '/?apikey=' . $apiKey . '&pid=' . $patternId . '&fnum=' . $senderNumber . '&tnum=' . $mobile . '&p1=message' . '&v1=' . $value1;
+            $response = Http::get($url);
             $responseData = $response->json();
-
-            if ($response->ok() && $responseData['status'] === 'OK') {
+            if ($response->successful() && $responseData['status'] === 'OK') {
                 return true;
             } else {
                 // Log or handle the error
@@ -62,7 +45,7 @@ class SmsFarazService implements SmsInterface
                 }
             }
         } catch (Exception $exception) {
-            // Log or handle the exception
+            # Log or handle the exception
             if ($throwException) {
                 throw $exception;
             } else {
@@ -71,4 +54,6 @@ class SmsFarazService implements SmsInterface
             }
         }
     }
+
+
 }
