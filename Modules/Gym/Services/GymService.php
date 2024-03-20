@@ -435,6 +435,7 @@ class GymService
                 ReserveTemplate::query()->create([
                     'from' => $from,
                     'to' => $to,
+                    'status'=>ReserveTemplate::status_active,
                     'gym_id' => $gym->id,
                     'week_number' => $week_number,
                     'price' => $price,
