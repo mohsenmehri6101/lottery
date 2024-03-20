@@ -6,11 +6,10 @@ use Ghasedak\Exceptions\ApiException;
 use Ghasedak\Exceptions\HttpException;
 use Exception;
 use Ghasedak\GhasedakApi;
-
 class SmsGhasedakService implements SmsInterface
 {
-    const DEFAULT_LINE_NUMBER = '10008566';
-
+    # const DEFAULT_LINE_NUMBER = '10008566';
+    const DEFAULT_LINE_NUMBER = '210002100';
     private static function getApiKeyGhasedak()
     {
         return config('configs.notifications.sms.ghasedak.api_key');
@@ -24,7 +23,11 @@ class SmsGhasedakService implements SmsInterface
             $ghasedak_api = new GhasedakApi($api_key);
             $ghasedak_api->SendSimple($mobile, $message, self::DEFAULT_LINE_NUMBER);
             return true;
-        } catch (ApiException|HttpException|Exception $e) {
+
+
+
+        } catch (ApiException|HttpException|Exception $e)
+        {
             if ($throwException) {
                 throw $e;
             } else {

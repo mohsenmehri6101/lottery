@@ -14,4 +14,5 @@ class CreateLinkPaymentException extends BaseException
         $code = $code ?? Response::HTTP_LOOP_DETECTED;
         parent::__construct($message, $code, $previous, $extra_data, $errors);
     }
+
 }

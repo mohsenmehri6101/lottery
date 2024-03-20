@@ -15,7 +15,7 @@ class PaymentPaypingService
     private static string $VERIFY_ENDPOINT = 'pay/verify';
     private static function convertToToman($amountInRial): float|int
     {
-        return $amountInRial / 10; // Example conversion: rial to toman
+        return $amountInRial / 10; // rial to toman
     }
     public function __construct(string|null $token = null)
     {
@@ -83,8 +83,6 @@ class PaymentPaypingService
             $responseData = $response->json();
             $code = $responseData['code'] ?? null;
 
-//            Log::info('in create link payment',[$responseData]);
-
             if ($statusCode === Response::HTTP_OK && $responseData['code']) {
                 return self::$PAYMENT_URL_V1 . 'pay/gotoipg/' . $code;
             }
@@ -99,6 +97,7 @@ class PaymentPaypingService
     {
         try {
 
+            $amount = is_string($amount) ? floatval($amount) : $amount;
             $amount = self::convertToToman($amount);
 
             $data = [
