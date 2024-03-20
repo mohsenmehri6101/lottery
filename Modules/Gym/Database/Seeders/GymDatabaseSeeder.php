@@ -257,7 +257,6 @@ class GymDatabaseSeeder extends Seeder
                         ReserveTemplate::status_active,
                         ReserveTemplate::status_active,
                         ReserveTemplate::status_active,
-                        ReserveTemplate::status_active,
                         ReserveTemplate::status_inactive,
                     ]),
                     'user_creator' => $user_random_id,
