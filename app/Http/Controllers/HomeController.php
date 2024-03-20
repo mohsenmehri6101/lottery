@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 class HomeController extends Controller
 {
-    public function index(): bool
+    public function index()
     {
          return view('home.index');
     }
-
 }

@@ -49,6 +49,7 @@ class ApiDocumentationAuth extends Controller
             }
 
         }
+
         return abort(403);
 
     }
