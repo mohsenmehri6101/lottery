@@ -28,6 +28,7 @@ use Modules\Gym\Entities\Keyword;
 use Modules\Gym\Entities\Sport;
 use Modules\Gym\Entities\Tag;
 use Faker\Factory as FakerFactory;
+use Modules\Gym\Services\GymService;
 use Modules\Gym\Services\ImageService;
 use Modules\Payment\Entities\Factor;
 use Modules\Payment\Entities\Payment;
@@ -179,7 +180,7 @@ class GymDatabaseSeeder extends Seeder
                     'status' => $faker->numberBetween(0, 2),
                     'profit_share_percentage' => $faker->numberBetween(1, 12),
                     'is_ball' => $is_ball,
-                    'ball_price' => $is_ball ? $faker->randomElement([100000,150000, 200000]) : 0,
+                    'ball_price' => $is_ball ? $faker->randomElement([100000, 150000, 200000]) : 0,
                     'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
                     'like_count' => $faker->numberBetween(15, 85),
                     'dislike_count' => $faker->numberBetween(10, 90),
@@ -206,68 +207,49 @@ class GymDatabaseSeeder extends Seeder
                 $attributes = Attribute::query()->inRandomOrder()->limit(rand(1, 3))->get();
                 $gym->attributes()->attach($attributes);
 
-                self::helperFunctionReserveTemplatesFake(gym_id:$gym->id,is_ball:$is_ball);
-
                 # set image
                 $image_directory = public_path('fake_images/');
                 $image_files = glob($image_directory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
                 $random_images = $faker->randomElements($image_files, $faker->numberBetween(1, 3));
                 self::helperFunctionSaveImage($gym, $random_images);
+
+                # save reserve_templates
+                self::helperFunctionReserveTemplatesFake($gym);
             }
         }
     }
 
-    public static function helperFunctionReserveTemplatesFake(int $gym_id,$is_ball=false): void
+    public static function helperFunctionReserveTemplatesFake(Gym $gym, $is_ball = false): void
     {
         $faker = \Faker\Factory::create();
-        $days = $faker->randomElement([7, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]); // Randomly choose between 7, 5, or 6 (with a higher chance of 7)
-        $interval = $faker->randomElement([5400, 7200]); // Randomly choose between 1.5 hours and 2 hours
-        // Generate a single random price for all records
-
-        // Loop through week_number from 1 to 7
-        for ($week_number = 1; $week_number <= $days; $week_number++) {
-            $price = $faker->randomElement(range(700000, 1500000, 100000));
-            $user_random_id = User::query()->inRandomOrder()->first()->id;
-            $from = $faker->randomElement(['06:00', '08:00', '10:00']); // Generate a new random start time for each day
-            $current_hour = (int)substr($from, 0, 2); // Extract the hour part as an integer
-
-            // Calculate the maximum allowed hour based on the desired end times
-            $max_hour = (strtotime('22:00') < strtotime('24:00')) ? 22 : 24;
-
-            // Continue generating records until it's near 22:00 or 24:00
-            while ($current_hour < $max_hour) {
-                $to = date('H:i', strtotime($from) + $interval);
-                // Check if the end time exceeds the maximum allowed hour
-                if (strtotime($to) >= strtotime('24:00') || strtotime($to) >= strtotime('22:00')) {
-                    break; // Exit the loop if it's near 22:00 or 24:00
-                }
-                $is_ball_reserve_template = $is_ball ? $faker->boolean : false;
-                ReserveTemplate::query()->create([
-                    'from' => $from,
-                    'to' => $to,
-                    'gym_id' => $gym_id, // Use the gym_id passed as a parameter
-                    'week_number' => $week_number, // Set the week_number
-                    'price' => $price, // Use the same price for all records
-                    'cod' => $faker->boolean,
-                    'is_ball' => $is_ball_reserve_template,
-                    'gender_acceptance' => $faker->randomElement([ReserveTemplate::status_gender_acceptance_unknown, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_male, ReserveTemplate::status_gender_acceptance_female, ReserveTemplate::status_gender_acceptance_all]),
-                    'discount' => $faker->randomElement([null, null, null, null, 5, 10, 15, 20]),
-                    'status' => $faker->randomElement([
-                        ReserveTemplate::status_active,
-                        ReserveTemplate::status_active,
-                        ReserveTemplate::status_active,
-                        ReserveTemplate::status_active,
-                        ReserveTemplate::status_inactive,
-                    ]),
-                    'user_creator' => $user_random_id,
-                    'user_editor' => $user_random_id,
-                ]);
-
-                // Set the new 'from' time to 'to' time for the next iteration
-                $from = $to;
-                $current_hour = (int)substr($from, 0, 2); // Update the current hour
-            }
-        }
+        $from = $faker->randomElement(['06:00', '07:00', '07:30', '08:00', '08:30', '10:00']);
+        $to = $faker->randomElement(['22:00', '22:30', '24:00', '21:00']);
+        $gender_acceptance = $faker->randomElement([
+            ReserveTemplate::status_gender_acceptance_unknown,
+            ReserveTemplate::status_gender_acceptance_male,
+            ReserveTemplate::status_gender_acceptance_female,
+            ReserveTemplate::status_gender_acceptance_all,
+        ]);
+        $randomWeeks = $faker->randomElement([
+            [1, 2, 3, 4, 5, 6, 7],
+            [1, 2, 3, 4, 5, 6, 7],
+            [1, 2, 3, 4, 5, 6, 7],
+            [3, 4, 5, 6, 7],
+            [1, 2, 3, 4, 5, 6],
+            [1, 2, 3, 4, 5, 6],
+            [1, 2, 3, 4, 5, 6, 7],
+            [2, 3, 4, 5, 6, 7],
+        ]);
+        $break_time = $faker->randomElement([1.5,2,2]);
+        // Call saveSectionReserveTemplate method to save the reserve template
+        GymService::saveSectionReserveTemplate(
+            gym: $gym,
+            week_numbers: $randomWeeks,
+            start_time: $from,
+            max_hour: $to,
+            break_time: $break_time,
+            gender_acceptance: $gender_acceptance,
+        );
     }
 
     public static function helperFunctionReservesFake($reserve_template_id = null, $count = 400): void
@@ -316,8 +298,8 @@ class GymDatabaseSeeder extends Seeder
                     'user_creator' => $user_creator_or_editor,
                     'user_editor' => $user_creator_or_editor,
                     'dated_at' => $formatted_georgian_date,
-                    'status'=>Reserve::status_reserved,
-                    'want_ball'=>$reserve_template->gym->is_ball ? $faker->boolean : false,
+                    'status' => Reserve::status_reserved,
+                    'want_ball' => $reserve_template->gym->is_ball ? $faker->boolean : false,
                     'reserved_at' => null, // You can customize this as needed
                     'reserved_user_id' => User::query()->inRandomOrder()->first()->id,
                 ];
@@ -333,8 +315,8 @@ class GymDatabaseSeeder extends Seeder
                 $factor = $factorService->store(['reserve_id' => $reserve->id, 'status' => Reserve::status_active]);
 
                 $factor->update([
-                    'description'=>Factor::calculateDescriptionReserves(collect([$reserve])),
-                    'total_price'=>Factor::calculatePriceForFactorReserves(collect([$reserve]))
+                    'description' => Factor::calculateDescriptionReserves(collect([$reserve])),
+                    'total_price' => Factor::calculatePriceForFactorReserves(collect([$reserve]))
                 ]);
 
                 PaymentService::save_transactions($factor);
@@ -342,6 +324,7 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
+
     private static function getRandomDateThisWeek(): Carbon
     {
         $currentDate = Carbon::now();
@@ -418,6 +401,7 @@ class GymDatabaseSeeder extends Seeder
             self::helperFunctionSaveAvatar($user, $random_image);
         }
     }
+
     public static function select_random_avatar_image()
     {
         $faker = \Faker\Factory::create('fa_IR');
@@ -426,6 +410,7 @@ class GymDatabaseSeeder extends Seeder
         $random_image = $faker->randomElement($image_files);
         return $random_image;
     }
+
     public static function helperFunctionSaveSliderImage(Slider $slider): void
     {
         $faker = FakerFactory::create();
@@ -442,6 +427,7 @@ class GymDatabaseSeeder extends Seeder
             }
         }
     }
+
     public static function helperFunctionSliderFake($count = 15): void
     {
         $faker = FakerFactory::create();
@@ -465,6 +451,7 @@ class GymDatabaseSeeder extends Seeder
             self::helperFunctionSaveSliderImage($slider);
         }
     }
+
     public static function helperFunctionFactorFake(int $number_record = 70): void
     {
         $faker = FakerFactory::create();
@@ -485,6 +472,7 @@ class GymDatabaseSeeder extends Seeder
             $factor->reserves()->attach($reserve->id, ['price' => $reserve->reserveTemplate->price]);
         }
     }
+
     public static function helperFunctionFakePayment($number = 80): void
     {
         $faker = FakerFactory::create();
@@ -503,10 +491,12 @@ class GymDatabaseSeeder extends Seeder
             ]);
         }
     }
+
     public static function deleteImages(): void
     {
         Artisan::call('gym:delete-images', ['--all' => true]);
     }
+
     public static function helperFunctionFakeAttributeGymPrice($count = 40): void
     {
         $faker = \Faker\Factory::create();
@@ -522,6 +512,7 @@ class GymDatabaseSeeder extends Seeder
             ]);
         }
     }
+
     public static function helperFunctionFakeAttributeGymPriceReserve($count = 100): void
     {
         $faker = \Faker\Factory::create();
@@ -550,8 +541,10 @@ class GymDatabaseSeeder extends Seeder
             // Log or handle the exception if needed
         }
     }
+
     public function run(): void
     {
+        #
         self::deleteImages();
         self::helperFunctionUserFake();
         self::helperFunctionKeywordFake();
@@ -562,11 +555,9 @@ class GymDatabaseSeeder extends Seeder
         self::helperFunctionGymFake();
         self::helperFunctionReservesFake();
         self::helperFunctionSliderFake();
-//        self::helperFunctionFactorFake();
-//        self::helperFunctionFakePayment();
         self::helperFunctionCommonComplaintFake();
         self::helperFunctionComplaintFake();
-        // self::helperFunctionFakeAttributeGymPrice();
-        // self::helperFunctionFakeAttributeGymPriceReserve();
+
     }
+
 }

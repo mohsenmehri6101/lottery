@@ -244,9 +244,10 @@ class Factor extends Model
     {
         $total_price = self::calculatePriceForFactorReserves($reserves);
         $description = "فاکتور مربوط به ";
+        # #### #### #### #### #### ####
+
         /** @var Reserve $reserve */
         foreach ($reserves as $reserve) {
-
             /** @var ReserveTemplate $reserveTemplate */
             $reserveTemplate = $reserve->reserveTemplate;
 
@@ -255,18 +256,32 @@ class Factor extends Model
             $reserveDate = $reserve->dated_at_persian;
             $discount = $reserveTemplate->discount;
 
-            // اگر توپ مورد نیاز نباشد، اطلاعات مربوط به توپ به توضیحات اضافه نمی‌شود
+            // Add the 'from' and 'to' dates to the description
+            $dateFrom = $reserveTemplate->from;
+            $dateTo = $reserveTemplate->to;
+
+            // Add the date range to the description
+            $dateRange = "از {$dateFrom} تا {$dateTo}";
+
+            // Check if the reservation includes a ball
             $ballStatus = $reserve->want_ball ? 'بله' : 'خیر';
             $ballPrice = $reserveTemplate->gym->ball_price;
 
+            // Add user information if available
             $userInfo = $reserve->user ? ($reserve->user->name && $reserve->user->family ?
                 "({$reserve->user->name} {$reserve->user->family}, {$reserve->user->mobile})" :
                 "({$reserve->user->mobile})") : '';
 
-            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}تخفیف: ";
+            // Construct the description string
+            $description .= "{$gymName}{$userInfo} (شناسه رزرو: {$reserveId}, تاریخ: {$reserveDate}, بازه زمانی: {$dateRange}, تخفیف: ";
             $description .= $reserve->want_ball ? "{$discount}%, توپ: {$ballStatus}, قیمت توپ: {$ballPrice})" : '';
         }
+
+        // Add total price to the description
         $description .= "با مجموع قیمت: {$total_price}";
+
         return $description;
     }
+
+
 }
