@@ -19,7 +19,6 @@ class ReserveStoreFactorLinkPaymentRequest extends FormRequest
         }
     }
 
-
     public function rules(): array
     {
         return [
@@ -36,5 +35,4 @@ class ReserveStoreFactorLinkPaymentRequest extends FormRequest
             'reserves.*.want_ball' => 'nullable|numeric|in:0,1',
         ];
     }
-
 }

@@ -89,6 +89,7 @@ class Factor extends Model
         'paymentPaid',
         'user',
         'reserves',
+        'gym',
     ];
 
     protected static function boot(): void
@@ -190,6 +191,11 @@ class Factor extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function gym(): BelongsTo
+    {
+        return $this->belongsTo(Gym::class);
+    }
+
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
@@ -218,6 +224,7 @@ class Factor extends Model
     public static function calculatePriceForFactorReserves($reserves): float|int|string
     {
         $totalPrice = 0;
+        /** @var Reserve $reserve */
         foreach ($reserves as $reserve) {
             $reserve_template_price = filled($reserve->reserveTemplate->price) && $reserve->reserveTemplate->price != 0 ? $reserve->reserveTemplate->price : null;
             $price = $reserve_template_price ?? $reserve->gym->price;
@@ -225,11 +232,10 @@ class Factor extends Model
                 $discountedPrice = $price * (1 - $reserve->reserveTemplate->discount / 100);
                 $price = $discountedPrice;
             }
-
-            if ($reserve->reserveTemplate->is_ball && $reserve->want_ball) {
+            // todo should be template
+            if (/*$reserve->reserveTemplate->is_ball &&*/ $reserve->want_ball) {
                 $price += $reserve->gym->ball_price;
             }
-
             $totalPrice += $price;
         }
         return $totalPrice;
@@ -283,5 +289,8 @@ class Factor extends Model
         return $description;
     }
 
-
+    public function gymManager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_gym_manager_id');
+    }
 }

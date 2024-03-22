@@ -49,6 +49,7 @@ class ReserveService
             throw $exception;
         }
     }
+
     public function myReserve(MyReserveRequest $request)
     {
         try {
@@ -66,7 +67,7 @@ class ReserveService
     public function myGymReserve(MyGymReserveRequest $request)
     {
         try {
-            if(is_gym_manager()){
+            if (is_gym_manager()) {
                 throw new ForbiddenCustomException();
             }
 
@@ -74,9 +75,9 @@ class ReserveService
             #################################
             $user_id = get_user_id_login();
             $fields['user_id'] = $user_id;
-            $gym_ids = Gym::query()->where('user_gym_manager_id',$user_id)->pluck('id')->toArray();
+            $gym_ids = Gym::query()->where('user_gym_manager_id', $user_id)->pluck('id')->toArray();
             $query = $this->reserveRepository->queryFull(inputs: $fields);
-            $query = $this->reserveRepository->byArray($query,'gym_id',$gym_ids);
+            $query = $this->reserveRepository->byArray($query, 'gym_id', $gym_ids);
             #################################
             return $this->reserveRepository->resolve_paginate(query: $query);
 
@@ -84,7 +85,6 @@ class ReserveService
             throw $exception;
         }
     }
-
 
     public function show(ReserveShowRequest $request, $reserve_id)
     {
@@ -98,14 +98,15 @@ class ReserveService
 
             $withs = $withs ?? [];
             return $this->reserveRepository->withRelations(relations: $withs)
-                ->where('id',$reserve_id)
-                ->orWhere('tracking_code',$reserve_id)
+                ->where('id', $reserve_id)
+                ->orWhere('tracking_code', $reserve_id)
                 ->first();
 
         } catch (Exception $exception) {
             throw $exception;
         }
     }
+
     public function store(ReserveStoreRequest $request)
     {
         DB::beginTransaction();
@@ -127,6 +128,7 @@ class ReserveService
             throw $exception;
         }
     }
+
     public function storeAndPrintFactorAndCreateLinkPayment(ReserveStoreFactorLinkPaymentRequest $request): ?array
     {
         DB::beginTransaction();
@@ -145,22 +147,19 @@ class ReserveService
             $gym_id = null;
 
             # save reserves
-            $reservesModels = [];
             $reserves->each(function ($reserve) use (&$reserveIds) {
                 $reserve_template_id = $reserve['reserve_template_id'];
-
                 if (!isset($reserve['gym_id']) || !filled($reserve['gym_id'])) {
                     /** @var ReserveTemplate $reserveTemplate */
                     $reserveTemplate = ReserveTemplate::query()->findOrFail($reserve_template_id);
                     $gym_id = $reserve['gym_id'] = $reserveTemplate->gym_id;
                 }
-
                 # user_id
                 if (!isset($reserve['user_id']) || !filled($reserve['user_id'])) {
                     $reserve['user_id'] = get_user_id_login();
                 }
                 /** @var Reserve $reserveModel */
-                $reservesModels[]=$reserveModel = $this->reserveRepository->create($reserve);
+                $reserveModel = $this->reserveRepository->create($reserve);
                 $reserveIds[] = $reserveModel->id;
             });
 
@@ -172,34 +171,33 @@ class ReserveService
             $factor = $factorService->store([
                 'reserve_ids' => $reserveIds,
                 'user_id' => get_user_id_login(),
-                'gym_id'=>$gym_id,
-                # 'description'=>Factor::calculateDescriptionReserves(collect($reservesModels)),
-                # 'total_price'=>Factor::calculatePriceForFactorReserves(collect($reservesModels))
+                'gym_id' => $gym_id,
             ]);
 
-             $factor->update([
-             'description'=>Factor::calculateDescription($factor),
-             'total_price'=>Factor::calculatePriceForFactor($factor)
-             ]);
+            $factor->update([
+                'description' => Factor::calculateDescription($factor),
+                'total_price' => Factor::calculatePriceForFactor($factor)
+            ]);
 
             # create link payment
             /** @var PaymentService $paymentService */
             $paymentService = resolve('PaymentService');
             $url = $paymentService->createLinkPayment(['factor_id' => $factor->id]);
 
-            if(filled($url)){
-                /** @var Factor $factor */
-                $factor->reserves()->update(['status' => Reserve::status_reserving]);
-            }
+            # if (filled($url)) {
+            #     /** @var Factor $factor */
+            #     $factor->reserves()->update(['status' => Reserve::status_reserving]);
+            # }
 
             DB::commit();
 
-            return ['url' => $url, 'factor' => $factor->with('reserves')->get()->toArray()];
+            return ['url' => $url, 'factor' => $factor->with('reserves')->first()->toArray(), 'test' => true];
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;
         }
     }
+
     public function storeBlocks(ReserveStoreBlockRequest $request): mixed
     {
         DB::beginTransaction();
@@ -220,6 +218,7 @@ class ReserveService
             throw $exception;
         }
     }
+
     public function update(ReserveUpdateRequest $request, $reserve_id)
     {
         DB::beginTransaction();
@@ -238,6 +237,7 @@ class ReserveService
             throw $exception;
         }
     }
+
     public function destroy($reserve_id)
     {
         DB::beginTransaction();
@@ -256,6 +256,7 @@ class ReserveService
             throw $exception;
         }
     }
+
     public function reserveBetweenDates(ReserveBetweenDateRequest $request): Collection|array
     {
         try {
@@ -275,6 +276,7 @@ class ReserveService
             throw $exception;
         }
     }
+
     public function statuses(Request $request): array|bool|int|string|null
     {
         return Reserve::getStatusTitle();

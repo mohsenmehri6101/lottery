@@ -39,7 +39,7 @@ class FactorController extends Controller
      *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="string"),description="user_creator"),
      *     @OA\Parameter(name="user_editor",in="query",required=false, @OA\Schema(type="string"),description="user_editor"),
      *     @OA\Parameter(name="payment_id",in="query",required=false, @OA\Schema(type="string"),description="payment_id"),
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:userCreator,userEditor,payments,paymentPaid,user,reserves"),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:gym,userCreator,userEditor,payments,paymentPaid,user,reserves"),
      *     @OA\Parameter(name="order_by",in="query",required=false,@OA\Schema(type="string"),description="Column to sort by"),
      *     @OA\Parameter(name="direction_by",in="query",required=false,@OA\Schema(type="string", enum={"asc", "desc"}),description="Sort direction (asc or desc)"),
      *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
@@ -71,8 +71,7 @@ class FactorController extends Controller
      *     @OA\Parameter(name="user_creator",in="query",required=false, @OA\Schema(type="string"),description="user_creator"),
      *     @OA\Parameter(name="user_editor",in="query",required=false, @OA\Schema(type="string"),description="user_editor"),
      *     @OA\Parameter(name="payment_id",in="query",required=false, @OA\Schema(type="string"),description="payment_id"),
-     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs"),
-     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
+     *     @OA\Parameter(name="withs",in="query",required=false, @OA\Schema(type="string"),description="withs:gym,userCreator,userEditor,payments,paymentPaid,user,reserves"),     *     @OA\Response(response=200, description="Success", @OA\JsonContent()),
      *     @OA\Response(response=500, description="Internal Server Error", @OA\JsonContent()),
      *  )
      */
