@@ -1,8 +1,8 @@
 <?php
+
 namespace Modules\Gym\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class GymDeleteReservedCommand extends Command
 {
@@ -20,4 +20,5 @@ class GymDeleteReservedCommand extends Command
         deleteReservedWithStatusReserving();
         $this->info('All reserved with status reserving deleted successfully');
     }
+
 }

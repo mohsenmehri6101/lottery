@@ -13588,7 +13588,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "withs:userCreator,userEditor,payments,paymentPaid,user,reserves",
+                        "description": "withs:gym,userCreator,userEditor,payments,paymentPaid,user,reserves",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -13844,7 +13844,7 @@
                     {
                         "name": "withs",
                         "in": "query",
-                        "description": "withs",
+                        "description": "withs:gym,userCreator,userEditor,payments,paymentPaid,user,reserves",
                         "required": false,
                         "schema": {
                             "type": "string"

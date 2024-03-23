@@ -177,7 +177,7 @@ class GymDatabaseSeeder extends Seeder
                     'address' => $persianFaker->persianAddress(),
                     'short_address' => $persianFaker->persianُShortAddress(),
                     'score' => $faker->numberBetween(1, 5),
-                    'status' => $faker->numberBetween(0, 2),
+                    'status' => $faker->randomElement([Gym::status_disable,Gym::status_active,Gym::status_active,Gym::status_active,Gym::status_active]),
                     'profit_share_percentage' => $faker->numberBetween(1, 12),
                     'is_ball' => $is_ball,
                     'ball_price' => $is_ball ? $faker->randomElement([100000, 150000, 200000]) : 0,
