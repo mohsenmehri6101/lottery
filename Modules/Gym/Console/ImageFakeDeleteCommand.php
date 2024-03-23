@@ -54,7 +54,7 @@ class ImageFakeDeleteCommand extends Command
 
     protected function deleteGymsImages(): void
     {
-        $directory = $this->publicPath . '/gyms';
+        $directory = $this->publicPath . '/gyms_images';
         $this->deleteImagesInDirectory($directory);
         $this->info('Gyms images deleted successfully');
     }

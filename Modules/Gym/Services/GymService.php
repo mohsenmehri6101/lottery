@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Modules\Authentication\Entities\User;
 use Modules\Authentication\Services\UserService;
 use Modules\Gym\Entities\ReserveTemplate;
@@ -346,7 +347,7 @@ class GymService
                         # delete avatar before
                         $name_file = ImageService::setNameFile($image);
                         // todo convert image change image size and with and height
-                        $path_image = $image->storeAs('gyms', $name_file);
+                        $path_image = $image->storeAs('gyms_images', $name_file);
                         if ($path_image) {
                             $imageModel = new Image(['url' => $path_image, 'image' => $name_file]);
                             $gym->images()->save($imageModel);
@@ -412,7 +413,6 @@ class GymService
             throw $exception;
         }
     }
-
     public static function saveSectionReserveTemplate(Gym $gym, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
     {
         foreach ($week_numbers as $week_number) {
@@ -601,7 +601,7 @@ class GymService
                         # delete avatar before
                         $name_file = ImageService::setNameFile($image);
                         // todo convert image change image size and with and height
-                        $path_image = $image->storeAs('gyms', $name_file);
+                        $path_image = $image->storeAs('gyms_images', $name_file);
                         if ($path_image) {
                             $imageModel = new Image(['url' => $path_image, 'image' => $name_file]);
                             $gym->images()->save($imageModel);

@@ -17,7 +17,6 @@ class GymDeleteReservedCommand extends Command
 
     public function handle(): void
     {
-        Log::info('he say true');
         deleteReservedWithStatusReserving();
         $this->info('All reserved with status reserving deleted successfully');
     }

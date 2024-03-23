@@ -49,7 +49,7 @@ class GymDatabaseSeeder extends Seeder
                     # delete  before
                     $name_file = ImageService::setNameFile($image);
                     // todo convert image change image size and with and height
-                    $path_image = $image->storeAs('gyms', $name_file);
+                    $path_image = $image->storeAs('gyms_images', $name_file);
                     if ($path_image) {
                         $imageModel = new Image(['url' => $path_image, 'image' => $name_file]);
                         $gym->images()->save($imageModel);

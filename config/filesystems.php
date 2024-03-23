@@ -55,7 +55,6 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-
     ],
 
     /*
@@ -73,7 +72,7 @@ return [
         public_path('storage') => storage_path('app/public'),
         public_path('avatars') => storage_path('app/avatars'),
         public_path('sliders') => storage_path('app/sliders'),
-        public_path('gyms') => storage_path('app/gyms'),
+        public_path('gyms_images') => storage_path('app/gyms_images'),
     ],
 
 ];
