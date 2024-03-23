@@ -3,6 +3,7 @@
 namespace Modules\Payment\Services;
 
 use App\Exceptions\Contracts\CreateLinkPaymentException;
+//use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
 use Exception;
@@ -70,6 +71,7 @@ class PaymentPaypingService
                 'Description' => $description, /* توضیحات */
                 'returnUrl' => $returnUrl, /* required *//* آدرس برگشتی از سمت درگاه */
             ];
+//            Log::info('in create link',$data);
 
             $response = Http::withHeaders([
                 'accept' => 'application/json',
@@ -96,7 +98,6 @@ class PaymentPaypingService
     public function confirmPayment($authority, $amount, $factor_id): bool
     {
         try {
-
             $amount = is_string($amount) ? floatval($amount) : $amount;
             $amount = self::convertToToman($amount);
 
@@ -104,6 +105,8 @@ class PaymentPaypingService
                 'amount' => $amount,
                 'refId' => $authority,
             ];
+
+//            Log::info('in confirm payment',$data);
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -114,7 +117,13 @@ class PaymentPaypingService
             $statusCode = $response->status();
             $responseData = $response->json();
 
-            if ($statusCode === 200 && $amount == $responseData['amount']) {
+//            Log::info('in confirm payment response data ',[$responseData]);
+
+            $amount_response_data = is_string($responseData['amount']) ? floatval($responseData['amount']) : $responseData['amount'];
+
+//            Log::info('ok so',[$amount == $amount_response_data,($statusCode === 200 && $amount == $amount_response_data)]);
+
+            if ($statusCode === 200 && $amount == $amount_response_data) {
                 return true;
             } else {
                 throw new Exception('مشکل مطابقت فاکتور یا مبلغ در تایید پرداخت');

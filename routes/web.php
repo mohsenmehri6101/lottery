@@ -66,6 +66,10 @@ Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->na
 Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_post');
 
 /*   -------------------------------------------------------------------------------------  */
+# ln -s ../laravel/storage/app/gyms_images/ gyms_images
+# ln -s ../laravel/storage/app/sliders/ sliders
+# ln -s ../laravel/storage/app/avatars/ avatars
+
 
 /*
 * 3 روز.

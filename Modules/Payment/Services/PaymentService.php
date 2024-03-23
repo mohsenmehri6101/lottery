@@ -189,11 +189,12 @@ class PaymentService
                 $payment->save();
                 $factor->payment_id_paid = $payment->id;
                 $factor->save();
-
                 self::save_transactions($factor);
-                return $payment->resnumber;
             }
             DB::commit();
+
+            return $payment->resnumber;
+
         } catch (Exception $exception) {
             DB::rollBack();
             # Log::info('', [$exception->getMessage(), $exception->getLine(), $exception->getTrace()]);
