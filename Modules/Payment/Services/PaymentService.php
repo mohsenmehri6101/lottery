@@ -140,7 +140,7 @@ class PaymentService
                 'user_id' => $user->id,
             ]);
 
-            /*
+
             $url = $PaymentPaypingService->createLinkPayment(
               clientRefId: $payment->resnumber,
               mobile: $mobile,
@@ -149,11 +149,11 @@ class PaymentService
               description: $description,
               payerName: $payerName,
             );
-            */
+
 
             # todo this is fake.
-            $url = Str::random();
-            self::confirmPaymentTest($payment);
+//            $url = Str::random();
+//            self::confirmPaymentTest($payment);
 
             DB::commit();
             return $url;

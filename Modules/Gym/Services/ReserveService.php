@@ -184,10 +184,10 @@ class ReserveService
             $paymentService = resolve('PaymentService');
             $url = $paymentService->createLinkPayment(['factor_id' => $factor->id]);
 
-            # if (filled($url)) {
-            #     /** @var Factor $factor */
-            #     $factor->reserves()->update(['status' => Reserve::status_reserving]);
-            # }
+            if (filled($url)) {
+                /** @var Factor $factor */
+                $factor->reserves()->update(['status' => Reserve::status_reserving]);
+            }
 
             DB::commit();
 
