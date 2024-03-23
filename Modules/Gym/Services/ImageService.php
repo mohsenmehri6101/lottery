@@ -12,11 +12,9 @@ use Exception;
 class ImageService
 {
     use  HelpersFileTrait;
-
     const default_is_cover = false;
     const default_is_public = false;
     const default_is_water_mark = false;
-
     # main function
     public static function saveImage(
         $image,
@@ -79,8 +77,6 @@ class ImageService
             throw $exception;
         }
     }
-
-
     private static function destinationPath($destinationPath = null)
     {
         if (is_null($destinationPath) || !filled($destinationPath)) {
@@ -88,17 +84,14 @@ class ImageService
         }
         return $destinationPath;
     }
-
     private static function getClientOriginalName($file)
     {
         return $file?->getClientOriginalName() ?? null;
     }
-
     private static function getClientOriginalExtension($file)
     {
         return $file?->getClientOriginalExtension() ?? null;
     }
-
     public static function setNameFile($file, $type = null, $length = 2, $start_with = null, $end_with = null): string
     {
         $start_with = $start_with ?? $type;
@@ -106,7 +99,6 @@ class ImageService
         $end_with = $end_with . "." . ($file?->getClientOriginalExtension() ?? 'webp');
         return random_string(length: $length, start_with: $start_with, end_with: $end_with);
     }
-
     public static function deleteImages(Model $model, $relation = null, $strict = true): bool
     {
         DB::beginTransaction();
