@@ -26,5 +26,4 @@ class QrCode extends Model
     ];
 
     public static array $relations_ = [];
-
 }
