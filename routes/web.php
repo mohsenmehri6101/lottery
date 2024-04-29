@@ -62,8 +62,8 @@ Route::prefix('manager')->group(function () {
     Route::get('/reserves', [\App\Http\Controllers\HomeController::class, 'index']);
 });
 
-Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_get');
-Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_post');
+//Route::get('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_get');
+//Route::post('/confirm-payment', [PaymentController::class, 'confirmPayment'])->name('web.confirm_payment_post');
 
 /*   -------------------------------------------------------------------------------------  */
 # ln -s ../laravel/storage/app/gyms_images/ gyms_images
