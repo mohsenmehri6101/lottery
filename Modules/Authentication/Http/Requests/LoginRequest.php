@@ -1,0 +1,26 @@
+<?php
+
+namespace Modules\Authentication\Http\Requests;
+
+use App\Http\Requests\CustomFormRequestTrait;
+use Illuminate\Foundation\Http\FormRequest;
+
+class LoginRequest extends FormRequest
+{
+    use CustomFormRequestTrait;
+
+    public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
+    {
+        $this->set_validator_username_or_mobile_or_email();
+        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
+    }
+
+
+    public function rules(): array
+    {
+        return [
+            'username' => 'required|string|filled|username_or_mobile_or_email',
+            'password' => 'required|string|filled',
+        ];
+    }
+}
