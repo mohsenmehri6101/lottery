@@ -8,13 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Authentication\Entities\User;
 use Modules\Authentication\Services\UserService;
-use Modules\Article\Entities\ReserveTemplate;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\Image;
 use Modules\Article\Http\Repositories\AttributeRepository;
 use Modules\Article\Http\Repositories\ArticleRepository;
 use Modules\Article\Http\Repositories\ReserveRepository;
-use Modules\Article\Http\Repositories\SportRepository;
 use Modules\Article\Http\Requests\Article\DeleteImageArticleRequest;
 use Modules\Article\Http\Requests\Article\ArticleIndexRequest;
 use Modules\Article\Http\Requests\Article\ArticleLikeRequest;
@@ -90,15 +88,7 @@ class ArticleService
                 });
             });
         });
-        $query = $query->when(in_array('sports', $withs), function ($querySport) use ($sports) {
-            $querySport->whereHas('sports', function (Builder $query) use ($sports) {
-                return $query->when(count($sports), function ($querySport) use ($sports) {
-                    /** @var SportRepository $sportRepository */
-                    $sportRepository = resolve('SportRepository');
-                    return $sportRepository->byArray($querySport,'id',$sports);
-                });
-            });
-        });
+
         $query = $query->when(in_array('attributes', $withs), function ($querySport) use ($attributes) {
             $querySport->whereHas('attributes', function (Builder $query) use ($attributes) {
                 return $query->when(count($attributes), function ($queryAttribute) use ($attributes) {
@@ -350,19 +340,6 @@ class ArticleService
                 $withs_result[] = 'urlImages';
             }
 
-            # save reserve_template
-            if (isset($time_template) && count($time_template)) {
-                $from = $time_template['from'] ?? '08:00';
-                $to = $time_template['to'] ?? '23:59';
-                $to = $to == '24:00' ? '23:59' : $to;
-                $break_time = $time_template['break_time'] ?? 2;
-                $price = $time_template['price'] ?? 0;
-                $gender_acceptance = $time_template['gender_acceptance'] ?? ReserveTemplate::status_gender_acceptance_unknown;
-                $week_numbers = $time_template['week_numbers'] ?? [1, 2, 3, 4, 5, 6, 7];
-                self::saveSectionReserveTemplate(article: $article, week_numbers: $week_numbers, start_time: $from, max_hour: $to, break_time: $break_time, price: $price, gender_acceptance: $gender_acceptance);
-                $withs_result[] = 'reserveTemplates';
-            }
-
             DB::commit();
             return $this->articleRepository->withRelations(relations: $withs_result)->findOrFail($article->id);
         } catch (Exception $exception) {
@@ -405,45 +382,7 @@ class ArticleService
             throw $exception;
         }
     }
-    public static function saveSectionReserveTemplate(Article $article, $week_numbers = [1, 2, 3, 4, 5, 6, 7], $start_time = '08:00', $max_hour = '23:59', $break_time = 2, $price = 0, $gender_acceptance = ReserveTemplate::status_gender_acceptance_unknown): void
-    {
-        foreach ($week_numbers as $week_number) {
 
-            $from = $start_time;
-            $switch = false;
-            while (strtotime($from) + ($break_time * 3600) <= strtotime("$max_hour:00") || $switch) {
-
-                $switch = false;
-                $to = date('H:i', strtotime($from) + ($break_time * 3600));
-                $to = $to == '00:00' ? '24:00' : $to;
-
-                if (!($to == '24:00' && $max_hour = '23:59')) {
-                    if ((strtotime($to) > strtotime("$max_hour:00"))) {
-                        break;
-                    }
-                }
-
-                $to = $to == '23:59' ? '24:00' : $to;
-                ReserveTemplate::query()->create([
-                    'from' => $from,
-                    'to' => $to,
-                    'status'=>ReserveTemplate::status_active,
-                    'article_id' => $article->id,
-                    'week_number' => $week_number,
-                    'price' => $price,
-                    'gender_acceptance' => $gender_acceptance ?? ReserveTemplate::status_gender_acceptance_unknown,
-                ]);
-
-                $from = date('H:i', strtotime($from) + ($break_time * 3600));
-                $from = $from == '00:00' ? '24:00' : $from;
-
-                if ($from == '22:00' && $max_hour == '23:59') {
-                    $switch = true;
-                }
-
-            }
-        }
-    }
     public function like(ArticleLikeRequest $request): int
     {
         DB::beginTransaction();

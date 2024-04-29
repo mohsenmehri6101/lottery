@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
         # dd($e->getLine(),$e->getMessage(),$e->getTrace());
 
         parent::report($e);
-        ExceptionService::reporter($e);
+        # ExceptionService::reporter($e);
     }
 
     public function render($request, Throwable $e): \Illuminate\Http\Response|JsonResponse|Response|RedirectResponse|null
