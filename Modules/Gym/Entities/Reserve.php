@@ -215,10 +215,8 @@ class Reserve extends Model
     {
         return $this->belongsToMany(AttributePrice::class, 'attribute_gym_price_reserve');
     }
-
     public function getDatedAtPersianAttribute(): string
     {
         return verta($this->dated_at)->format('d/m/Y');
     }
-
 }
