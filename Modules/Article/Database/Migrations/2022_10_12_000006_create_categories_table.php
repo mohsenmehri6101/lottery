@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
@@ -14,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('parent')->nullable();
         });
 
-        Schema::create('category_article', function (Blueprint $table) {
+        Schema::create('article_category', function (Blueprint $table) {
             $table->bigInteger('category_id');
             $table->bigInteger('article_id');
             # $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
@@ -25,7 +26,7 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('category_article');
+        Schema::dropIfExists('article_category');
         Schema::dropIfExists('categories');
     }
 

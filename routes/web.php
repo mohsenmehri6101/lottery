@@ -36,6 +36,5 @@ Route::get('/api/documentation/swap-dark-mode/{darkMode}', [\App\Http\Controller
                 - connect other table
                 - crud article + routes my, check, change-status article, review article, comment article
                 - implement and check other tables score , likes , comments, ...
-                -
             - lottery section
  */

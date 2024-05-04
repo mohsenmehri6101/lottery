@@ -37,22 +37,10 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
-        Schema::create('article_criticisms', function (Blueprint $table) {
-            $table->id();
-            $table->comment('انتقادات از سالن ورزشی');
-            $table->string('name')->nullable()->comment('نام');
-            $table->unsignedBigInteger('article_id')->nullable()->comment('article_id');
-            $table->unsignedBigInteger('user_creator')->nullable()->comment('user_creator');
-            $table->unsignedBigInteger('user_editor')->nullable()->comment('user_editor');
-            $table->timestamps();
-
-        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('article_criticisms');
         Schema::dropIfExists('articles');
     }
-
 };

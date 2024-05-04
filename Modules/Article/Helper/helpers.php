@@ -23,7 +23,6 @@ if (!function_exists('helperDeleteFiles')) {
         return true;
     }
 }
-
 if (!function_exists('deleteReservedWithStatusReserving')) {
     function deleteReservedWithStatusReserving(): bool
     {
