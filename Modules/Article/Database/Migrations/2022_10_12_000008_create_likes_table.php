@@ -36,4 +36,5 @@ return new class extends Migration {
         Schema::dropIfExists('likes_article');
         Schema::dropIfExists('likes_comment');
     }
+
 };
