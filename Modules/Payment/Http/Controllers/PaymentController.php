@@ -258,9 +258,9 @@ class PaymentController extends Controller
     {
         $confirmCode = $this->paymentService->confirmPayment($request) ?? '';
         $status = $confirmCode && filled($confirmCode);
-        # $url = route('web.confirm.payment') . '?confirm_code=' . $confirmCode . '&status='.$status;
-        return redirect("/confirm-payment?confirm_code=$confirmCode&status=$status");
-        # return redirect()->to($url);
+        $url = route('web.confirm.payment') . '?confirm_code=' . $confirmCode . '&status='.$status;
+
+        return redirect()->to($url);
     }
 
     /**

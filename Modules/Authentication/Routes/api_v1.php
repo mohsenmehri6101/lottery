@@ -5,8 +5,6 @@ use Modules\Authentication\Http\Controllers\AuthenticationController;
 use Modules\Authentication\Http\Controllers\UserController;
 use Modules\Authentication\Http\Controllers\WebInfoController;
 
-Route::get('api-test-mohsen',[\App\Http\Controllers\HomeController::class,'test_api_redirect'])->name('api-test-mohsen');
-
 # users
 Route::prefix('users')->name('users_')->group(function () {
     Route::get('/', [UserController::class, 'index'])->middleware('auth:api')->name('index');
